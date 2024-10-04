@@ -15,6 +15,7 @@ MongoDB에 이미지를 저장하는 방법은 크게 두 가지가 있습니다
 
 -flask_db_연결어쩌고.py -> 연결 완
 python으로 서버를 실행시키고 bash로 돌아가서 
+
 curl http://127.0.0.1:5000/data/John을 쓰면 
 해당 파이썬 파일의 from flask_pymongo import PyMongo에 의한 함수로 인해서
 
