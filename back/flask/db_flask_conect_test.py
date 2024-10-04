@@ -1,14 +1,25 @@
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-# MongoDB URI 설정 (로컬 MongoDB의 경우)
-app.config["MONGO_URI"] = "mongodb+srv://rjh0162:difbel0162@cluster0.6twyc.mongodb.net/"  # 로컬 MongoDB 사용
-# MongoDB Atlas 사용 시 주석 처리된 부분을 활성화하고 사용하세요
-# app.config["MONGO_URI"] = "mongodb+srv://<username>:<password>@cluster.mongodb.net/myDatabase?retryWrites=true&w=majority"
+# MongoDB Atlas URI (올바른 값으로 설정)
+app.config["MONGO_URI"] = "mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/sample_mflix"
+
+# 또는 로컬 MongoDB URI
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 
 mongo = PyMongo(app)
+
+
+try:
+    # MongoDB 컬렉션에 연결이 성공했는지 테스트
+    mongo.db.sample_mflix.find_one()
+    print("MongoDB 연결 성공")
+except Exception as e:
+    print(f"MongoDB 연결 실패: {e}")
+    
 
 @app.route('/')
 def index():
@@ -19,20 +30,12 @@ def index():
 def add_data():
     name = request.json.get('name')
     age = request.json.get('age')
-    mongo.db.myCollection.insert_one({"name": name, "age": age})
-    return jsonify({"message": "Data added!"}), 201
+    if name and age:
+        mongo.db.myCollection.insert_one({"name": name, "age": age})
+        return jsonify({"message": "Data added!"}), 201
+    return jsonify({"error": "Missing data"}), 400
 
-# 데이터 조회
-@app.route('/data', methods=['GET'])
-def get_data():
-    data = mongo.db.myCollection.find()
-    result = []
-    for document in data:
-        document['_id'] = str(document['_id'])  # ObjectId를 문자열로 변환
-        result.append(document)
-    return jsonify(result), 200
-
-# 특정 데이터 조회 (예: 이름으로 조회)
+# 이름으로 데이터 조회
 @app.route('/data/<name>', methods=['GET'])
 def get_data_by_name(name):
     document = mongo.db.myCollection.find_one({"name": name})
