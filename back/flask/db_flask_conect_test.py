@@ -14,7 +14,7 @@ mongo = PyMongo(app)
 
 
 try:
-    # MongoDB 컬렉션에 연결이 성공했는지 테스트
+    # MongoDB 컬렉션에 연결이 성공했는지 테스트 
     mongo.db.sample_mflix.find_one()
     print("MongoDB 연결 성공")
 except Exception as e:
