@@ -16,6 +16,7 @@ mongo = PyMongo(app)
 try:
     # MongoDB 컬렉션에 연결이 성공했는지 테스트 
     mongo.db.sample_mflix.find_one()
+    #여기서 sample_mflix는 해당 데이터베이스에의 컬렉션의 이름이다.
     print("MongoDB 연결 성공")
 except Exception as e:
     print(f"MongoDB 연결 실패: {e}")
@@ -45,4 +46,4 @@ def get_data_by_name(name):
     return jsonify({"error": "Data not found"}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run('0.0.0.0', port=5000, debug=True)
