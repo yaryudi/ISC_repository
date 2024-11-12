@@ -12,7 +12,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <title>ISC - 메인화면 </title>
+    <title>ISC - 회원가입</title>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
         * {
@@ -29,10 +29,12 @@
             padding: 20px 30px;
         }
 
+        .form-group {
+            margin: 10px 0;
+        }
+
         .posting-box {
-            display: flex;
-            justify-content: space-evenly;
-            margin: 10px auto;
+            margin: 10px auto 30px auto;
             width: 500px;
             border: 3px solid black;
             border-radius: 5px;
@@ -40,28 +42,21 @@
         }
     </style>
     <script>
-        function go_signup() {
-            window.location.href = '/signup'
-        }
-
-        function go_login() {
-            window.location.href = '/login'
-        }
-
-        // 로그인에 성공해서 토큰이 있는 경우에만 인사하기!
-        function hello() {
+        function signup() {
             $.ajax({
-                type: "GET",
-                url: "/api/isAuth",
-                data: {},
+                type: "POST",
+                url: "/api/signup",
+                data: {
+                    id_give: $('#input-id').val(),
+                    pw_give: $('#input-password').val(),
+                    nickname_give: $('#input-nickname').val()
+                },
                 success: function (response) {
                     if (response['result'] == 'success') {
-                        // 로그인한 사용자면 닉네임을 보여주는 알람을 띄움!
-                        let nickname = response['nickname']
-                        alert(`반갑습니다 ${nickname}님!!`)
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
                     } else {
                         alert(response['msg'])
-                        window.location.href = '/login'
                     }
                 }
             })
@@ -72,12 +67,25 @@
 <body>
 <div class="wrap">
     <div class="title">
-        <h1 class="display-4">홈화면</h1>
+        <h1 class="display-4">회원가입</h1>
         <hr class="my-4">
         <div class="posting-box" id="post-box">
-            <button type="submit" onclick="go_signup()" class="btn btn-primary">회원가입</button>
-            <button type="submit" onclick="go_login()" class="btn btn-primary">로그인</button>
-            <button type="submit" onclick="hello()" class="btn btn-primary">환영인사</button>
+            <div class="form-group">
+                <label>ID</label>
+                <input type="email" class="form-control" aria-describedby="emailHelp"
+                       id="input-id" placeholder="">
+            </div>
+            <div class="form-group">
+                <label>닉네임</label>
+                <input type="email" class="form-control" aria-describedby="emailHelp"
+                       id="input-nickname" placeholder="">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="email" class="form-control" aria-describedby="emailHelp"
+                       id="input-password" placeholder="">
+            </div>
+            <button type="submit" onclick="signup()" class="btn btn-primary">회원가입</button>
         </div>
     </div>
 </div>

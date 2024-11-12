@@ -8,10 +8,9 @@ SECRET_KEY = 'SPARTA'
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb+srv://duck:1234@cluster0.f9x0w.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.users
+client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/user_data')
+db = client.user_data
 
-SECRET_KEY = 'SPARTA'
 
 
 @app.route('/')
