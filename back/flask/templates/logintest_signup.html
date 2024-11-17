@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en">
 
+<!-- 로그인 예제 - 회원가입 페이지
+ 회원가입을 하는 페이지 = db에 접근함 -->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,10 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <!--jquery cookie를 사용하기 위해-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-    <title>ISC - 로그인</title>
+    <title>ISC - 회원가입</title>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
         * {
@@ -44,21 +45,19 @@
         }
     </style>
     <script>
-        function login() {
+        function signup() {
             $.ajax({
                 type: "POST",
-                url: "/api/login",
+                url: "/api/signup",
                 data: {
                     id_give: $('#input-id').val(),
                     pw_give: $('#input-password').val(),
+                    nickname_give: $('#input-nickname').val()
                 },
                 success: function (response) {
-                    console.log(response)
                     if (response['result'] == 'success') {
-                        // 로그인에 성공하면 token을 쿠키에 저장!!!!
-                        $.cookie('mytoken', response['token']);
-                        alert('로그인 완료!')
-                        window.location.href = '/'
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
                     } else {
                         alert(response['msg'])
                     }
@@ -71,7 +70,7 @@
 <body>
 <div class="wrap">
     <div class="title">
-        <h1 class="display-4">로그인</h1>
+        <h1 class="display-4">회원가입</h1>
         <hr class="my-4">
         <div class="posting-box" id="post-box">
             <div class="form-group">
@@ -80,11 +79,16 @@
                        id="input-id" placeholder="">
             </div>
             <div class="form-group">
+                <label>닉네임</label>
+                <input type="email" class="form-control" aria-describedby="emailHelp"
+                       id="input-nickname" placeholder="">
+            </div>
+            <div class="form-group">
                 <label>비밀번호</label>
                 <input type="email" class="form-control" aria-describedby="emailHelp"
                        id="input-password" placeholder="">
             </div>
-            <button type="submit" onclick="login()" class="btn btn-primary">로그인</button>
+            <button type="submit" onclick="signup()" class="btn btn-primary">회원가입</button>
         </div>
     </div>
 </div>

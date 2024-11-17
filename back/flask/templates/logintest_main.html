@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="en">
 
+<!-- 
+로그인 예제 - 메인 페이지
+ 홈페이지/로그인 페이지에서 사용자 인증 후 페이지를 옮겨도 사용자 인증이 유지되는 지 확인하는 용도
+  -->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,12 +45,17 @@
         }
     </style>
     <script>
+        //페이지 이동 - URL을 고치고, 고쳐진 URL은 백에서 인식하여 html을 불러온다.
         function go_signup() {
             window.location.href = '/signup'
         }
 
         function go_login() {
             window.location.href = '/login'
+        }
+
+        function go_home() {
+            window.location.href = '/'
         }
 
         // 로그인에 성공해서 토큰이 있는 경우에만 인사하기!
@@ -61,6 +71,7 @@
                         alert(`반갑습니다 ${nickname}님!!`)
                     } else {
                         alert(response['msg'])
+                        //login으로 이동
                         window.location.href = '/login'
                     }
                 }
@@ -72,11 +83,10 @@
 <body>
 <div class="wrap">
     <div class="title">
-        <h1 class="display-4">홈화면</h1>
+        <h1 class="display-4">메인화면</h1>
         <hr class="my-4">
         <div class="posting-box" id="post-box">
-            <button type="submit" onclick="go_signup()" class="btn btn-primary">회원가입</button>
-            <button type="submit" onclick="go_login()" class="btn btn-primary">로그인</button>
+            <button type="submit" onclick="go_home()" class="btn btn-primary">홈화면</button>
             <button type="submit" onclick="hello()" class="btn btn-primary">환영인사</button>
         </div>
     </div>

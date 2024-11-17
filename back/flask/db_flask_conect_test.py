@@ -1,3 +1,12 @@
+"""
+db - flask 연결확인용 코드
+
+해당 코드를 작동시키고,
+curl -X POST http://127.0.0.1:5000/add -H "Content-Type: application/json" -d '{"name": "Alice", "age": 25, "region": "home"}'
+
+를 입력하여 테스트
+"""
+
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
