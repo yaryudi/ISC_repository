@@ -4,9 +4,8 @@ db - flask - 프론트 로그인 페이지 기능 구현 코드
 https://duckgugong.tistory.com/274
 -> 해당 예제를 참고하였음
 
+
 """
-
-
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import jwt
 import datetime
@@ -23,19 +22,19 @@ db = client.user_data
 #페이지 이동
 @app.route('/')
 def home():
-    return render_template('logintest_home.html')
+    return render_template('login_test_home.html')
 
 @app.route('/login')
 def login():
-    return render_template('logintest_login.html')
+    return render_template('login_test_login.html')
 
 @app.route('/signup')
 def signup():
-    return render_template('logintest_signup.html')
+    return render_template('login_test_signup.html')
 
 @app.route('/main')
 def main():
-    return render_template('logintest_main.html')
+    return render_template('login_test_main.html')
 
 
 
@@ -49,6 +48,10 @@ def api_register():
     #암호화를 한다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest() 
 
+    #빈칸 입력시 경고
+    if id_receive == "" or pw_receive == "" or nickname_receive == "":
+        return jsonify({'result': 'fail', 'msg': '공란이 존재합니다!'})
+    
     # 이미 존재하는 아이디면 패스!
     result = db.user.find_one({'id': id_receive})
     if result is not None:

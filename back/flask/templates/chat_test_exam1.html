@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+체팅  예제 - 채팅 예제 구현: https://bokyeong-kim.github.io/python/flask/2020/05/09/flask(1).html
+ chat_test.py의 시작 페이지 
+ -->
+  <html lang="en">
+  <head>
+    <title>Flask_Chatting_Application</title>
+  </head>
+  <body>
+    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+    <div class="message_holder"></div>
+    <form action="" method="POST">
+      <input type="text" class="username" style='font-size:15px;' placeholder="User Name"/>
+      <input type="text" class="message" style='font-size:15px;' placeholder="Messages"/>
+      <input type="submit"/>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 
+    socket.io 클라이언트측 사용: 항상 해당 링크의 socketio 버전을 확인하기 바람
+    서버(백:flask)의 socketio버전과 클라이언트(프론트:js)의 socketio버전이 일치하지 않으면 400, 405 에러를 발생시킴 
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+    <script type="text/javascript">
+
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+
+      socket.on( 'connect', function() {
+        socket.emit( 'my event', {
+          data: 'User Connected'
+        } )
+
+        var form = $( 'form' ).on( 'submit', function( e ) {
+          e.preventDefault()
+          let user_name = $( 'input.username' ).val()
+          let user_input = $( 'input.message' ).val()
+          socket.emit( 'my event', {
+            user_name : user_name,
+            message : user_input
+          } )
+          $( 'input.message' ).val( '' ).focus()
+        } )
+      } )
+
+      socket.on( 'my response', function( msg ) {
+        console.log( msg )
+        if( typeof msg.user_name !== 'undefined' ) {
+          $( 'h3' ).remove()
+          $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
+        }
+      })
+    </script>
+
+  </body>
+  </html>
