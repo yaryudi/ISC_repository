@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffd6d6;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .form-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .image-section {
+            flex: 1;
+            text-align: center;
+        }
+        .image-section img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .image-section .upload-actions {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .textarea-section {
+            margin-top: 20px;
+        }
+        .textarea-section textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ffc0c0;
+            border-radius: 8px;
+            background-color: #ffe5e5;
+        }
+        .button-container {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button-container button:hover {
+            background-color: #e69500;
+        }
+        .todo-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .todo-link a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>내 이력서</h1>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <div class="container">
+            <div class="form-section">
+                <input type="hidden" name="resume_id" value="{{ resume._id if resume else '' }}">
+
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" value="{{ resume.name if resume else '' }}" required>
+
+                <label for="age">나이</label>
+                <input type="number" id="age" name="age" value="{{ resume.age if resume else '' }}" required>
+
+                <label for="gender">성별</label>
+                <select id="gender" name="gender" required>
+                    <option value="">선택</option>
+                    <option value="Male" {% if resume and resume.gender == "Male" %}selected{% endif %}>남성</option>
+                    <option value="Female" {% if resume and resume.gender == "Female" %}selected{% endif %}>여성</option>
+                </select>
+
+                <label for="experience">경력 (기간)</label>
+                <input type="number" id="experience" name="experience" value="{{ resume.experience if resume else '' }}" required>
+            </div>
+
+            <div class="image-section">
+                {% if resume and resume.photo %}
+                    <img src="{{ url_for('static', filename=resume.photo) }}" alt="Profile Photo">
+                {% else %}
+                    <img src="https://via.placeholder.com/200" alt="Profile Photo Placeholder">
+                {% endif %}
+                <div class="upload-actions">
+                    <input type="file" id="photo" name="photo" accept="image/png, image/jpeg">
+                    <button type="submit" name="action" value="upload_photo">업로드</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container textarea-section">
+            <label for="introduction">자기소개 (경력, 원하는 사항 등)</label>
+            <textarea id="introduction" name="introduction" required>{{ resume.introduction if resume else '' }}</textarea>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" name="action" value="update">저장</button>
+        </div>
+    </form>
+
+    <div class="todo-link">
+        <a href="/todo">ToDo 페이지로 이동</a>
+    </div>
+</body>
+</html>

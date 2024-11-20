@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do 리스트 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #ffd6d6;
+        }
+        header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .navigate-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .navigate-btn:hover {
+            background-color: #0056b3;
+        }
+        .todo-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff5e1;
+            border-radius: 8px;
+        }
+        .todo-time {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            background-color: #ffc9c9;
+            padding: 5px;
+            border-radius: 5px;
+            color: #d9534f;
+            margin-right: 10px;
+        }
+        .todo-content {
+            flex: 3;
+            background-color: #ffe6b8;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+        }
+        .todo-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .todo-actions button {
+            background-color: #ffc107;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .todo-actions button:hover {
+            background-color: #e0a800;
+        }
+        .delete-btn {
+            background-color: #d9534f;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c9302c;
+        }
+        .input-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .input-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-time {
+            flex: 1;
+        }
+        .input-content {
+            flex: 4;
+        }
+        .input-section button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-section button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>To Do 리스트 작성</h1>
+        <!-- 이력서 페이지로 이동 버튼 -->
+        <a href="/resume" class="navigate-btn">이력서 페이지로 이동</a>
+    </header>
+    <div class="todo-container">
+        <ul>
+            {% for todo in todos %}
+                <li class="todo-item">
+                    <span class="todo-time">{{ todo.time }}</span>
+                    <span class="todo-content">{{ todo.content }}</span>
+                    <div class="todo-actions">
+                        <form action="/todo/delete/{{ todo._id }}" method="POST">
+                            <button type="submit" class="delete-btn">삭제</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="input-section">
+            <form method="POST" action="/todo" style="display: flex; width: 100%; gap: 10px;">
+                <input type="time" id="time" name="time" class="input-time" required>
+                <input type="text" id="content" name="content" class="input-content" placeholder="내용 입력" required>
+                <button type="submit">작성</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
