@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC: 이력서 관리하기</title>
+    <link rel="shortcut icon" href="#" />
+    <link href="resume.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <h1>내 이력서</h1>
+    <div></div>
+    <!-- 개인 정보 입력 및 이미지 업로드-->
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <div class="container">
+        <!-- 개인 정보를 입력-->
+        <div class="form-section">
+          <input
+            type="hidden"
+            name="resume_id"
+            value="{{ resume._id if resume else '' }}"
+          />
+          <label
+            >이름<input type="text" id="name" name="name" required
+          /></label>
+          <label>나이<input type="text" id="age" name="age" required /></label>
+          <label
+            >성별
+            <select id="gender" name="gender" required>
+              <option value="">선택</option>
+              <option value="Male">남성</option>
+              <option value="Female">여성</option>
+            </select>
+          </label>
+          <label
+            >경력(연도)<input
+              type="text"
+              id="experience_year"
+              name="experience_year"
+              required
+          /></label>
+          <label
+            >경력(월)<input
+              type="text"
+              id="experience_month"
+              name="experience_month"
+              required
+          /></label>
+        </div>
+        <!-- 이미지를 업로드-->
+        <div class="image-section">
+          <img
+            src="https://via.placeholder.com/200"
+            alt="Profile Photo Placeholder"
+          />
+          <div class="upload-actions">
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/png, image/jpeg"
+            />
+            <button type="submit" name="action" value="upload_photo">
+              업로드
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- 자기 소개 입력 -->
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <div class="container textarea-section">
+        <label for="introduction"
+          >자기소개 (경력, 원하는 사항 등)<textarea
+            id="introduction"
+            name="introduction"
+            required
+          >
+            자기소개를 입력해주세요.</textarea
+          >
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="submit" name="action" value="update">저장</button>
+      </div>
+    </form>
+
+    <div class="todo-link">
+      <a href="/todo">ToDo 페이지로 이동</a>
+    </div>
+  </body>
+</html>
