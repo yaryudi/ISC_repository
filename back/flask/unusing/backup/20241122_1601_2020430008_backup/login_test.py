@@ -95,13 +95,13 @@ def api_login():
 def api_logout():
     # 클라이언트에서 보내는 JWT 토큰을 지워줍니다.
     resp = jsonify({'result': 'success', 'msg': '로그아웃 되었습니다.'})
-    resp.set_cookie('usertoken', '', expires=0)  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
+    resp.set_cookie('mytoken', '', expires=0)  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
     return resp
 
 # 보안: 로그인한 사용자만 통과할 수 있는 API
 @app.route('/api/isAuth', methods=['GET'])
 def api_valid():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get('mytoken')
     try:
         # token을 시크릿키로 디코딩합니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])

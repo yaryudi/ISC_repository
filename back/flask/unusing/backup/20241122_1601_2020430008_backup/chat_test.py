@@ -1,68 +1,62 @@
-"""
-db - flask - 프론트 로그인 페이지 기능 구현 코드
+'''
+채팅 예제 구현 코드: https://bokyeong-kim.github.io/python/flask/2020/05/09/flask(1).html
 
-https://duckgugong.tistory.com/274
--> 해당 예제를 참고하였음
+관련 파일: 
+chat_test_inroom.html   - 사용자 토큰 + 방 토큰을 바탕으로 채팅 환경 생성 및 DB와의 데이터 상호작용
+chat_test_outroom.html  - DB정보 + 사용자토큰을 바탕으로 방 토큰 생성
+chat_test_login.html    - 사용자 토큰 생성
 
+테스트시 창 2개를 띄우고 socketio 통신이 잘 되는 지 확인
+'''
 
-"""
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import jwt
 import datetime
 import hashlib
 from pymongo import MongoClient
+from flask_socketio import SocketIO
 
 SECRET_KEY = 'SPARTA'
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '비밀번호 설정'
+socketio = SocketIO(app)
 
-client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/user_data')
+client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/')
 db = client.user_data
-
-#페이지 이동
-@app.route('/')
-def home():
-    return render_template('login_test_home.html')
-
-@app.route('/login')
-def login():
-    return render_template('login_test_login.html')
-
-@app.route('/signup')
-def signup():
-    return render_template('login_test_signup.html')
-
-@app.route('/main')
-def main():
-    return render_template('login_test_main.html')
+db_chat = client.ChatDB
 
 
+#함수
 
-# 회원가입
-@app.route('/api/signup', methods=['POST'])
-def api_register():
-    #id가 ~~인 빈 칸에서 입력값을 받아온다.
-    id_receive = request.form['id_give']
-    pw_receive = request.form['pw_give']
-    nickname_receive = request.form['nickname_give']
-    #암호화를 한다.
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest() 
 
-    #빈칸 입력시 경고
-    if id_receive == "" or pw_receive == "" or nickname_receive == "":
-        return jsonify({'result': 'fail', 'msg': '공란이 존재합니다!'})
+#메시지 수신 신호
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
     
-    # 이미 존재하는 아이디면 패스!
-    result = db.user.find_one({'id': id_receive})
-    if result is not None:
-        return jsonify({'result': 'fail', 'msg': '이미 존재하는 ID입니다!'})
-    else:
-        #db에 기입
-        db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
-        #결과를 반환 - 프론트에 결과 전송
-        return jsonify({'result': 'success'})
 
-# 로그인
+#단순 이동 함수
+
+    
+#채팅방 내부로 이동 
+@app.route('/inroom')
+def go_inroom():
+    return render_template('chat_test_inroom.html')
+
+#채팅방 외부로 이동
+@app.route('/outroom')
+def go_outroom():
+    return render_template('chat_test_outroom.html')
+
+#채팅방 시작 전 로그인 환경
+@app.route('/')
+def go_login():
+    return render_template('chat_test_login.html')
+
+
+#API 기능 함수
+
+
 @app.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
@@ -89,19 +83,19 @@ def api_login():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-    
+
 # 로그아웃
 @app.route('/api/logout', methods=['POST'])
 def api_logout():
     # 클라이언트에서 보내는 JWT 토큰을 지워줍니다.
     resp = jsonify({'result': 'success', 'msg': '로그아웃 되었습니다.'})
-    resp.set_cookie('usertoken', '', expires=0)  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
+    resp.set_cookie('mytoken', '', expires=0)  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
     return resp
 
 # 보안: 로그인한 사용자만 통과할 수 있는 API
 @app.route('/api/isAuth', methods=['GET'])
 def api_valid():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get('mytoken')
     try:
         # token을 시크릿키로 디코딩합니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -115,5 +109,18 @@ def api_valid():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+#클라이언트-> socket.emit('my event', data), 서버에서 이 이벤트를 처리하는 함수가 실행
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    #클라이언트로부터 받은 json 데이터를 로그로 출력합니다.
+    print('received my event: ' + str(json))
+    
+    #여기서 받은 채팅기록을 DB에 저장 - 발신자 + 전송 시간 + 전송내용
+    
+    
+    #socketio.emit은 서버가 클라이언트로 메시지를 보낼 때 사용하는 함수 + json과 같이 보낸다.
+    #callback=messageReceived, 클라이언트에서 응답을 보내면 messageReceived 함수를 실행(callback)
+    socketio.emit('my response', json, callback=messageReceived)
+
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    socketio.run(app, debug=True)

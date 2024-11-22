@@ -65,11 +65,11 @@
                 success: function (response) {
                     console.log(response)
                     if (response['result'] == 'success') {
-                        // 로그인에 성공하면 token을 쿠키에 저장!!!!
+                        // 로그인에 성공하면 token을 쿠키에 저장!!!! 
                         $.cookie('usertoken', response['token']);
                         alert('로그인 완료!')
                         //메인 페이지로 이동
-                        window.location.href = '/'
+                        window.location.href = '/outroom'
                     } else {
                         alert(response['msg'])
                     }
