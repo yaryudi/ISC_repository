@@ -6,9 +6,10 @@ chat_test_inroom.html   - 사용자 토큰 + 방 토큰을 바탕으로 채팅 �
 chat_test_outroom.html  - DB정보 + 사용자토큰을 바탕으로 방 토큰 생성
 chat_test_login.html    - 사용자 토큰 생성
 
+문제 발생 시 류 문의 주세요~
+
 테스트시 창 2개를 띄우고 socketio 통신이 잘 되는 지 확인
 '''
-
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import jwt
 import datetime
@@ -49,7 +50,14 @@ def go_inroom():
 #채팅방 외부로 이동
 @app.route('/outroom')
 def go_outroom():
-    return render_template('chat_test_outroom.html')
+    
+    token_receive = request.cookies.get('usertoken')
+        # token을 시크릿키로 디코딩합니다.
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
+    username = db.user.find_one({'id': payload['id']}, {'_id': 0})
+    
+    return render_template('chat_test_outroom.html', username=username['id'])
 
 #채팅방 시작 전 로그인 환경
 @app.route('/')
@@ -123,6 +131,13 @@ def api_findchatroom():
         #입력받은 id의 유저를 찾습니다.
         payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         id_receive = request.form['id_give']
+        
+        #예외조건 - 자신 - 자신 제외, 상대가 DB에 없을 시 오류 출력
+        if payload_user['id'] == id_receive:
+            return jsonify({'result': 'fail', 'msg': '자기자신과의 대화는 지금도 할 수 있습니다.'})
+        
+        if db.user.find_one({"id" : id_receive}) is None:
+            return jsonify({'result': 'fail', 'msg': '대화상대가 존재하지않습니다.'})
 
         #두 유저가 존재하면서 활성화된 방이 없다면 새로운 방을 생성
         chatroom_info = db_chat.chat_room.find_one({
@@ -161,6 +176,11 @@ def api_findchatroom():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
     
+
+####################
+#   socket.io 함수   #
+####################
+    
 # 클라이언트가 특정 채팅방에 참여하는 이벤트 핸들러 -> 항후 오류 및 예외 처리 필요!
 # 해당 함수에는 그 그거 함수랑 딸려오는 그거 그 변수 그거 필요없음! 그 캐시로 데이터를 받아오기 때문!
 @socketio.on('join_chat')
@@ -186,8 +206,22 @@ def join_chat():
         join_room(room_id)
         print(f"Customer {customer_id} has successfully joined room {room_id}")
         
-        #항후 방 참여시 프론트에서 이벤트 발생시킬때 필요 -> 그럴 필요는 지금 못느낌
-        #socketio.emit('room_joined', {'room_id': room_id, 'customer_id': customer_id}, room=room_id)
+        #DB에 있던 대화기록 출력 -> 
+        #DB의 object를 담는 array를 하나 만든다.
+        #array에 따른 반복문 하나
+        #반복문은 emit을 통해서 서서히 출력한다.
+        socketio.emit('clean_message')
+        document = db_chat.chat_room.find_one({"_id": ObjectId(room_id)})
+        talk_box = document.get("talk_box", [])
+        for item in talk_box:
+            sender = item.get("talker", "Unknown")
+            message = item.get("talk", "")
+            timestamp = item.get("date", "")
+            #둘 중 한 명이라도 접속하면 작동, => 대화방에 한 명이 들어가 있으면 중복 출력되는 문제가 있음
+            #해당 명령어 이전에 html의 기록을 제거하는 식으로 해결함
+            #socketio.emit('clean_message') 활용할것
+            #다만, 상대 접속시 재출력 현상 - 깜박이는 현상 발생 => 기능적 문제로 볼 수는 없으나 항후 기회가 되면 해결바람
+            socketio.emit('receive_message', {'talker': sender, "talk": message, "date": timestamp}, room=room_id)
 
     except jwt.ExpiredSignatureError:
         print("Error: Token has expired.")

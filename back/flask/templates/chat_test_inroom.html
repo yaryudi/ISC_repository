@@ -75,6 +75,13 @@
         
       })
 
+      //html에 나타나있는 메시지를 지운다.(중복소환되는 문제가 있음)
+      socket.on( 'clean_message', function( msg ) {
+       // Remove all the <div> elements inside the message_holder
+        $('div.message_holder').empty();
+      
+      })
+
       //에러처리
       socket.on('receive_message', function( msg ) {
         //콘솔에 msg를 출력

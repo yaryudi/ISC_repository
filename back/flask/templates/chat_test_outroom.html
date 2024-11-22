@@ -15,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
  <body>
+    <h1>안녕하세요, {{ username }}님!</h1>
   <h3 style='color: #ccc;font-size: 30px;'>THIS IS OUT OF CHAT ROOM</h3>
   <div class="message_holder"></div>
   <form action="" method="POST">
@@ -92,12 +93,6 @@ function make_inroom(){
 })
 
 }
-//채팅 입장 버튼을 눌렀을 시 -> jwt토큰의 정보를 기반으로 DB에서 수색
-//없을 시 데이터 생성
-//있을 시 해당 방에 입장
 
-
-//입장 전, 대화방의 jwt 토큰을 클라이언트에 줌
-//즉, 클라이언트는 사용자인증 토큰 + 대화방인증 토큰 -> 2개를 보유하고 inroom으로 간다.
 
 </script>
