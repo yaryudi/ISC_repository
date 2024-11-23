@@ -1,47 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Management</title>
-</head>
-<body>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC: 이력서 관리하기</title>
+    <link rel="shortcut icon" href="#" />
+    <link href="resume.css" rel="stylesheet" />
+  </head>
+
+  <body>
     <h1>내 이력서</h1>
+    <div></div>
+    <!-- 개인 정보 입력 및 이미지 업로드-->
     <form action="/" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="resume_id" value="{{ resume._id if resume else '' }}">
-
-        <label for="name">이름:</label><br>
-        <input type="text" id="name" name="name" value="{{ resume.name if resume else '' }}" required><br><br>
-
-        <label for="age">나이:</label><br>
-        <input type="number" id="age" name="age" value="{{ resume.age if resume else '' }}" required><br><br>
-
-        <label for="gender">성별:</label><br>
-        <select id="gender" name="gender" required>
-            <option value="">선택</option>
-            <option value="Male" {% if resume and resume.gender == "Male" %}selected{% endif %}>남성</option>
-            <option value="Female" {% if resume and resume.gender == "Female" %}selected{% endif %}>여성</option>
-        </select><br><br>
-
-        <label for="experience">경력:</label><br>
-        <input type="number" id="experience" name="experience" value="{{ resume.experience if resume else '' }}" required><br><br>
-
-        <label for="introduction">자기소개:</label><br>
-        <textarea id="introduction" name="introduction" rows="4" cols="50" required>{{ resume.introduction if resume else '' }}</textarea><br><br>
-
-        <label for="photo">사진 업로드 (증명사진):</label><br>
-        <input type="file" id="photo" name="photo" accept="image/png, image/jpeg"><br><br>
-
-        <button type="submit" name="action" value="upload_photo">업로드</button><br><br>
-
-        {% if resume and resume.photo %}
-            <h3>현재 사진:</h3>
-            <img src="{{ url_for('static', filename=resume.photo) }}" alt="Profile Photo" style="width:120px; height:160px;"><br><br>
-        {% endif %}
-
-        <button type="submit" name="action" value="update">수정</button>
+      <div class="container">
+        <!-- 개인 정보를 입력-->
+        <div class="form-section">
+          <input
+            type="hidden"
+            name="resume_id"
+            value="{{ resume._id if resume else '' }}"
+          />
+          <label
+            >이름<input type="text" id="name" name="name" required
+          /></label>
+          <label>나이<input type="text" id="age" name="age" required /></label>
+          <label
+            >성별
+            <select id="gender" name="gender" required>
+              <option value="">선택</option>
+              <option value="Male">남성</option>
+              <option value="Female">여성</option>
+            </select>
+          </label>
+          <label
+            >경력(연도)<input
+              type="text"
+              id="experience_year"
+              name="experience_year"
+              required
+          /></label>
+          <label
+            >경력(월)<input
+              type="text"
+              id="experience_month"
+              name="experience_month"
+              required
+          /></label>
+        </div>
+        <!-- 이미지를 업로드-->
+        <div class="image-section">
+          <img
+            src="https://via.placeholder.com/200"
+            alt="Profile Photo Placeholder"
+          />
+          <div class="upload-actions">
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/png, image/jpeg"
+            />
+          </div>
+        </div>
+      </div>
     </form>
-    <a href="/todo">ToDo 페이지로 이동</a>
-</body>
-</html>
+    <!-- 자기 소개 입력 -->
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <div class="container textarea-section">
+        <label for="introduction"
+          >자기소개 (경력, 원하는 사항 등)<textarea
+            id="introduction"
+            name="introduction"
+            required
+          >
+            자기소개를 입력해주세요.</textarea
+          >
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="submit" name="action" value="update">저장</button>
+      </div>
+    </form>
 
+    <div class="todo-link">
+      <a href="/todo">ToDo 페이지로 이동</a>
+    </div>
+  </body>
+</html>

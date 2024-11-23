@@ -1,0 +1,147 @@
+/* 전체 바디 */
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* 수직 중앙 정렬 */
+        align-items: center; /* 수평 중앙 정렬 */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        min-height: 100vh; /* 화면 크기 변경 시에도 최소 화면 높이를 100%로 설정 */
+        background-color: white;
+    }
+
+/* 상단 바 = h1 + div */
+    h1 {
+        font-size: 50px;
+        text-align: left;
+        margin: 20px;
+        width: 80%; /* form과 동일한 너비로 설정 */
+        max-width: 800px; /* 최대 너비를 form과 동일하게 제한 */
+    }
+
+    h1 + div {
+        height: 20px;
+        background-color: #e69696;
+        width: 80%; /* form과 동일한 너비로 설정 */
+        max-width: 800px; /* 최대 너비를 form과 동일하게 제한 */
+        border-radius: 10px;
+    }
+
+/* container = 개인정보 입력 + 사진 파일 업로드 */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    width: 90%;
+    margin: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    position: relative;
+}
+
+
+form {
+    width: 800px;
+}
+
+#introduction {
+    width: 700px;
+    height: 150px;
+}
+
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 100px;
+}
+
+.form-section label {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* 사진 업로드 dp + upload */
+    .image-section {
+        flex: 1;
+        text-align: center;
+    }
+
+    .image-section img {
+        max-width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+/* 사진 업로드 버튼 */
+    .upload-actions {
+        gap: 10px;
+        margin: 10px 30px;
+        align-items: right;
+    }
+
+    .upload-actions input[type="file"] {
+        margin-bottom: 10px;
+    }
+
+/* 자기 소개 upload */
+    .textarea-section label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .textarea-section textarea {
+        background-color: #ffe5e5;
+        border: 1px solid #ffc0c0;
+        border-radius: 8px;
+        resize: none;
+    }
+
+/* 모든 변경 사항 저장 */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    background-color: #ffa500;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* To-Do List로 가는 버튼 */
+.button-container button:hover {
+    background-color: #e69500;
+}
+
+.todo-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.todo-link a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+}
