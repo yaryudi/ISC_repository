@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>케어 기록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+    
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #ffd6d6;
+        }
+    
+        header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+    
+        /* 출근/퇴근 버튼 스타일 */
+        .attendance-btn {
+            background-color: #f0a500; /* 주황색 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    
+        .attendance-btn:hover {
+            background-color: #d88a00; /* 어두운 주황색 */
+        }
+    
+        /* 기존 버튼 스타일 */
+        .navigate-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    
+        .navigate-btn:hover {
+            background-color: #0056b3;
+        }
+    
+        /* 전체 컨테이너 스타일 */
+        .care-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+    
+        .care-item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background-color: #fff8dc;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        .care-time {
+            font-weight: bold;
+            color: #d9534f;
+            text-align: center;
+            background-color: #ffe4e4;
+            padding: 10px;
+            border-radius: 8px;
+            flex: 1;
+        }
+    
+        .care-details {
+            flex: 4;
+            background-color: #ffe6b8;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    
+        .care-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    
+        .care-photo img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    
+        .care-comment {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+    
+        .care-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    
+        .care-actions form {
+            flex: 1;
+        }
+    
+        form input[type="file"],
+        form textarea,
+        form button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    
+        form textarea {
+            resize: none;
+            height: 50px;
+        }
+    
+        form button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    
+        form button:hover {
+            background-color: #45a049;
+        }
+    </style>    
+</head>
+<body>
+    <header>
+        <h1>케어 기록</h1>
+        <div class="button-group">
+            <form action="/care/attendance" method="POST" style="display: inline;">
+                <button type="submit" class="attendance-btn">출근/퇴근</button>
+            </form>
+            <a href="/todo" class="navigate-btn">To Do 리스트로 이동</a>
+        </div>
+    </header>    
+    <div class="care-container">
+        {% for care in cares %}
+        <div class="care-item">
+            <!-- 시간 표시 -->
+            <div class="care-time">{{ care.time }}</div>
+            <!-- 세부 내용 -->
+            <div class="care-details">
+                <div class="care-title">{{ care.content }}</div>
+
+                <!-- 사진 및 코멘트 표시: 출근/퇴근 항목은 제외 -->
+                {% if care.content != "출근" and care.content != "퇴근" %}
+                    <!-- 사진 표시 -->
+                    {% if care.photo %}
+                    <div class="care-photo">
+                        <img src="{{ url_for('static', filename=care.photo) }}" alt="첨부된 사진">
+                    </div>
+                    {% endif %}
+
+                    <!-- 코멘트 표시 -->
+                    {% if care.comment %}
+                    <div class="care-comment">{{ care.comment }}</div>
+                    {% endif %}
+
+                    <!-- 수정 버튼 -->
+                    <form action="/care/update/{{ care._id }}" method="POST" enctype="multipart/form-data">
+                        <label for="photo-{{ care._id }}">사진 추가</label>
+                        <input type="file" name="photo" id="photo-{{ care._id }}">
+
+                        <label for="comment-{{ care._id }}">코멘트 작성:</label>
+                        <textarea name="comment" id="comment-{{ care._id }}" placeholder="코멘트를 작성하세요..."></textarea>
+
+                        <button type="submit">저장</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
