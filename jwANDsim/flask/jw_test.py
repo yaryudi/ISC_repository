@@ -122,6 +122,53 @@ def resume_page():
     resume = resume_db.db.information.find_one()  # Resume 데이터베이스에서 정보 가져오기
     return render_template('resumeCSS.html', resume=resume)
 
+@app.route('/care_record', methods=['GET'])
+def care_record():
+    # GET 요청: 모든 todo 데이터를 조회
+    cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
+    return render_template('care_record.html', cares=cares)
+
+@app.route('/care/update/<care_id>', methods=['POST'])
+def update_care(care_id):
+    # 특정 케어 업데이트
+    photo = request.files.get('photo')  # 업로드된 사진
+    comment = request.form.get('comment')  # 작성된 코멘트
+
+    update_data = {}
+
+    if photo:
+        # 사진 저장
+        filename = secure_filename(photo.filename)
+        photo_path = os.path.join('static/uploads', filename)
+        photo.save(photo_path)
+        update_data['photo'] = f'uploads/{filename}'
+
+    if comment:
+        # 코멘트 업데이트
+        update_data['comment'] = comment
+
+    if update_data:
+        # MongoDB 업데이트
+        todo_db.db.todo.update_one({"_id": ObjectId(care_id)}, {"$set": update_data})
+
+    return redirect('/care_record')
+
+from datetime import datetime
+
+@app.route('/care/attendance', methods=['POST'])
+def record_attendance():
+    current_time = datetime.now().strftime('%H:%M')  # 현재 시간 HH:MM 형식으로 저장
+    last_entry = todo_db.db.todo.find_one(sort=[('_id', -1)])  # 가장 최근의 데이터 가져오기
+
+    if last_entry and last_entry.get('content') == '출근':
+        # 최근 데이터가 '출근'이라면 '퇴근' 데이터 저장
+        todo_db.db.todo.insert_one({'time': current_time, 'content': '퇴근'})
+    else:
+        # 최근 데이터가 '출근'이 아니면 '출근' 데이터 저장
+        todo_db.db.todo.insert_one({'time': current_time, 'content': '출근'})
+
+    return redirect('/care_record')  # 케어 기록 페이지로 리다이렉트
+
 if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     app.run(debug=True)
