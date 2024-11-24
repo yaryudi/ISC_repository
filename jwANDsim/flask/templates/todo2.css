@@ -29,9 +29,9 @@
             width: 100px; /* 네비게이션 박스의 가로 크기 */
             height: 100px; /* 네비게이션 박스의 세로 크기 */
             border-radius: 50%; /* 원 모양으로 변경 */
+            font-size: 75px; /* 화살표 크기 */
             display: flex;
             justify-content: center; /* 가로 가운데 정렬 */
-            align-items: center; /* 세로 가운데 정렬 */
             cursor: pointer;
             color: gray; /* 화살표 색상 */
             font-size: 75px; /* 화살표 크기 */
