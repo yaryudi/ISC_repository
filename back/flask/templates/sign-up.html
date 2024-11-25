@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- jquery cookie를 사용하기 위해 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <title>ISC - 회원가입</title>
+  </head>
+  <body>
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header class="signup-header">
+      <h1 class="signup-header__title">ISC와 동행하기</h1>
+      <p class="signup-header__text">
+        만나서 반갑습니다, <span class="highlight">ISC</span>에 오신 여러분!
+        <br />
+        <span class="highlight">이메일, 닉네임, 비밀번호</span>를 작성해주시고
+        <br />
+        <span class="highlight">케어 코디</span> 혹은<span class="highlight">보호자</span>
+        버튼을 누르신 다음에 회원가입을 눌러주세요.
+      </p>
+    </header>
+
+    <form id="signup-form">
+      <fieldset>
+        <label>
+          <input type="radio" id="care_coordi" name="role" value="care_coordi" />
+          <span>케어 코디</span>
+        </label>
+
+        <label>
+          <input type="radio" id="keeper" name="role" value="keeper" />
+          <span>보호자</span>
+        </label>
+      </fieldset>
+      <input id="input-id" name="userName" type="text" required placeholder="이메일(ID)" />
+      <input id="input-nickname" name="nickname" type="text" required placeholder="닉네임" />
+      <input id="input-password" name="password" type="password" required minlength="8" placeholder="Password" />
+
+      <!-- Sign In 버튼 -->
+      <input type="submit" value="회원가입" onclick="signup()" />
+    </form>
+
+    <script>
+      function signup() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/signup',
+          data: {
+            //입력한 값(data)들을 전송한다.
+            id_give: $('#input-id').val(),
+            pw_give: $('#input-password').val(),
+            nickname_give: $('#input-nickname').val(),
+            role: $('input[name="role"]:checked').val()
+          },
+          success: function (response) {
+            if (response['result'] == 'success') {
+              alert('회원가입이 완료되었습니다.')
+              window.location.href = '/login'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+    </script>
+    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+  </body>
+</html>
