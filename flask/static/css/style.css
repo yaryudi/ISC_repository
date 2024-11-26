@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Gowun+Batang:wght@400;700&family=Oswald:wght@200..700&display=swap');
+@import url(reset.css);
+@import url(variable.css);
+
+/* 컴포넌트 */
+@import url(components/status-bar.css);
+@import url(components/nav-bar.css);
+
+/* 스크린 */
+@import url(screens/login.css);
+@import url(screens/first-home.css);
+@import url(screens/sign-up.css);
+body:lang(en){
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body:lang(ko){
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.important-text {
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-weight: bolder;
+  }
+
+  .highlight {
+    color: #fa937e;
+    font-weight: bold; 
+    
+  }
+
+

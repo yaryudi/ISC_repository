@@ -1,0 +1,203 @@
+/* 공통 스타일 */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flext-start; /* 수직 맨위 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding:0;
+    height: 100vh;
+    min-height: 100vh;
+    background-color: white;
+}
+
+/* 헤더 스타일 */
+header {
+    display: flex;
+    justify-content: space-between; /* 제목과 버튼을 양쪽 끝으로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+    height: 66px;
+    margin: 20px;
+    width: 80%; /* 너비 설정 */
+    max-width: 800px; /* 최대 너비 제한 */
+}
+/* 제목 스타일 */
+header h1 {
+    font-size: 50px;
+    text-align: left;
+    margin:0;
+  }
+  
+  /* 우상단 뒤로가기 버튼 */
+  .navigate-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    font-size: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:gray;
+    border: none;
+    cursor: pointer;
+    margin-left: auto; /* 버튼을 오른쪽으로 밀착 */
+  }
+  
+  .navigate-btn:hover {
+    background-color: #df4b8d; /* 호버 시 색상 변경 */
+    color: white; /* 호버 시 화살표 색상 */
+}
+  
+header + div {
+    min-height: 20px;
+    background-color: #e69696;
+    width: 80%; /* form과 동일한 너비로 설정 */
+    max-width: 800px; /* 최대 너비를 form과 동일하게 제한 */
+    border-radius: 10px;
+}
+  /* 주간 내비게이션 */
+  .navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #ffe6b8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .nav-btn:hover {
+    background-color: #ffc107;
+  }
+  
+  .current-week {
+    font-size:40px;
+    font-weight: bold;
+    color: #333;
+  }
+
+/* 요일 및 날짜 스타일 */
+.week-days {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    width: 800px; /* 너비 설정 */
+    max-width: 800px; /* 최대 너비 제한 */
+    background-color: #ffe6b8;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.day-container {
+    text-align: center;
+}
+
+.day {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    background-color: #ffd6d6;
+    color: #333;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 케어 기록 카드 스타일 */
+.care-container {
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.care-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.care-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff7e6; /* 밝은 크림색 */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.care-time {
+    flex: 0 0 60px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #ffc9c9;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+    align-self: flex-start;
+    align-self: flex-start; /* 개별 요소를 최상단으로 */
+}
+
+
+.care-content {
+    display: flex;
+    flex: 1;
+    gap: 10px; /* 사진과 코멘트 사이 간격 */
+}
+
+.care-photo {
+    flex: 1;
+    max-width: 150px; /* 사진의 최대 너비를 150px로 고정 */
+    max-height: 100px; /* 사진의 최대 높이를 100px로 고정 */
+    overflow: hidden; /* 크기 제한으로 넘치는 부분을 숨김 */
+}
+
+.care-photo img {
+    width: 150px; /* 사진의 너비를 150px로 고정 */
+    height: 100px; /* 사진의 높이를 100px로 고정 */
+    object-fit: cover; /* 크기가 고정된 박스 안에 비율을 유지하며 꽉 채움 */
+    border-radius: 8px; /* 둥근 모서리 */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+/* 코멘트 스타일 */
+.care-comment {
+    flex: 2; /* 코멘트가 사진보다 넓게 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.care-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.care-description {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}

@@ -1,0 +1,6 @@
+Javascript 필요한 지점
+1. HTML과 CSS만으로 "주간 변경"이나 "날짜 클릭"과 같은 동적 로직은 불가능.
+2. JavaScript 없이 날짜별로 UI 전환은 불가능하므로
+    해당 부분은 추후 JavaScript 보강이 필요하다고 명시.
+3. 뒤로가기 버튼의 동작을 실제 구현하려면
+    JavaScript로 history.back()을 적용할 수 있습니다.

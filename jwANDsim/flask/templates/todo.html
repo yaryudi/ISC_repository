@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do 리스트 작성</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #ffd6d6;
+      }
+      header h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      .navigate-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .navigate-btn:hover {
+        background-color: #0056b3;
+      }
+      .todo-container {
+        flex: 1;
+        max-width: 600px;
+        margin: 0 auto;
+        overflow-y: auto;
+        padding: 20px;
+      }
+      .todo-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .todo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fff5e1;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .todo-time-box {
+        flex: 2;
+        text-align: center;
+        padding: 10px;
+        background-color: #ffc9c9;
+        border-radius: 5px;
+        margin-right: 10px;
+        font-weight: bold;
+        color: #d9534f;
+      }
+      .todo-content-box {
+        flex: 8;
+        padding: 10px;
+        background-color: #ffe6b8;
+        border-radius: 5px;
+        color: #333;
+      }
+      .edit-btn {
+        background-color: #ffc107;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      .edit-btn:hover {
+        background-color: #e0a800;
+      }
+      .input-section {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fff8dc;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .input-section input,
+      .input-section button {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .input-section input[type="time"] {
+        flex: 2;
+        margin-right: 10px;
+      }
+      .input-section input[type="text"] {
+        flex: 8;
+        margin-right: 10px;
+      }
+      .input-section button {
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+        width: 80px;
+      }
+      .input-section button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>To Do 리스트 작성</h1>
+      <a href="/" class="navigate-btn">이력서로 이동</a>
+    </header>
+    <div class="todo-container">
+      <ul id="todo-list" class="todo-list"></ul>
+    </div>
+
+    <!-- 입력창 아래 고정 -->
+    <div class="input-section">
+      <input type="time" id="todo-time" placeholder="시간 입력" />
+      <input type="text" id="todo-content" placeholder="내용 입력" />
+      <button id="add-btn">작성</button>
+    </div>
+
+    <script>
+      const todoList = document.getElementById("todo-list");
+      const timeInput = document.getElementById("todo-time");
+      const contentInput = document.getElementById("todo-content");
+      const addBtn = document.getElementById("add-btn");
+
+      // To Do 리스트 데이터 저장
+      let todos = [];
+
+      // To Do 리스트 렌더링 함수
+      function renderTodos() {
+        // 리스트 초기화
+        todoList.innerHTML = "";
+
+        // 정렬된 리스트 생성
+        todos.sort((a, b) => a.time.localeCompare(b.time));
+
+        todos.forEach((todo, index) => {
+          const listItem = document.createElement("li");
+          listItem.className = "todo-item";
+
+          const timeBox = document.createElement("div");
+          timeBox.className = "todo-time-box";
+          timeBox.textContent = todo.time;
+
+          const contentBox = document.createElement("div");
+          contentBox.className = "todo-content-box";
+          contentBox.textContent = todo.content;
+
+          const editBtn = document.createElement("button");
+          editBtn.className = "edit-btn";
+          editBtn.textContent = "수정";
+          editBtn.onclick = () => editTodo(index);
+
+          listItem.appendChild(timeBox);
+          listItem.appendChild(contentBox);
+          listItem.appendChild(editBtn);
+          todoList.appendChild(listItem);
+        });
+      }
+
+      // To Do 리스트 추가 함수
+      function addTodo() {
+        const time = timeInput.value;
+        const content = contentInput.value;
+
+        if (!time || !content) {
+          alert("시간과 내용을 모두 입력해주세요.");
+          return;
+        }
+
+        todos.push({ time, content });
+        renderTodos();
+
+        // 입력 필드 초기화
+        timeInput.value = "";
+        contentInput.value = "";
+      }
+
+      // To Do 리스트 수정 함수
+      function editTodo(index) {
+        const newContent = prompt(
+          "수정할 내용을 입력하세요:",
+          todos[index].content
+        );
+        if (newContent !== null) {
+          todos[index].content = newContent;
+          renderTodos();
+        }
+      }
+
+      // 이벤트 리스너
+      addBtn.addEventListener("click", addTodo);
+    </script>
+  </body>
+</html>
