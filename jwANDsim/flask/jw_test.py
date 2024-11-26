@@ -93,7 +93,7 @@ def manage_resume():
 
     # GET 요청: 기존 데이터 가져오기
     resume = resume_db.db.information.find_one()
-    return render_template('resumeCSS.html', resume=resume)
+    return render_template('resume.html', resume=resume)
 
 @app.route('/todo', methods=['GET', 'POST'])
 def manage_todo():
@@ -106,8 +106,8 @@ def manage_todo():
             todo_db.db.todo.insert_one({"time": time, "content": content})
         return redirect('/todo')
 
-    # 데이터 조회
-    todos = list(todo_db.db.todo.find())
+    # 데이터 조회 (출근/퇴근 제외)
+    todos = list(todo_db.db.todo.find({"content": {"$nin": ["출근", "퇴근"]}}))
     return render_template('todo2.html', todos=todos)
 
 @app.route('/todo/delete/<todo_id>', methods=['POST'])

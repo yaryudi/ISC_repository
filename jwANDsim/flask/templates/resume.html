@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ISC: 이력서 관리하기</title>
     <link rel="shortcut icon" href="#" />
-    <link href="resume.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/resume.css') }}" rel="stylesheet" />
   </head>
 
   <body>
@@ -85,6 +85,7 @@
 
     <div class="todo-link">
       <a href="/todo">ToDo 페이지로 이동</a>
+      <a href="/care_record" style="margin-left: 20px;">케어기록 페이지로 이동</a>
     </div>
   </body>
 </html>
