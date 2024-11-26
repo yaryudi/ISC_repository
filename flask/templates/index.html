@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>ISC - 초기 화면</title>
+
+    <script>
+      function go_login() {
+        window.location.href = '/login'
+      }
+    </script>
+  </head>
+
+  <body class="no-scroll with-background">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="title">
+        <img src="../static/ISC_logo_cut.png" alt="ISC_logo" style="max-width: 100%; height: auto" />
+        <header class="greet-header">
+          <h1 class="greet-header__title"><span class="highlight">I</span>n<span class="highlight">S</span>pired <span class="highlight">C</span>are For Connection</h1>
+          <p class="greet-header__text vision important-text">함께하는 돌봄, 연결과 지원, 투명성과 책임</p>
+          <p class="greet-header__text">이 세가지 가치를 바탕으로 노인과 보호자가 신뢰할 수 있는 돌봄 서비스를 제공합니다.</p>
+        </header>
+
+        <input class="important-text" id="start" type="submit" value="동행 하기" onclick="go_login()" />
+      </div>
+    </div>
+    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+  </body>
+</html>
