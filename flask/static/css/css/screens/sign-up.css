@@ -1,0 +1,120 @@
+
+
+.signup-header{
+    margin: 90px 0px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.signup-header__title{
+    margin-bottom: 90px;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.signup-header__text{
+    opacity: 0.6;
+    width: 80%;
+}
+
+
+#signup-form{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 30px;
+}
+
+#signup-form input{
+    padding: 15px 0px;
+    border: none;
+    font-size: 20px;
+    margin-bottom: 25px;
+    
+}
+
+
+/* input type 이 submit이 아닐때, []이 사이에 쓰인 것들은 특정 선택자 
+    input 타입이 submit가 아닐 때에만 아래가 작동.
+*/
+#signup-form input:not([type="submit"]){
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    transition: border-color 1s ease-in-out;
+}
+
+#signup-form input::placeholder{
+    color: rgba(0, 0, 0, 0.3);
+}
+
+#signup-form input:focus{
+    border-color: var(--orange);
+}
+
+#signup-form input[type="submit"]{
+    color:rgba(255,255,255,0.7);
+    background-color: var(--orange);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 15px;
+}
+
+#signup-form input[type="submit"]:hover{
+    background-color: var(--littlePink);
+  }
+
+#signup-form fieldset{
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--orange);
+}
+
+ #signup-form label span {
+    font-size: 20px;
+    line-height: 2rem; 
+    border: none;
+    color: rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease-in-out; /* 색상 변화 애니메이션 */
+    
+  }
+  
+  /* #signup-form input[type="radio"], span{
+    vertical-align: middle;
+  } */
+
+
+#signup-form input[type="radio"]{
+    appearance: none;
+    padding: 0;     
+    vertical-align: middle;
+    width: 1.25em;
+    height: 1.25em;
+    border: 2px solid var(--littlePink);
+    margin-bottom: 15px; 
+    border: max(2px, 0.1em) solid var(--littlePink);
+    border-radius: 30%;
+    transition: border 0.3s ease-in-out;
+  }
+
+  #signup-form [type="radio"]:checked {
+    border: 0.4em solid var(--littlePink);
+  }
+
+  #signup-form [type="radio"]:checked + span{
+    color: var(--orange); 
+    font-weight: bolder;
+  }
+
+  #signup-form [type="radio"]:focus-visible {
+    outline: max(2px, 0.1em) dotted var(--orange);
+    outline-offset: max(2px, 0.1em);
+  }
+
+  #signup-form [type="radio"]:hover {
+    box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+    cursor: pointer;
+  }
+  
+  #signup-form [type="radio"]:hover + span {
+    cursor: pointer;
+  }
