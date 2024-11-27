@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISC: 이력서 관리하기</title>
+    <title>ISC: 내 이력서 편집</title>
     <link rel="shortcut icon" href="#" />
-    <link href="{{ url_for('static', filename='css/resume.css') }}" rel="stylesheet" />
+    <link href="..\static\css\resume.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -50,10 +50,7 @@
         </div>
         <!-- 이미지를 업로드-->
         <div class="image-section">
-          <img
-            src="https://via.placeholder.com/200"
-            alt="Profile Photo Placeholder"
-          />
+          <img src="https://via.placeholder.com/200" alt="첨부된 사진" />
           <div class="upload-actions">
             <input
               type="file"
@@ -74,7 +71,7 @@
             name="introduction"
             required
           >
-            자기소개를 입력해주세요.</textarea
+자기소개를 입력해주세요.</textarea
           >
         </label>
       </div>
@@ -85,8 +82,12 @@
 
     <div class="todo-link">
       <a href="/todo">ToDo 페이지로 이동</a>
-      <a href="/todo_carecody" style="margin-left: 20px;">내 ToDo 페이지로 이동</a>
-      <a href="/care_record" style="margin-left: 20px;">케어 기록 페이지로 이동</a>
+      <a href="/todo_carecody" style="margin-left: 20px"
+        >내 ToDo 페이지로 이동</a
+      >
+      <a href="/care_record" style="margin-left: 20px"
+        >케어 기록 페이지로 이동</a
+      >
     </div>
   </body>
 </html>
