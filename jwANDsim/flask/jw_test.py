@@ -126,7 +126,7 @@ def resume_page():
 def care_record():
     # GET 요청: 모든 todo 데이터를 조회
     cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
-    return render_template('care_record.html', cares=cares)
+    return render_template('care_record_old.html', cares=cares)
 
 @app.route('/care/update/<care_id>', methods=['POST'])
 def update_care(care_id):
