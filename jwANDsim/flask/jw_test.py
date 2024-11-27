@@ -108,7 +108,7 @@ def manage_todo():
 
     # 데이터 조회 (출근/퇴근 제외)
     todos = list(todo_db.db.todo.find({"content": {"$nin": ["출근", "퇴근"]}}))
-    return render_template('todo2.html', todos=todos)
+    return render_template('todo_maker.html', todos=todos)
 
 @app.route('/todo/delete/<todo_id>', methods=['POST'])
 def delete_todo(todo_id):
@@ -152,7 +152,7 @@ def update_care(care_id):
         # MongoDB 업데이트
         todo_db.db.todo.update_one({"_id": ObjectId(care_id)}, {"$set": update_data})
 
-    return redirect('/care_record')
+    return redirect('/todo_carecody')
 
 from datetime import datetime
 
@@ -168,14 +168,14 @@ def record_attendance():
         # 최근 데이터가 '출근'이 아니면 '출근' 데이터 저장
         todo_db.db.todo.insert_one({'time': current_time, 'content': '출근'})
 
-    return redirect('/care_record')  # 내 ToDo 페이지로 리다이렉트
+    return redirect('/todo_carecody')  # 내 ToDo 페이지로 리다이렉트
 
-###케어 기록(날짜별 모음)###
+###케어 기록(날짜별 모음)
 @app.route('/care_record', methods=['GET'])
 def care_record_page():
     # 모든 todo 데이터를 조회
     cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
-    return render_template('care_record.html', cares=cares)
+    return render_template('diary.html', cares=cares)
 
 if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
