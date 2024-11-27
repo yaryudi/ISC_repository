@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
+import math
 
 app = Flask(__name__)
 
@@ -102,8 +104,15 @@ def manage_todo():
         time = request.form.get('time')
         content = request.form.get('content')
 
+        # 현재 날짜 가져오기
+        current_date = datetime.now().strftime('%Y-%m-%d')
+
         if time and content:
-            todo_db.db.todo.insert_one({"time": time, "content": content})
+            todo_db.db.todo.insert_one({
+                "time": time,
+                "content": content,
+                "date": current_date  # 현재 날짜 추가
+            })
         return redirect('/todo')
 
     # 데이터 조회 (출근/퇴근 제외)
@@ -170,9 +179,76 @@ def record_attendance():
 
     return redirect('/todo_carecody')  # 내 ToDo 페이지로 리다이렉트
 
-###케어 기록(날짜별 모음)
-@app.route('/care_record', methods=['GET'])
+##############################################################################
+
+# 주별 날짜 계산 함수 (일요일 시작)
+def get_week_dates(base_date):
+    # 일요일 기준으로 주의 시작일 계산
+    start_of_week = base_date - timedelta(days=(base_date.weekday() + 1) % 7)
+    return [start_of_week + timedelta(days=i) for i in range(7)]
+
+# 월 내에서 주차 계산 함수
+def week_number_in_month(date):
+    first_day_of_month = date.replace(day=1)
+    # 일요일 기준으로 첫 번째 날의 위치를 조정
+    first_day_adjusted = (first_day_of_month.weekday() + 1) % 7
+    return math.ceil((date.day + first_day_adjusted) / 7)
+
+# 월에 몇 주가 있는지 계산
+def total_weeks_in_month(date):
+    first_day_of_month = date.replace(day=1)
+    last_day_of_month = (date.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+    last_day_adjusted = (last_day_of_month.weekday() + 1) % 7
+    return math.ceil((last_day_of_month.day + last_day_adjusted) / 7)
+
+### 돌봄 다이어리(날짜별 모음) ###
+@app.route('/diary', methods=['GET'])
 def care_record_page():
+    # URL 파라미터 처리
+    week_offset = int(request.args.get('week', 0))  # 주 이동 (기본값 0)
+    base_date = datetime.now() + timedelta(weeks=week_offset)
+
+    # 주차 계산 (월 기준)
+    current_month = base_date.month
+    current_year = base_date.year
+    current_week_number = week_number_in_month(base_date)
+    total_weeks = total_weeks_in_month(base_date)
+
+    # 주차 이동이 월 범위를 넘어가지 않도록 제한
+    if current_week_number + week_offset > total_weeks:
+        base_date = base_date.replace(day=1) + timedelta(days=32)  # 다음 달로 이동
+        base_date = base_date.replace(day=1)  # 다음 달 1일로 설정
+    elif current_week_number + week_offset < 1:
+        base_date = base_date.replace(day=1) - timedelta(days=1)  # 이전 달로 이동
+        base_date = base_date.replace(day=1)  # 이전 달 1일로 설정
+
+    # 주별 날짜 계산 (일요일 시작)
+    week_dates = get_week_dates(base_date)
+    formatted_week = [date.strftime('%Y-%m-%d') for date in week_dates]
+    days = ['일', '월', '화', '수', '목', '금', '토']
+
+    # MongoDB 쿼리 조건
+    selected_date = request.args.get('date')  # 특정 날짜 선택
+    if selected_date:  # 특정 날짜 선택
+        query = {"date": selected_date}
+        current_date = selected_date
+    else:  # 기본적으로 주 전체 데이터를 로드
+        query = {"date": {"$in": formatted_week}}
+        current_date = None
+
+    cares = list(todo_db.db.todo.find(query).sort("time", 1))  # 시간순 정렬
+
+    # 데이터를 HTML 템플릿으로 전달
+    return render_template(
+        'diary_jw.html',
+        cares=cares,
+        week_dates=zip(days, formatted_week),
+        current_week=f"{current_year}년 {current_month}월 {week_number_in_month(base_date)}째주",
+        current_date=current_date
+    )
+
+@app.route('/test', methods=['GET'])
+def test_page():
     # 모든 todo 데이터를 조회
     cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
     return render_template('diary.html', cares=cares)

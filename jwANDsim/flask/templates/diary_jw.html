@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC: 돌봄 다이어리</title>
+    <link rel="shortcut icon" href="#" />
+    <link href="{{ url_for('static', filename='css/diary_jw.css') }}" rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <h1>돌봄 다이어리</h1>
+    </header>
+
+    <div class="navigation">
+      <!-- 주차 이동 버튼 -->
+      <a href="{{ url_for('care_record_page', week=-1) }}" class="nav-btn">◀</a>
+      <span class="current-week">{{ current_week }}</span>
+      <a href="{{ url_for('care_record_page', week=1) }}" class="nav-btn">▶</a>
+    </div>
+
+    <!-- 요일 선택 버튼 -->
+    <div class="week-days">
+      {% for day, date in week_dates %}
+      <a href="{{ url_for('care_record_page', date=date) }}" 
+         class="day-btn {% if current_date == date %}active{% endif %}">
+        {{ day }} <br>
+        <span class="day-number">{{ date[-2:] }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- 데이터 표시 -->
+    <div class="care-container">
+      {% if cares %}
+        {% for care in cares %}
+        <div class="care-item">
+          <div class="care-time">{{ care.time }}</div>
+          <div class="care-details">
+            <div class="care-title">{{ care.content }}</div>
+            {% if care.photo %}
+            <div class="care-photo">
+              <img src="{{ url_for('static', filename=care.photo) }}" alt="첨부된 사진">
+            </div>
+            {% endif %}
+            {% if care.comment %}
+            <div class="care-comment">{{ care.comment }}</div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-data">선택된 날짜에 데이터가 없습니다.</p>
+      {% endif %}
+    </div>
+    <div class="resume-link">
+      <a href="/resume">이력서 페이지로 이동</a>
+      <a href="/todo">ToDo 페이지로 이동</a>
+    </div>
+  </body>
+</html>
