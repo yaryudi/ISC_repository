@@ -71,11 +71,29 @@
 
           //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
           //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
-        $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.talker+' '+msg.talk+ '</b> '+msg.date+'</div>' )
-        
+        $('div.message_holder').append(`
+        <div class="message-row">
+          <img
+            src="https://th.bing.com/th/id/OIP.-5sorRJ9rKAhvzVSJZEaTwHaEJ?w=300&h=180&c=7&r=0&o=5&pid=1.7"
+            alt="User Avatar"
+          />
+          <div class="message-row__content">
+            <span class="message__author">Mommy Tiger</span>
+            <div class="message__info">
+              <span class="message__bubble">
+                밥 먹어라~ppppppppppppp
+                <div class="balloon-tail__left"></div>
+              </span>
+              <span class="message__time">14:03</span>
+            </div>
+          </div>
+        </div>
+        `)
       })
 
       //html에 나타나있는 메시지를 지운다.(중복소환되는 문제가 있음)
+
+      
       socket.on( 'clean_message', function( msg ) {
        // Remove all the <div> elements inside the message_holder
         $('div.message_holder').empty();

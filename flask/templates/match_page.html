@@ -64,11 +64,46 @@
       }
       
       function dis_match() {
-
-        
+        $.ajax({
+          type: 'POST',
+          url: '/api/dis_match',
+          data: {
+            nick_give: $('#input-nick').val()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 해제 완료!')
+              //메인 페이지로 이동
+              window.location.href = '/main'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
       }
       
-      function allow_match() {}
+      function allow_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/allow_match',
+          data: {
+            nick_give: $('#input-nick').val()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 완료!')
+              //메인 페이지로 이동
+              window.location.href = '/main'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
     </script>
   </head>
 
