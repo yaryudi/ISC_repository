@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC: 내 ToDo</title>
+    <link rel="shortcut icon" href="#" />
+    <link href="{{ url_for('static', filename='css/todo_carecody.css') }}" rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <h1>내 ToDo</h1>
+      <div class="button-group">
+        <form action="/care/attendance" method="POST" style="display: inline">
+          <button type="submit" class="attendance-btn">출근/퇴근</button>
+        </form>
+      </div>
+      <div class="navigation">
+        <button class="nav-btn prev-week">◀ 지난 주</button>
+        <span class="current-week">11월 둘째 주</span>
+        <button class="nav-btn next-week">다음 주 ▶</button>
+      </div>
+    </header>
+
+    <div class="care-container">
+      {% for care in cares %}
+      <div class="care-item">
+        <!-- 시간 표시 -->
+        <div class="care-time">{{ care.time }}</div>
+        <!-- 세부 내용 -->
+        <div class="care-details">
+          <div class="care-title">{{ care.content }}</div>
+
+          <!-- 사진 및 코멘트 표시: 출근/퇴근 항목은 제외 -->
+          {% if care.content != "출근" and care.content != "퇴근" %}
+          <!-- 사진 표시 -->
+          {% if care.photo %}
+          <div class="care-photo">
+            <img
+              src="{{ url_for('static', filename=care.photo) }}"
+              alt="첨부된 사진"
+            />
+          </div>
+          {% endif %}
+
+          <!-- 코멘트 표시 -->
+          {% if care.comment %}
+          <div class="care-comment">{{ care.comment }}</div>
+          {% endif %}
+
+          <!-- 수정 버튼 -->
+          <form
+            action="/care/update/{{ care._id }}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <label for="photo-{{ care._id }}">사진 추가</label>
+            <input type="file" name="photo" id="photo-{{ care._id }}" />
+
+            <label for="comment-{{ care._id }}">코멘트 작성:</label>
+            <textarea
+              name="comment"
+              id="comment-{{ care._id }}"
+              placeholder="코멘트를 작성하세요..."
+            ></textarea>
+
+            <button type="submit">저장</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

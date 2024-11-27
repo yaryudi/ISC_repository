@@ -120,13 +120,14 @@ def delete_todo(todo_id):
 def resume_page():
     # Resume 데이터를 가져오거나 기본 페이지 렌더링
     resume = resume_db.db.information.find_one()  # Resume 데이터베이스에서 정보 가져오기
-    return render_template('resumeCSS.html', resume=resume)
+    return render_template('resume.html', resume=resume)
 
-@app.route('/care_record', methods=['GET'])
+###내 ToDo (케어코디가 입력하는 페이지)###
+@app.route('/todo_carecody', methods=['GET'])
 def care_record():
     # GET 요청: 모든 todo 데이터를 조회
     cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
-    return render_template('care_record_old.html', cares=cares)
+    return render_template('todo_carecody.html', cares=cares)
 
 @app.route('/care/update/<care_id>', methods=['POST'])
 def update_care(care_id):
@@ -167,7 +168,14 @@ def record_attendance():
         # 최근 데이터가 '출근'이 아니면 '출근' 데이터 저장
         todo_db.db.todo.insert_one({'time': current_time, 'content': '출근'})
 
-    return redirect('/care_record')  # 케어 기록 페이지로 리다이렉트
+    return redirect('/care_record')  # 내 ToDo 페이지로 리다이렉트
+
+###케어 기록(날짜별 모음)###
+@app.route('/care_record', methods=['GET'])
+def care_record_page():
+    # 모든 todo 데이터를 조회
+    cares = list(todo_db.db.todo.find().sort("time", 1))  # 시간순으로 정렬
+    return render_template('care_record.html', cares=cares)
 
 if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
