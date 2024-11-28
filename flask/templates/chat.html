@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="../static/css/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat with Tiger -Cocoa Clone</title>
+    <title>ISC - 케톡!</title>
   </head>
   <body id="chat-screen">
     <div class="status-bar">
@@ -27,22 +27,25 @@
 
     <header class="alt-screen-header">
       <div class="alt-screen-header__column">
-        <a href="chats.html"> <i class="fa-solid fa-angles-left fa-3x"></i></a>
+        <a href="chats.html"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
       </div>
       <div class="alt-screen-header__column">
         <h1 class="alt-screen-header__title">Tiger</h1>
       </div>
       <div class="alt-screen-header__column">
-        <span><i class="fa-sharp fa-solid fa-magnifying-glass fa-2x"></i></span>
-        <span><i class="fa-solid fa-bars fa-2x"></i></span>
+        <!-- <span><i class="fa-sharp fa-solid fa-magnifying-glass fa-2x"></i></span>
+        <span><i class="fa-solid fa-bars fa-2x"></i></span> -->
+        <span
+          ><img
+            class="alt-screen-header-logo"
+            src="../static/ISC-logo_trans.png"
+        /></span>
       </div>
     </header>
 
     <main class="main-screen main-chat">
       <div class="chat__timestamp">Tuesday, June 30, 2020</div>
-      
-      <div class="message_holder"></div>
-      
+      <!-- <div class="message_holder"></div> -->
     </main>
     <form class="reply">
       <div class="reply__column">
@@ -50,123 +53,139 @@
       </div>
       <div class="reply__column">
         <input type="text" class="message" placeholder="Write a message..." />
-        <input type="submit"/>
-        <i class="far fasmile--wink fa-lg"></i>
-        <button>
+        <button class="reply__btn">
           <i class="fas fa-arrow-up"></i>
         </button>
       </div>
     </form>
 
-    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    
-    <script>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
       crossorigin="anonymous"
-      var socket = io.connect('http://' + document.domain + ':' + location.port);
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script>
+      crossorigin = "anonymous";
+      var socket = io.connect(
+        "http://" + document.domain + ":" + location.port
+      );
 
       //클라이언트가 서버와 연결이 성공적으로 이루어졌을 때 실행
-      socket.on( 'connect', function() {
+      socket.on("connect", function () {
         //서버에 'my event'라는 이벤트를 발생시키고, data: 'User Connected'라는 데이터를 보냄
-        socket.emit( 'my event', {
-          data: 'User Connected'
-        } )
+        socket.emit("my event", {
+          data: "User Connected",
+        });
 
-        socket.emit( 'join_chat')
+        socket.emit("join_chat");
 
         //이 코드는 <form> 태그에 submit 이벤트를 설정합니다. 사용자가 폼을 제출할 때 이 함수가 실행됩니다//채팅을 전송할 때 작동
-        var form = $( 'form' ).on( 'submit', function( e ) {
+        var form = $("form").on("submit", function (e) {
           // 폼의 기본 동작(페이지 리로드)을 방지하고, 사용자 정의 동작을 실행하게 만듭니다.
-          e.preventDefault()
+          e.preventDefault();
           //사용자가 입력한 사용자 이름, 메시지를 을 input.message 요소에서 읽어옵니다.
-          let user_input = $( 'input.message' ).val()
+          let user_input = $("input.message").val();
 
           //입력시 시간을 보낸다. (Date()는 9시간 앞선 날짜를 보낸다.)
           var currentDate = new Date();
           currentDate.setHours(currentDate.getHours() + 9);
 
-
           currentDate = currentDate.toISOString();
 
           //time과 user_input 값을 포함하는 객체를 서버에 전송합니다
           //socket을 사용한다!!!!! -> 사용자에 관련된 정보는 캐시를 직접적으로 다루는 백에서 처리한다.
-          socket.emit( 'send_message', {
-            message : user_input,
-            time : currentDate
-          } )
+          socket.emit("send_message", {
+            message: user_input,
+            time: currentDate,
+          });
 
           //메시지 입력 필드(input.message)의 값을 빈 문자열로 설정하여 메시지를 비웁니다
-          $( 'input.message' ).val( '' ).focus()
-        } )
-      } )
+          $("input.message").val("").focus();
+        });
+      });
 
       //서버에서 준 글을 출력
 
-      socket.on( 'receive_message_me', function( msg ) {
+      socket.on("receive_message_me", function (msg) {
         //콘솔에 msg를 출력
         console.log("Received message:", msg); // 서버에서 전 달받은 데이터 출력
         const date = new Date(msg.date);
         const time = date.toISOString().substring(11, 16); // "HH:MM:SS" 형식으로 시간만 추출
 
-          //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
-          //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
-        $('div.message_holder').append(`
+        //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
+        //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
+        $("main").append(
+          `
         <div class="message-row__own">
         <div class="message-row__content">
           <div class="message__info">
             <span class="message__bubble"
-              >`+msg.talk+`
-              <div class="balloon-tail__"></div>
+              >` +
+            msg.talk +
+            `
+              <div class="balloon-tail__right"></div>
             </span>
 
-            <span class="message__time">`+time+`</span>
+            <span class="message__time">` +
+            time +
+            `</span>
           </div>
         </div>
       </div>
-        `)
-      })
+        `
+        );
+        // 스크롤을 아래로 이동
+        const main = document.querySelector("main");
+        main.scrollTop = main.scrollHeight;
+      });
 
-      socket.on( 'receive_message_you', function( msg ) {
+      socket.on("receive_message_you", function (msg) {
         //콘솔에 msg를 출력
         console.log("Received message:", msg); // 서버에서 전달받은 데이터 출력
         const date = new Date(msg.date);
         const time = date.toISOString().substring(11, 16); // "HH:MM:SS" 형식으로 시간만 추출
 
-          //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
-          //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
-        $('div.message_holder').append(`
+        //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
+        //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
+        $("main").append(
+          `
         <div class="message-row">
           <img
             src="https://th.bing.com/th/id/OIP.-5sorRJ9rKAhvzVSJZEaTwHaEJ?w=300&h=180&c=7&r=0&o=5&pid=1.7"
             alt="User Avatar"
           />
           <div class="message-row__content">
-            <span class="message__author">`+msg.talker+`</span>
+            <span class="message__author">` +
+            msg.talker +
+            `</span>
             <div class="message__info">
               <span class="message__bubble">
-                `+msg.talk+`
+                ` +
+            msg.talk +
+            `
                 <div class="balloon-tail__left"></div>
               </span>
-              <span class="message__time">`+time+`</span>
+              <span class="message__time">` +
+            time +
+            `</span>
             </div>
           </div>
         </div>
-        `)
-      })
+        `
+        );
+        // 스크롤을 아래로 이동
+        const main = document.querySelector("main");
+        main.scrollTop = main.scrollHeight;
+      });
 
       //html에 나타나있는 메시지를 지운다.(중복소환되는 문제가 있음)
 
-      
-      socket.on( 'clean_message', function( msg ) {
-       // Remove all the <div> elements inside the message_holder
-        $('div.message_holder').empty();
-      
-      })      
-
-    
-
-
+      socket.on("clean_message", function (msg) {
+        // Remove all the <div> elements inside the message_holder
+        $("main").empty();
+      });
     </script>
   </body>
 </html>

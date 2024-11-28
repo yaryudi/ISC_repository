@@ -5,7 +5,6 @@
 /* 컴포넌트 */
 @import url(components/status-bar.css);
 @import url(components/nav-bar.css);
-
 @import url(components/screen-header.css);
 @import url(components/user-component.css);
 @import url(components/badge.css);
@@ -18,25 +17,21 @@
 @import url(screens/sign-up.css);
 @import url(screens/chat.css);
 
+body{
+  color: var(--green);
+}
+
 body:lang(en){
     font-family: "Fira Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
+    
 }
 
 body:lang(ko){
     font-family: "Gowun Batang", serif;
     font-weight: 400;
     font-style: normal;
-}
-
-.message_holder {
-  height: 400px;
-  width: 100%;
-  overflow-y: scroll;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ddd;
 }
 
 
@@ -46,7 +41,7 @@ body:lang(ko){
     font-weight: bolder;
   }
 
-  .highlight {
+.highlight {
     color: #fa937e;
     font-weight: bold; 
     

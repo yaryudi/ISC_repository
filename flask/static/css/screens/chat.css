@@ -1,6 +1,6 @@
 #chat-screen{
     background-color: #abc1d1;
-    height: 150vh;
+    height: 100%;
 }
 
 #chat-screen .status-bar{
@@ -19,13 +19,20 @@
 
 #chat-screen .alt-screen-header{
     z-index: 1;
-}
+} 
 
 .main-chat{
-    margin-top: 120px;
+    margin-top: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0px 15px;
+    padding-bottom: 50px;
+
+    /* 스크롤 코드 */
+    overflow-y: auto; /* 스크롤 활성화 */
+    max-height: calc(100vh - 130px - 50px); /* 상태 바, 헤더, reply 높이 제외 */
+    box-sizing: border-box;
 }
 
 .chat__timestamp{
@@ -189,4 +196,8 @@
   .reply__column button:focus,
   .reply__column button:active {
     outline: none;
+  }
+
+  .reply__btn{
+    cursor: pointer;
   }

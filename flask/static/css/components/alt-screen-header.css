@@ -21,3 +21,12 @@
 .alt-screen-header__column span{
     margin-left: 20px;
 }
+
+.alt-screen-header__column:first-child i {
+    color: var(--green); /* 원하는 색상 코드 */
+}
+
+.alt-screen-header-logo{
+    height: 60px;
+    width: 60px;
+}
