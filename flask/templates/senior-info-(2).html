@@ -73,9 +73,11 @@
             <span class="question-text__text">성함(필수)</span>
             <input
               id="input-senior-name"
+              name="name"
               required
               type="text"
               placeholder="시니어 성함"
+              value="{{ name }}"
             />
           </div>
 
@@ -83,21 +85,19 @@
             <span class="question-click__text">성별</span>
             <div class="question-click__container">
               <div
-                class="click-option"
-                id="male"
-                onclick="updateSelection('남성')"
+                class="click-option gender-option {% if gender == '남성' %}selected{% endif %}"
+                id="남성"
+                onclick="updateGender('남성')"
               >
                 남성
               </div>
               <div
-                class="click-option"
-                id="female"
-                onclick="updateSelection('여성')"
+                class="click-option gender-option {% if gender == '여성' %}selected{% endif %}"
+                id="여성"
+                onclick="updateGender('여성')"
               >
                 여성
               </div>
-              <!-- 정현-디버깅용 -->
-              <p id="selected-gender-display" class="gender-display"></p>
             </div>
           </div>
 
@@ -107,11 +107,13 @@
               <input
                 class="question-text__text__shirink"
                 id="input-senior-bornyear"
+                name="birth"
                 required
                 type="number"
                 placeholder="출생년도(예: 1999)"
                 min="1900"
                 max="2020"
+                value="{{ birth }}"
               />
               <span class="question-text__appendix">년</span>
             </div>
@@ -122,15 +124,25 @@
               <input
                 class="question-text__text__shirink"
                 id="input-senior-weight"
+                name="weight"
                 required
                 type="number"
                 placeholder="체중(예: 80)"
                 min="30"
                 max="150"
+                value="{{ weight }}"
               />
               <span class="question-text__appendix">Kg</span>
             </div>
           </div>
+        </form>
+
+        <!-- 서버로 데이터 전송 -->
+        <form id="senior-data-form" action="/senior_info_2" method="POST">
+          <input type="hidden" id="hidden-name" name="name" />
+          <input type="hidden" id="hidden-gender" name="gender" />
+          <input type="hidden" id="hidden-birth" name="birth" />
+          <input type="hidden" id="hidden-weight" name="weight" />
         </form>
 
         <a id="service-display-link">
@@ -144,10 +156,10 @@
     <nav class="previous-next-bar">
       <div class="previous-next-bar__list">
         <div class="previous-next-bar__previous">
-          <a href="senior-info-(1).html" class="nav__link__text">이전</a>
+          <a href="/senior_info_1" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="senior-info-(3).html" class="nav__link__text">다음</a>
+          <a href="javascript:void(0);" class="nav__link__text" onclick="submitFormAndSendData()">다음</a>
         </div>
       </div>
     </nav>
@@ -157,26 +169,44 @@
     ></script>
 
     <script>
-      function updateSelection(gender) {
-        const maleOption = document.getElementById("male");
-        const femaleOption = document.getElementById("female");
+    // 성별 선택 함수
+    function updateGender(selectedGender) {
+    // 모든 성별 버튼에서 'selected' 클래스를 제거
+    document.querySelectorAll('.gender-option').forEach((option) => {
+      option.classList.remove('selected');
+    });
 
-        // Reset styles
-        maleOption.classList.remove("selected");
-        femaleOption.classList.remove("selected");
+    // 선택한 버튼에 'selected' 클래스 추가
+    const selectedOption = document.getElementById(selectedGender);
+    if (selectedOption) {
+      selectedOption.classList.add('selected');
+    }
 
-        // Apply 'selected' style to clicked option
-        if (gender === "남성") {
-          maleOption.classList.add("selected");
-        } else {
-          femaleOption.classList.add("selected");
-        }
+    console.log(`성별 선택: ${selectedGender}`);
+  }
 
-        const displayElement = document.getElementById(
-          "selected-gender-display"
-        );
-        displayElement.textContent = `선택된 성별: ${gender}`;
+    // 서버에 데이터 전송 함수
+    function submitFormAndSendData() {
+      const name = document.getElementById('input-senior-name').value;
+      const gender = document.querySelector('.gender-option.selected')?.id || '';
+      const birth = document.getElementById('input-senior-bornyear').value;
+      const weight = document.getElementById('input-senior-weight').value;
+
+      // 유효성 검사
+      if (!name || !gender || !birth || !weight) {
+        alert('모든 필드를 입력해주세요.');
+        return;
       }
+
+      // 숨겨진 필드에 값 설정
+      document.getElementById('hidden-name').value = name;
+      document.getElementById('hidden-gender').value = gender;
+      document.getElementById('hidden-birth').value = birth;
+      document.getElementById('hidden-weight').value = weight;
+
+      // 폼 제출
+      document.getElementById('senior-data-form').submit();
+    }
     </script>
   </body>
 </html>

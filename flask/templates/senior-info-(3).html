@@ -79,14 +79,14 @@
               <div class="question-click__container">
                 <!-- 첫 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '해당없음' in selected_diseases %}selected{% endif %}" 
                   id="해당없음"
                   onclick="updateSelection('해당없음')"
                 >
                   해당없음
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '뇌경색' in selected_diseases %}selected{% endif %}"
                   id="뇌경색"
                   onclick="updateSelection('뇌경색')"
                 >
@@ -95,14 +95,14 @@
 
                 <!-- 두 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '루게릭' in selected_diseases %}selected{% endif %}"
                   id="루게릭"
                   onclick="updateSelection('루게릭')"
                 >
                   루게릭
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '욕창(체위변경)' in selected_diseases %}selected{% endif %}"
                   id="욕창(체위변경)"
                   onclick="updateSelection('욕창(체위변경)')"
                 >
@@ -111,14 +111,14 @@
 
                 <!-- 세 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '위장병' in selected_diseases %}selected{% endif %}"
                   id="위장병"
                   onclick="updateSelection('위장병')"
                 >
                   위장병
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '우울증' in selected_diseases %}selected{% endif %}"
                   id="우울증"
                   onclick="updateSelection('우울증')"
                 >
@@ -127,14 +127,14 @@
 
                 <!-- 네 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '관절염/디스크' in selected_diseases %}selected{% endif %}"
                   id="관절염/디스크"
                   onclick="updateSelection('관절염/디스크')"
                 >
                   관절염/디스크
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '자궁질환' in selected_diseases %}selected{% endif %}"
                   id="자궁질환"
                   onclick="updateSelection('자궁질환')"
                 >
@@ -143,14 +143,14 @@
 
                 <!-- 다섯 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '정신질환' in selected_diseases %}selected{% endif %}"
                   id="정신질환"
                   onclick="updateSelection('정신질환')"
                 >
                   정신질환
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '말기암' in selected_diseases %}selected{% endif %}"
                   id="말기암"
                   onclick="updateSelection('말기암')"
                 >
@@ -159,14 +159,14 @@
 
                 <!-- 여섯 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '치매(인지/섬망)' in selected_diseases %}selected{% endif %}"
                   id="치매(인지/섬망)"
                   onclick="updateSelection('치매(인지/섬망)')"
                 >
                   치매(인지/섬망)
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '파킨슨' in selected_diseases %}selected{% endif %}"
                   id="파킨슨"
                   onclick="updateSelection('파킨슨')"
                 >
@@ -175,14 +175,14 @@
 
                 <!-- 일곱 번째 줄 -->
                 <div
-                  class="click-option"
+                  class="click-option {% if '녹내장' in selected_diseases %}selected{% endif %}"
                   id="녹내장"
                   onclick="updateSelection('녹내장')"
                 >
                   녹내장
                 </div>
                 <div
-                  class="click-option"
+                  class="click-option {% if '전염성질환' in selected_diseases %}selected{% endif %}"
                   id="전염성질환"
                   onclick="updateSelection('전염성질환')"
                 >
@@ -204,21 +204,21 @@
               </span>
               <div class="question-click__container">
                 <div
-                  class="click-option mobility-option"
+                  class="click-option mobility-option {% if selected_mobility == '스스로가능함' %}selected{% endif %}"
                   id="스스로가능함"
                   onclick="updateMobility('스스로가능함')"
                 >
                   스스로 가능함
                 </div>
                 <div
-                  class="click-option mobility-option"
+                  class="click-option mobility-option {% if selected_mobility == '부분적도움필요' %}selected{% endif %}"
                   id="부분적도움필요"
                   onclick="updateMobility('부분적도움필요')"
                 >
                   부축, 휠체어 이용 등 부분적 도움 필요
                 </div>
                 <div
-                  class="click-option mobility-option"
+                  class="click-option mobility-option {% if selected_mobility == '거동불상' %}selected{% endif %}"
                   id="거동불상"
                   onclick="updateMobility('거동불상')"
                 >
@@ -236,21 +236,21 @@
               </span>
               <div class="question-click__container">
                 <div
-                  class="click-option meal-option"
+                  class="click-option meal-option {% if selected_meal == '스스로가능' %}selected{% endif %}"
                   id="스스로가능"
                   onclick="updateMeal('스스로가능')"
                 >
                   스스로 가능
                 </div>
                 <div
-                  class="click-option meal-option"
+                  class="click-option meal-option {% if selected_meal == '떠먹여줘야함' %}selected{% endif %}"
                   id="떠먹여줘야함"
                   onclick="updateMeal('떠먹여줘야함')"
                 >
                   떠먹여줘야함
                 </div>
                 <div
-                  class="click-option meal-option"
+                  class="click-option meal-option {% if selected_meal == '콧물뱃줄' %}selected{% endif %}"
                   id="콧줄뱃줄"
                   onclick="updateMeal('콧줄뱃줄')"
                 >
@@ -272,56 +272,56 @@
               </span>
               <div class="question-click__container">
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '이용자본인' %}selected{% endif %}"
                   id="이용자본인"
                   onclick="updateRelation('이용자본인')"
                 >
                   이용자 본인
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '부모' %}selected{% endif %}"
                   id="부모"
                   onclick="updateRelation('부모')"
                 >
                   부모
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '자녀' %}selected{% endif %}"
                   id="자녀"
                   onclick="updateRelation('자녀')"
                 >
                   자녀(딸 또는 아들)
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '손자녀' %}selected{% endif %}"
                   id="손자녀"
                   onclick="updateRelation('손자녀')"
                 >
                   손·자녀
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '친척' %}selected{% endif %}"
                   id="친척"
                   onclick="updateRelation('친척')"
                 >
                   친척
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '며느리사위' %}selected{% endif %}"
                   id="며느리사위"
                   onclick="updateRelation('며느리사위')"
                 >
                   며느리 또는 사위
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '형제자매' %}selected{% endif %}"
                   id="형제자매"
                   onclick="updateRelation('형제자매')"
                 >
                   형제 또는 자매
                 </div>
                 <div
-                  class="click-option relation-option"
+                  class="click-option relation-option {% if selected_relation == '기타' %}selected{% endif %}"
                   id="기타"
                   onclick="updateRelation('기타')"
                 >
@@ -332,12 +332,14 @@
           </div>
         </form>
 
-        <!-- 서버 전송 -- 정현 군 구현해줘 -->
-
-        <input type="hidden" id="selected-diseases" name="selected-diseases" />
-        <input type="hidden" id="selected-mobility" name="selected-mobility" />
-        <input type="hidden" id="selected-meal" name="selected-meal" />
-        <input type="hidden" id="selected-relation" name="selected-relation" />
+        <!-- 서버 전송 -->
+        
+        <form id="senior-sickness-info-form" action="/senior_info_3" method="POST">
+          <input type="hidden" id="selected-diseases" name="selected-diseases" />
+          <input type="hidden" id="selected-mobility" name="selected-mobility" />
+          <input type="hidden" id="selected-meal" name="selected-meal" />
+          <input type="hidden" id="selected-relation" name="selected-relation" />
+        </form>
 
         <a id="service-display-link">
           <i class="fa-solid fa-circle-info highlight"></i>
@@ -352,10 +354,10 @@
     <nav class="previous-next-bar">
       <div class="previous-next-bar__list">
         <div class="previous-next-bar__previous">
-          <a href="senior-info-(2).html" class="nav__link__text">이전</a>
+          <a href="/senior_info_2" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="senior-info-(4).html" class="nav__link__text">다음</a>
+          <a href="javascript:void(0);" class="nav__link__text" onclick="submitFormAndRedirect()">다음</a>
         </div>
       </div>
     </nav>
@@ -443,30 +445,36 @@
       }
 
       // 폼 제출 함수
-      function submitForm() {
-        const form = document.getElementById("senior-sickness-info-form");
+      function submitFormAndRedirect() {
+          const formData = new FormData();
 
-        // 질환 정보 전송
-        const selectedDiseasesInput =
-          document.getElementById("selected-diseases");
-        selectedDiseasesInput.value = selectedDiseases.join(", ");
+          // 데이터 설정
+          formData.append("selected-diseases", selectedDiseases.join(", "));
+          formData.append("selected-mobility", selectedMobility);
+          formData.append("selected-meal", selectedMeal);
+          formData.append("selected-relation", selectedRelation);
 
-        // 거동 상태 전송
-        const selectedMobilityInput =
-          document.getElementById("selected-mobility");
-        selectedMobilityInput.value = selectedMobility;
+          console.log("서버로 데이터 전송 시작");
 
-        // 식사 상태 전송
-        const selectedMealInput = document.getElementById("selected-meal");
-        selectedMealInput.value = selectedMeal;
-
-        // 돌봄 대상자와의 관계 전송
-        const selectedRelationInput =
-          document.getElementById("selected-relation");
-        selectedRelationInput.value = selectedRelation;
-
-        // 폼 제출
-        form.submit();
+          // 서버에 데이터 전송
+          fetch("/senior_info_3", {
+              method: "POST",
+              body: formData,
+          })
+          .then((response) => {
+              if (response.ok) {
+                  console.log("데이터 전송 성공, 페이지 이동");
+                  // 페이지 이동
+                  window.location.href = "/senior_info_4";
+              } else {
+                  console.error("데이터 전송 실패:", response.statusText);
+                  alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+              }
+          })
+          .catch((error) => {
+              console.error("네트워크 오류:", error);
+              alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+          });
       }
     </script>
   </body>
