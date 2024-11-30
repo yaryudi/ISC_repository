@@ -15,13 +15,15 @@ from pymongo import MongoClient
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from bson import ObjectId
 
-
+#!!!!!암호화키!!!!!
 SECRET_KEY = 'SPARTA'
 
+#서버 구동 초기 설정
 app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = '비밀번호 설정'
 socketio = SocketIO(app)
 
+#데이터 베이스 설정
 client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/')
 db = client.ISC_database #사용자 탐색용 db
 
@@ -39,6 +41,11 @@ HTML_OUTROOM = "chat_test_outroom.html"
 HTML_INROOM = "chat.html"
 HTML_MATCH =  "match_page.html"
 HTML_REQUEST = "match_personal.html"
+HTML_SENIOR_INFO1 = "senior-info-(1).html" 
+HTML_SENIOR_INFO2 = "senior-info-(2).html" 
+HTML_SENIOR_INFO3 = "senior-info-(3).html" 
+HTML_SENIOR_INFO4 = "senior-info-(4).html" 
+HTML_SENIOR_INFO5 = "senior-info-(5).html" 
 
 ####################
 #  범용       함수   # --> 보안이나 편의성을 위하여 전반적으로 사용되는 함수
@@ -213,6 +220,15 @@ def go_outroom():
     username = db.user.find_one({'id': payload['id']}, {'_id': 0})
     
     return render_template((HTML_OUTROOM), username=username['nick'])
+
+#시니어 페이지 1 - 페이지를 수정함
+@app.route("/senior_info_1")
+def senior_info_1():
+    if not is_valid():
+            return redirect("/")
+    return render_template((HTML_SENIOR_INFO1))
+
+
 
 ####################
 #       기능 함수   # - @app.route("/api 를 사용하는 함수, 주로 methods= 가 존재함
@@ -425,6 +441,177 @@ def api_findchatroom_mate():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
     
+#### 시니어 정보 관련 함수 ####
+
+##### 주소 입력 및 입력값 출력 #####
+@app.route('/address', methods=['GET', 'POST'])
+def address():
+    # 기본 값
+    address = ""
+    detail_address = ""
+
+    if request.method == 'POST':
+        # 입력 데이터 받기
+        address = request.form.get('address')
+        detail_address = request.form.get('detail_address')
+
+        # 기존 데이터 확인
+        existing_address = db.page1.find_one()
+
+        if existing_address:
+            # 기존 데이터 업데이트
+            db.page1.update_one(
+                {"_id": existing_address["_id"]},  # 기존 데이터 조건 (_id 사용)
+                {"$set": {
+                    "address": address,
+                    "detail_address": detail_address
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page1.insert_one({
+                "address": address or "",
+                "detail_address": detail_address or "",
+            })
+
+        # 입력값 확인 (빈 값 처리)
+        if not (address and detail_address):
+            # 값이 없을 경우 에러 처리
+            error_message = "모든 필드를 입력해 주세요."
+            return render_template(HTML_SENIOR_INFO1, address=address, detail_address=detail_address, error=error_message)
+
+    # GET 요청 시 데이터 불러오기
+    latest_data = db.page1.find_one()
+    if latest_data:
+        address = latest_data.get("address", "")
+        detail_address = latest_data.get("detail_address", "")
+
+    return render_template(HTML_SENIOR_INFO1, address=address, detail_address=detail_address)
+
+##### 2 페이지 - 성함, 성별, 출생년도, 체중 #####
+@app.route('/senior_info_2', methods=['GET', 'POST'])
+def senior_info_2():
+    if request.method == 'POST':
+        data = request.get_json()
+        name = data.get('name')
+        gender = data.get('gender')
+        birth = data.get('birth')
+        weight = data.get('weight')
+
+        # 유효성 검사
+        
+        # if not (name and gender and birth and weight):
+            # return jsonify({"message": "모든 필드를 입력해주세요."}), 400
+
+        # 데이터베이스 저장
+        existing_entry = db.page2.find_one()
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page2.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "name": name,
+                    "gender": gender,
+                    "birth": birth,
+                    "weight": weight,
+                }},
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page2.insert_one({
+                "name": name,
+                "gender": gender,
+                "birth": birth,
+                "weight": weight,
+            })
+
+        return jsonify({"message": "데이터가 성공적으로 저장되었습니다."}), 200
+
+    # GET 요청 처리
+    senior = db.page2.find_one()
+    name = senior["name"] if senior else ""
+    gender = senior["gender"] if senior else ""
+    birth = senior["birth"] if senior else ""
+    weight = senior["weight"] if senior else ""
+
+    return render_template(
+        'senior-info-(2).html',
+        name=name,
+        gender=gender,
+        birth=birth,
+        weight=weight,
+    )
+
+
+##### 3 페이지  - 질환, 일상생활 능력 #####
+@app.route('/senior_info_3', methods=['GET', 'POST'])
+def senior_info_3():
+    if request.method == 'POST':
+        print("POST 요청 수신됨")
+        print("요청 데이터:", request.form)
+        # 사용자가 선택한 데이터 수집
+        selected_diseases = request.form.get('selected-diseases', '').split(", ")
+        selected_mobility = request.form.get('selected-mobility', '')
+        selected_meal = request.form.get('selected-meal', '')
+        selected_relation = request.form.get('selected-relation', '')
+
+        print("POST 요청 수신")
+        print("수신한 데이터:", selected_diseases, selected_mobility, selected_meal, selected_relation)
+
+
+        # 기존 데이터베이스 항목 가져오기
+        existing_entry = db.page3.find_one()
+
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page3.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "selected_diseases": selected_diseases,
+                    "selected_mobility": selected_mobility,
+                    "selected_meal": selected_meal,
+                    "selected_relation": selected_relation
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page3.insert_one({
+                "selected_diseases": selected_diseases,
+                "selected_mobility": selected_mobility,
+                "selected_meal": selected_meal,
+                "selected_relation": selected_relation
+            })
+
+        # POST 요청 후 페이지 리다이렉트
+        return redirect('/senior_info_3')
+
+    # GET 요청 시 기존 데이터 불러오기
+    senior_info = db.page3.find_one()
+    selected_diseases = senior_info["selected_diseases"] if senior_info else []
+    selected_mobility = senior_info["selected_mobility"] if senior_info else ""
+    selected_meal = senior_info["selected_meal"] if senior_info else ""
+    selected_relation = senior_info["selected_relation"] if senior_info else ""
+
+    # HTML 템플릿 렌더링
+    return render_template(
+        'senior-info-(3).html',
+        selected_diseases=selected_diseases,
+        selected_mobility=selected_mobility,
+        selected_meal=selected_meal,
+        selected_relation=selected_relation
+    )
+
+##### 4페이지 라우트 #####
+@app.route('/senior_info_4', methods=['GET'])
+def senior_info_4():
+    return render_template('senior-info-(4).html')
+
+##### 5페이지 라우트 #####
+@app.route('/senior_info_5', methods=['GET'])
+def senior_info_5():
+    return render_template('senior-info-(5).html')
+    
+    
 #### mate 관련 함수 ####
     
 #mate 요청 보내기
@@ -455,11 +642,11 @@ def api_send_match():
         if userinfo_sender["mate"] != "" :
             return jsonify({'result': 'fail', 'msg': '매칭자가 있는 상태에서는 매칭 요청을 할 수 없습니다.'})
         if userinfo_receiver["mate"] != "" :
-            return jsonify({'result': 'fail', 'msg': '이미 매칭이 된 상대입니다.'})
+            return jsonify({'result': 'fail', 'msg': '이미 다른 매칭이 된 상대입니다.'})
         
         result = db.mate_request.find({"sender" : userinfo_sender["nick"], "receiver" : userinfo_receiver["nick"]})
         if result is None:
-            return jsonify({'result': 'fail', 'msg': '이미 존재하는 매칭입니다'})
+            return jsonify({'result': 'fail', 'msg': '이미 해당 하는 매칭을 요청하셨습니다'})
             
 
         #해당 요청을 DB에 업로드
@@ -662,8 +849,14 @@ def first_match():
 
         # 커서를 리스트로 변환하여 요청이 없을 경우 처리
         request_inform_list = list(request_inform)
+        
+        if request_inform_list:
+            print("데이터를 찾았습니다:", request_inform_list)
+        else:
+            print("데이터를 찾지 못했습니다.")
+            return jsonify({"result": "fail", "msg": "온 요청이 없습니다.", 'data': "요청없음"}), 404
         if len(request_inform_list) == 0:
-            return jsonify({"result": "fail", "msg": "온 요청이 없습니다."}), 404
+            return jsonify({"result": "fail", "msg": "온 요청이 없습니다.", 'data': "요청없음"}), 404
 
         # 요청이 있을 경우 첫 번째 항목 가져오기
         request_data = request_inform_list[0]  # 첫 번째 요청
@@ -675,7 +868,6 @@ def first_match():
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
     except jwt.exceptions.DecodeError:
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
-
 
 #지금 보고 있는 페이지의 이전 요청을 확인한다. 
 @app.route("/api/pred_match", methods=["POST"])
