@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 시니어 정보(2)</title>
+  </head>
+  <body id="senior-info">
+    <div>
+      <div class="status-bar">
+        <div class="status-bar__column">
+          <span>No Service</span>
+          <!-- To Do: wifi-icon -->
+          <i class="fa-solid fa-wifi"></i>
+        </div>
+        <div class="status-bar__column">
+          <span>18:43</span>
+        </div>
+        <div class="status-bar__column">
+          <span>100%</span>
+          <!-- battery icon -->
+          <i class="fa-solid fa-battery-full fa-2x"></i>
+          <!-- lightning icon -->
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+      </div>
+      <header class="senior-info-header">
+        <div class="senior-info-header__column">
+          <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        </div>
+        <div class="senior-info-header__column">
+          <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
+        </div>
+        <div class="senior-info-header_column">
+          <span
+            ><img
+              class="senior-info-header-logo"
+              src="../static/ISC-logo_trans.png"
+          /></span>
+        </div>
+      </header>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+        <div class="progress-bar progress-bar__complete"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+
+    <div class="screen-header">
+      <span class="screen-header__title">
+        돌봄을 받으시는 분에 대해<br />
+        알려주세요.
+      </span>
+    </div>
+
+    <main class="main-screen">
+      <div class="previous-next-bar__screen">
+        <form id="senior-detail-info-form">
+          <div class="question-text">
+            <span class="question-text__text">성함(필수)</span>
+            <input
+              id="input-senior-name"
+              required
+              type="text"
+              placeholder="시니어 성함"
+            />
+          </div>
+
+          <div class="question-click">
+            <span class="question-click__text">성별</span>
+            <div class="question-click__container">
+              <div
+                class="click-option"
+                id="male"
+                onclick="updateSelection('남성')"
+              >
+                남성
+              </div>
+              <div
+                class="click-option"
+                id="female"
+                onclick="updateSelection('여성')"
+              >
+                여성
+              </div>
+              <!-- 정현-디버깅용 -->
+              <p id="selected-gender-display" class="gender-display"></p>
+            </div>
+          </div>
+
+          <div class="question-text">
+            <span class="question-text__text">출생년도</span>
+            <div class="appendix__setting">
+              <input
+                class="question-text__text__shirink"
+                id="input-senior-bornyear"
+                required
+                type="number"
+                placeholder="출생년도(예: 1999)"
+                min="1900"
+                max="2020"
+              />
+              <span class="question-text__appendix">년</span>
+            </div>
+          </div>
+          <div class="question-text">
+            <span class="question-text__text">체중(필수)</span>
+            <div class="appendix__setting">
+              <input
+                class="question-text__text__shirink"
+                id="input-senior-weight"
+                required
+                type="number"
+                placeholder="체중(예: 80)"
+                min="30"
+                max="150"
+              />
+              <span class="question-text__appendix">Kg</span>
+            </div>
+          </div>
+        </form>
+
+        <a id="service-display-link">
+          <i class="fa-solid fa-circle-info"></i>
+          서비스 신청 중에 어려움이 있으시다면, <br />
+          010-4255-5997 로 문의해주세요.
+          <i class="fa-solid fa-chevron-right fa-xs"></i>
+        </a>
+      </div>
+    </main>
+    <nav class="previous-next-bar">
+      <div class="previous-next-bar__list">
+        <div class="previous-next-bar__previous">
+          <a href="senior-info-(1).html" class="nav__link__text">이전</a>
+        </div>
+        <div class="previous-next-bar__next">
+          <a href="senior-info-(3).html" class="nav__link__text">다음</a>
+        </div>
+      </div>
+    </nav>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      function updateSelection(gender) {
+        const maleOption = document.getElementById("male");
+        const femaleOption = document.getElementById("female");
+
+        // Reset styles
+        maleOption.classList.remove("selected");
+        femaleOption.classList.remove("selected");
+
+        // Apply 'selected' style to clicked option
+        if (gender === "남성") {
+          maleOption.classList.add("selected");
+        } else {
+          femaleOption.classList.add("selected");
+        }
+
+        const displayElement = document.getElementById(
+          "selected-gender-display"
+        );
+        displayElement.textContent = `선택된 성별: ${gender}`;
+      }
+    </script>
+  </body>
+</html>
+
+<!-- 
+ Web에서는 index html 부터 찾아봄
+
+-->

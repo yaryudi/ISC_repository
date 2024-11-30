@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 시니어 정보(4)</title>
+  </head>
+  <body id="senior-info">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <!-- To Do: wifi-icon -->
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header class="senior-info-header">
+      <div class="senior-info-header__column">
+        <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+      </div>
+      <div class="senior-info-header__column">
+        <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
+      </div>
+      <div class="senior-info-header_column">
+        <span
+          ><img
+            class="senior-info-header-logo"
+            src="../static/ISC-logo_trans.png"
+        /></span>
+      </div>
+    </header>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar"></div>
+      <div class="progress-bar"></div>
+      <div class="progress-bar"></div>
+      <div class="progress-bar progress-bar__complete"></div>
+      <div class="progress-bar"></div>
+    </div>
+
+    <div class="screen-header">
+      <span class="screen-header__title"> 돌봄시간을 선택해주세요<br /> </span>
+    </div>
+    <main class="main-screen">
+      <form id="senior-time-form">
+        <!-- 시간 선택 시작 -->
+        <div class="start-time-screen">
+          <label class="start-time-screen__text" for="start-time"
+            >시작 시간</label
+          >
+          <select id="select-start" name="select-start">
+            <option value="08:00">08:00</option>
+            <option value="08:30">08:30</option>
+            <option value="09:00">09:00</option>
+            <option value="09:30">09:30</option>
+            <option value="10:00">10:00</option>
+            <option value="10:30">10:30</option>
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+            <option value="16:30">16:30</option>
+            <option value="17:00">17:00</option>
+            <option value="17:30">17:30</option>
+            <option value="18:00">18:00</option>
+            <option value="18:30">18:30</option>
+            <option value="19:00">19:00</option>
+            <option value="19:30">19:30</option>
+            <option value="20:00">20:00</option>
+            <option value="20:30">20:30</option>
+            <option value="21:00">21:00</option>
+            <option value="21:30">21:30</option>
+            <option value="22:00">22:00</option>
+            <option value="22:30">22:30</option>
+            <option value="23:00">23:00</option>
+
+            <!-- 더 많은 시간 추가 가능 -->
+          </select>
+        </div>
+        <div class="time-seperator">부터</div>
+        <div class="end-time-screen">
+          <label class="end-time-screen__text" for="end-time">종료 시간</label>
+          <select id="select-end" name="select-end">
+            <option value="09:00">09:00</option>
+            <option value="09:30">09:30</option>
+            <option value="10:00">10:00</option>
+            <option value="10:30">10:30</option>
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+            <option value="16:30">16:30</option>
+            <option value="17:00">17:00</option>
+            <option value="17:30">17:30</option>
+            <option value="18:00">18:00</option>
+            <option value="18:30">18:30</option>
+            <option value="19:00">19:00</option>
+            <option value="19:30">19:30</option>
+            <option value="20:00">20:00</option>
+            <option value="20:30">20:30</option>
+            <option value="21:00">21:00</option>
+            <option value="21:30">21:30</option>
+            <option value="22:00">22:00</option>
+            <option value="22:30">22:30</option>
+            <option value="23:00">23:00</option>
+            <option value="24:00">23:00</option>
+
+            <!-- 더 많은 시간 추가 가능 -->
+          </select>
+        </div>
+      </form>
+      <div class="senior-info-four">
+        <span class="red-warnning"
+          >* 2시간 미만 신청시, 회당 오천원의 추가 요금이 가산됩니다.</span
+        >
+      </div>
+
+      <a id="service-display-link">
+        <i class="fa-solid fa-circle-info"></i>
+        서비스 신청 중에 어려움이 있으시다면, <br />
+        010-4255-5997 로 문의해주세요.
+        <i class="fa-solid fa-chevron-right fa-xs"></i>
+      </a>
+    </main>
+
+    <nav class="previous-next-bar">
+      <div class="previous-next-bar__list">
+        <div class="previous-next-bar__previous">
+          <a href="senior-info-(3).html" class="nav__link__text">이전</a>
+        </div>
+        <div class="previous-next-bar__next">
+          <a href="senior-info-(5).html" class="nav__link__text">다음</a>
+        </div>
+      </div>
+    </nav>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

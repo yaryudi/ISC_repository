@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 시니어 정보(5)</title>
+  </head>
+  <body id="senior-info">
+    <div>
+      <div class="status-bar">
+        <div class="status-bar__column">
+          <span>No Service</span>
+          <!-- To Do: wifi-icon -->
+          <i class="fa-solid fa-wifi"></i>
+        </div>
+        <div class="status-bar__column">
+          <span>18:43</span>
+        </div>
+        <div class="status-bar__column">
+          <span>100%</span>
+          <!-- battery icon -->
+          <i class="fa-solid fa-battery-full fa-2x"></i>
+          <!-- lightning icon -->
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+      </div>
+      <header class="senior-info-header">
+        <div class="senior-info-header__column">
+          <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        </div>
+        <div class="senior-info-header__column">
+          <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
+        </div>
+        <div class="senior-info-header_column">
+          <span
+            ><img
+              class="senior-info-header-logo"
+              src="../static/ISC-logo_trans.png"
+          /></span>
+        </div>
+      </header>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar progress-bar__complete"></div>
+      </div>
+    </div>
+
+    <div class="screen-header">
+      <span class="screen-header__title">
+        희망하시는 케어코디 성별 및 <br />
+        서비스를 알려주세요.
+      </span>
+    </div>
+
+    <main class="main-screen">
+      <div class="previous-next-bar__screen">
+        <form id="senior-favor-info-form">
+          <!-- 케어코디 성별 -->
+          <div class="question-click">
+            <div class="question-click" id="gender-options">
+              <span class="question-click__text">
+                선호하시는 케어코디 성별을 골라주세요
+              </span>
+              <div class="question-click__container">
+                <!-- 첫 번째 줄 -->
+                <div
+                  class="click-option gender-options"
+                  id="남성"
+                  onclick="updateGender('남성')"
+                >
+                  남성
+                </div>
+                <div
+                  class="click-option gender-options"
+                  id="여성"
+                  onclick="updateGender('여성')"
+                >
+                  여성
+                </div>
+
+                <!-- 두 번째 줄 -->
+                <div
+                  class="click-option gender-options"
+                  id="모두 가능"
+                  onclick="updateGender('모두 가능')"
+                >
+                  모두 가능
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 원하는 서비스 -->
+          <div class="question-click">
+            <span class="question-click__text">
+              필요한 서비스를 선택해 주세요
+            </span>
+            <div class="question-click__container">
+              <!-- 첫 번째 줄 -->
+              <div
+                class="click-option"
+                id="바닥청소"
+                onclick="updateSelection('바닥청소')"
+              >
+                바닥청소
+              </div>
+              <div
+                class="click-option"
+                id="설거지"
+                onclick="updateSelection('설거지')"
+              >
+                설거지
+              </div>
+              <div
+                class="click-option"
+                id="빨래및건조"
+                onclick="updateSelection('빨래및건조')"
+              >
+                빨래및건조
+              </div>
+              <div
+                class="click-option"
+                id="쓰레기 배출"
+                onclick="updateSelection('쓰레기 배출')"
+              >
+                쓰레기 배출
+              </div>
+
+              <!-- 두 번째 줄 -->
+              <div
+                class="click-option"
+                id="식사 준비 및 정리"
+                onclick="updateSelection('식사 준비 및 정리')"
+              >
+                식사 준비 및 정리
+              </div>
+              <div
+                class="click-option"
+                id="복약확인/디스크"
+                onclick="updateSelection('복약확인/디스크')"
+              >
+                복약확인/디스크
+              </div>
+
+              <!-- 세 번째 줄 -->
+              <div
+                class="click-option"
+                id="세면보조"
+                onclick="updateSelection('세면보조')"
+              >
+                세면보조
+              </div>
+              <div
+                class="click-option"
+                id="빨래개기"
+                onclick="updateSelection('빨래개기')"
+              >
+                빨래개기
+              </div>
+
+              <!-- 네 번째 줄 -->
+              <div
+                class="click-option"
+                id="식사조리"
+                onclick="updateSelection('식사조리')"
+              >
+                식사조리
+              </div>
+              <div
+                class="click-option"
+                id="말벗/정서케어"
+                onclick="updateSelection('말벗/정서케어')"
+              >
+                말벗/정서케어
+              </div>
+
+              <!-- 다섯 번째 줄 -->
+              <div
+                class="click-option"
+                id="간단한 부축"
+                onclick="updateSelection('간단한 부축')"
+              >
+                간단한 부축
+              </div>
+              <div
+                class="click-option"
+                id="안전 및 안부확인"
+                onclick="updateSelection('안전 및 안부확인')"
+              >
+                안전 및 안부확인
+              </div>
+            </div>
+            <span class="red-warnning"
+              >* 식사 조리 서비스는 시간당 1만원 혹은 케톡(카톡 아님!)에서
+              상의하세요
+            </span>
+          </div>
+        </form>
+
+        <!-- 서버 전송 -- 정현 군 구현해줘 -->
+
+        <input type="hidden" id="selected-gender" name="selected-gender" />
+        <input type="hidden" id="selected-services" name="selected-services" />
+
+        <a id="service-display-link">
+          <i class="fa-solid fa-circle-info"></i>
+          서비스 신청 중에 어려움이 있으시다면, <br />
+          010-4255-5997 로 문의해주세요.
+          <i class="fa-solid fa-chevron-right fa-xs"></i>
+        </a>
+      </div>
+    </main>
+    <nav class="previous-next-bar">
+      <div class="previous-next-bar__list">
+        <div class="previous-next-bar__previous">
+          <a href="senior-info-(4).html" class="nav__link__text">이전</a>
+        </div>
+        <div class="previous-next-bar__next">
+          <a href="#" class="nav__link__text">저장하기</a>
+        </div>
+      </div>
+    </nav>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      let selectedGender = "";
+      let selectedServices = [];
+
+      // 서비스 선택 함수
+      function updateSelection(services) {
+        const selectedOption = document.getElementById(services);
+
+        // 이미 선택된 항목이 있다면 배열에서 제거하고, 없으면 추가
+        if (selectedServices.includes(services)) {
+          selectedServices = selectedServices.filter(
+            (item) => item !== services
+          );
+          selectedOption.classList.remove("selected");
+        } else {
+          selectedServices.push(services);
+          selectedOption.classList.add("selected");
+        }
+
+        console.log("선택된 서비스들:", selectedServices);
+      }
+
+      // 성별 선택 함수
+      function updateGender(selection) {
+        // 모든 성별 관련 옵션에서 active 클래스 제거
+        const genderOptions = document.querySelectorAll(".gender-options");
+        genderOptions.forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // 선택한 성별 항목에만 active 클래스 추가
+        const selectedOption = document.getElementById(selection);
+        selectedOption.classList.add("selected");
+
+        // 선택된 성별 상태 저장
+        const selectedGender = selection;
+        console.log("선택된 성별:", selectedGender);
+      }
+      // 폼 제출 함수
+      function submitForm() {
+        const form = document.getElementById("senior-favor-info-form");
+
+        const selectedServicesInput =
+          document.getElementById("selected-services");
+        selectedServicesInput.value = selectedServices.join(", ");
+
+        const selectedGenderInput = document.getElementById("selected-gender");
+        selectedGenderInput.value = selectedGender;
+        // 폼 제출
+        form.submit();
+      }
+    </script>
+  </body>
+</html>
+
+<!-- 
+ Web에서는 index html 부터 찾아봄
+
+-->

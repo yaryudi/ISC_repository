@@ -1,0 +1,64 @@
+.main-screen .previous-next-bar__screen{
+  padding-bottom: 80px;
+}
+
+.previous-next-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    /* background-color: white; */
+    /* padding: 20px 50px; */
+    box-sizing: border-box;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.previous-next-bar__list {
+    display: flex;
+    width: 100%;
+    height: 80px; /* 네비게이션 바 높이 */
+  }
+  
+  .previous-next-bar__previous,
+  .previous-next-bar__next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  .previous-next-bar__previous {
+    width: 30%; /* "이전" 버튼의 너비 */
+    background-color: #f9f9fa;
+    color: black;
+    border-right: 2px solid rgba(0, 0, 0, 0.3); /* "이전"과 "다음" 사이 경계선 */
+    cursor: pointer;
+}
+  
+  .previous-next-bar__next {
+    width: 70%; /* "다음" 버튼의 너비 */
+    background-color: var(--orange);
+    color: white;
+    transition: background-color 1s ease, color 1s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .nav__link__text {
+    display: inline-block;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  .previous-next-bar__next:hover {
+    background-color: var(--littlePink);
+}
+
+.previous-next-bar a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;          /* flexbox로 바꿔서 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center;    /* 수직 중앙 정렬 */
+  height: 100%; /* 링크 영역을 100% 채우기 */
+  width: 100%;
+}

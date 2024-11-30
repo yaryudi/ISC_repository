@@ -34,7 +34,7 @@ ALGORITHMS_JWT = "HS256"
 HTML_INDEX = "index.html"
 HTML_LOGIN = "login.html"
 HTML_SIGNUP =  "sign-up.html"
-HTML_MAIN = "main_page.html"
+HTML_MAIN = "home.html"
 HTML_OUTROOM = "chat_test_outroom.html"
 HTML_INROOM = "chat.html"
 HTML_MATCH =  "match_page.html"
@@ -640,6 +640,45 @@ def disallow_match():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
+#자신에게 온 요청들을 확인한다. 
+#메인 페이지에서 요청 확인 페이지로 가는 버튼을 누른 후에 작동한다.
+@app.route("/api/first_match", methods=["POST"])
+def first_match():
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+    
+
+    try:
+        # token을 시크릿키로 디코딩합니다.
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        #수신자 정보 확인
+        user = db.user.find_one({"id": payload["id"]})
+        
+        #첫 페이지 입장시 
+        #사용자에게 온 요청이 있는 지 확인한다.
+        #해당 요청이 현재 존재하는 지 확인
+        
+        request_inform = db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1).limit(1)
+        
+        #사용자에게 온 요청이 없다면, 오류 메시지를 출력하고 밖으로 내보낸다.
+        if request_inform.count_documents() == 0:
+            return jsonify({"result": "fail", "msg": "온 요청이 없습니다."}), 404
+
+        # 요청이 있을 경우 첫 번째 항목 가져오기
+        request_data = request_inform[0]  # 첫 번째 요청
+        
+        
+        #관련 정보를 프론트로 다시 넘겨준다    
+        return jsonify({'result': 'success', 'msg': '매칭 요청 확인 성공', 'data':request_data["sender"]})
+    
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
+    except jwt.exceptions.DecodeError:
+        # 로그인 정보가 없으면 에러가 납니다!
+        return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
+
+
 #지금 보고 있는 페이지의 이전 요청을 확인한다. 
 @app.route("/api/pred_match", methods=["POST"])
 def pred_match():
@@ -650,31 +689,19 @@ def pred_match():
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
-        # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
-
-        #요청자와 수신자의 정보 확인
-        user = db.user.find_one({"id": payload["id"]})
+        #첫 페이지 입장시 
+        #우선 현재 페이지에 nick이 공란인지 확인한다.
         
-        if(user["mate"] != "") :
-            return jsonify({"result": "fail", "msg": "매칭이 된 상태입니다. 추가로 매칭할 수 없습니다."})
+        #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
         
-        #해당 로직은 메이트를 바깥에서 받아야한다.
-        user_mate = db.user.find_one({"nick": nickname_receive})
         
-        if(user_mate["mate"] != "") :
-            return jsonify({"result": "fail", "msg": "상대가 매칭이 된 상태입니다. 매칭되지 않습니다."})
+        #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
         
-        #해당 요청이 현재 존재하는 지 확인
-        request_inform = db.mate_request.find_one({"receiver": user["nick"], "sender": user_mate["nick"]})
-        if(request_inform == None) :
-            return jsonify({"result": "fail", "msg": "해당 요청은 존재하지 않는 요청입니다."})
+        #해당 요청이 존재하지 않는다면 오류를 발생시키고 main페이지로 보낸다.
         
-        #자신이 받은 요청을 삭제한다.
-        result = db.mate_request.delete_one({"receiver": user["nick"], "sender": user_mate["nick"]})
-        
-        return jsonify({'result': 'success', 'msg': '매칭 요청 거절 성공'})
-    
+        #해당 요청이 존재한다면, 해당 요청 이전 값을 찾아 해당 값을 띄운다.
+        #이전 값이 존재하지 않는다면 오류를 표기하고 해당 페이지에 머문다.
+        return jsonify({'result': 'success', 'msg': '매칭 요청 페이지 이전 이동 성공'})
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
@@ -685,6 +712,7 @@ def pred_match():
 #지금 보고 있는 페이지의 다음 요청을 확인한다.
 @app.route("/api/next_match", methods=["POST"])
 def next_match():
+    #데이터는 span에서 받아온다.
     nickname_receive = request.form["nick_give"]
     token_receive = request.cookies.get(USERTOKEN)
     
@@ -692,30 +720,19 @@ def next_match():
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
-        # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
-
-        #요청자와 수신자의 정보 확인
-        user = db.user.find_one({"id": payload["id"]})
+        #첫 페이지 입장시 
+        #우선 현재 페이지에 nick이 공란인지 확인한다.
         
-        if(user["mate"] != "") :
-            return jsonify({"result": "fail", "msg": "매칭이 된 상태입니다. 추가로 매칭할 수 없습니다."})
+        #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
         
-        #해당 로직은 메이트를 바깥에서 받아야한다.
-        user_mate = db.user.find_one({"nick": nickname_receive})
         
-        if(user_mate["mate"] != "") :
-            return jsonify({"result": "fail", "msg": "상대가 매칭이 된 상태입니다. 매칭되지 않습니다."})
+        #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
         
-        #해당 요청이 현재 존재하는 지 확인
-        request_inform = db.mate_request.find_one({"receiver": user["nick"], "sender": user_mate["nick"]})
-        if(request_inform == None) :
-            return jsonify({"result": "fail", "msg": "해당 요청은 존재하지 않는 요청입니다."})
+        #해당 요청이 존재하지 않는다면 오류를 발생시키고 main페이지로 보낸다.
         
-        #자신이 받은 요청을 삭제한다.
-        result = db.mate_request.delete_one({"receiver": user["nick"], "sender": user_mate["nick"]})
-        
-        return jsonify({'result': 'success', 'msg': '매칭 요청 거절 성공'})
+        #해당 요청이 존재한다면, 해당 요청 다음 값을 찾아 해당 값을 띄운다.
+        #다음 값이 존재하지 않는다면 오류를 표기하고 해당 페이지에 머문다.
+        return jsonify({'result': 'success', 'msg': '매칭 요청 페이지 다음 이동 성공'})
     
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.

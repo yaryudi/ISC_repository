@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 시니어 정보(3)</title>
+  </head>
+  <body id="senior-info">
+    <div>
+      <div class="status-bar">
+        <div class="status-bar__column">
+          <span>No Service</span>
+          <!-- To Do: wifi-icon -->
+          <i class="fa-solid fa-wifi"></i>
+        </div>
+        <div class="status-bar__column">
+          <span>18:43</span>
+        </div>
+        <div class="status-bar__column">
+          <span>100%</span>
+          <!-- battery icon -->
+          <i class="fa-solid fa-battery-full fa-2x"></i>
+          <!-- lightning icon -->
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+      </div>
+      <header class="senior-info-header">
+        <div class="senior-info-header__column">
+          <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        </div>
+        <div class="senior-info-header__column">
+          <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
+        </div>
+        <div class="senior-info-header_column">
+          <span
+            ><img
+              class="senior-info-header-logo"
+              src="../static/ISC-logo_trans.png"
+          /></span>
+        </div>
+      </header>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar progress-bar__complete"></div>
+        <div class="progress-bar"></div>
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+
+    <div class="screen-header">
+      <span class="screen-header__title">
+        돌봄을 받으시는 분의 질환이나<br />
+        일상생활 능력을 알려주세요.
+      </span>
+    </div>
+
+    <main class="main-screen">
+      <div class="previous-next-bar__screen">
+        <form id="senior-sickness-info-form">
+          <div class="question-click">
+            <span class="question-click__text">
+              돌봄 대상자의 질환 정보를
+              <span class="highlight">모두</span> 선택해주세요.
+            </span>
+
+            <div class="question-click">
+              <div class="question-click__container">
+                <!-- 첫 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="해당없음"
+                  onclick="updateSelection('해당없음')"
+                >
+                  해당없음
+                </div>
+                <div
+                  class="click-option"
+                  id="뇌경색"
+                  onclick="updateSelection('뇌경색')"
+                >
+                  뇌경색
+                </div>
+
+                <!-- 두 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="루게릭"
+                  onclick="updateSelection('루게릭')"
+                >
+                  루게릭
+                </div>
+                <div
+                  class="click-option"
+                  id="욕창(체위변경)"
+                  onclick="updateSelection('욕창(체위변경)')"
+                >
+                  욕창(체위변경)
+                </div>
+
+                <!-- 세 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="위장병"
+                  onclick="updateSelection('위장병')"
+                >
+                  위장병
+                </div>
+                <div
+                  class="click-option"
+                  id="우울증"
+                  onclick="updateSelection('우울증')"
+                >
+                  우울증
+                </div>
+
+                <!-- 네 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="관절염/디스크"
+                  onclick="updateSelection('관절염/디스크')"
+                >
+                  관절염/디스크
+                </div>
+                <div
+                  class="click-option"
+                  id="자궁질환"
+                  onclick="updateSelection('자궁질환')"
+                >
+                  자궁질환
+                </div>
+
+                <!-- 다섯 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="정신질환"
+                  onclick="updateSelection('정신질환')"
+                >
+                  정신질환
+                </div>
+                <div
+                  class="click-option"
+                  id="말기암"
+                  onclick="updateSelection('말기암')"
+                >
+                  말기암
+                </div>
+
+                <!-- 여섯 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="치매(인지/섬망)"
+                  onclick="updateSelection('치매(인지/섬망)')"
+                >
+                  치매(인지/섬망)
+                </div>
+                <div
+                  class="click-option"
+                  id="파킨슨"
+                  onclick="updateSelection('파킨슨')"
+                >
+                  파킨슨
+                </div>
+
+                <!-- 일곱 번째 줄 -->
+                <div
+                  class="click-option"
+                  id="녹내장"
+                  onclick="updateSelection('녹내장')"
+                >
+                  녹내장
+                </div>
+                <div
+                  class="click-option"
+                  id="전염성질환"
+                  onclick="updateSelection('전염성질환')"
+                >
+                  전염성질환
+                </div>
+              </div>
+            </div>
+            <span class="red-warnning"
+              >* 정신질환의 경우 보호자 함께 없으면 서비스 신청이
+              불가합니다.</span
+            >
+          </div>
+
+          <!-- 거동 상태 -->
+          <div class="question-click">
+            <div class="question-click" id="mobility-options">
+              <span class="question-click__text">
+                거동은 스스로 하실 수 있나요?
+              </span>
+              <div class="question-click__container">
+                <div
+                  class="click-option mobility-option"
+                  id="스스로가능함"
+                  onclick="updateMobility('스스로가능함')"
+                >
+                  스스로 가능함
+                </div>
+                <div
+                  class="click-option mobility-option"
+                  id="부분적도움필요"
+                  onclick="updateMobility('부분적도움필요')"
+                >
+                  부축, 휠체어 이용 등 부분적 도움 필요
+                </div>
+                <div
+                  class="click-option mobility-option"
+                  id="거동불상"
+                  onclick="updateMobility('거동불상')"
+                >
+                  거동 불상(와상)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 식사 상태 -->
+          <div class="question-click">
+            <div class="question-click" id="meal-options">
+              <span class="question-click__text">
+                식사는 스스로 하실 수 있나요?
+              </span>
+              <div class="question-click__container">
+                <div
+                  class="click-option meal-option"
+                  id="스스로가능"
+                  onclick="updateMeal('스스로가능')"
+                >
+                  스스로 가능
+                </div>
+                <div
+                  class="click-option meal-option"
+                  id="떠먹여줘야함"
+                  onclick="updateMeal('떠먹여줘야함')"
+                >
+                  떠먹여줘야함
+                </div>
+                <div
+                  class="click-option meal-option"
+                  id="콧줄뱃줄"
+                  onclick="updateMeal('콧줄뱃줄')"
+                >
+                  콧줄/뱃줄
+                </div>
+              </div>
+              <span class="red-warnning"
+                >* 콧줄/뱃줄의 경우 보호자가 함께 없으면 서비스 신청이
+                불가합니다.</span
+              >
+            </div>
+          </div>
+
+          <!-- 돌봄 대상자와의 관계 -->
+          <div class="question-click">
+            <div class="question-click" id="relation-options">
+              <span class="question-click__text">
+                돌봄 대상자와의 관계를 알려주세요.
+              </span>
+              <div class="question-click__container">
+                <div
+                  class="click-option relation-option"
+                  id="이용자본인"
+                  onclick="updateRelation('이용자본인')"
+                >
+                  이용자 본인
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="부모"
+                  onclick="updateRelation('부모')"
+                >
+                  부모
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="자녀"
+                  onclick="updateRelation('자녀')"
+                >
+                  자녀(딸 또는 아들)
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="손자녀"
+                  onclick="updateRelation('손자녀')"
+                >
+                  손·자녀
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="친척"
+                  onclick="updateRelation('친척')"
+                >
+                  친척
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="며느리사위"
+                  onclick="updateRelation('며느리사위')"
+                >
+                  며느리 또는 사위
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="형제자매"
+                  onclick="updateRelation('형제자매')"
+                >
+                  형제 또는 자매
+                </div>
+                <div
+                  class="click-option relation-option"
+                  id="기타"
+                  onclick="updateRelation('기타')"
+                >
+                  기타
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- 서버 전송 -- 정현 군 구현해줘 -->
+
+        <input type="hidden" id="selected-diseases" name="selected-diseases" />
+        <input type="hidden" id="selected-mobility" name="selected-mobility" />
+        <input type="hidden" id="selected-meal" name="selected-meal" />
+        <input type="hidden" id="selected-relation" name="selected-relation" />
+
+        <a id="service-display-link">
+          <i class="fa-solid fa-circle-info highlight"></i>
+          <span class="highlight"> 대상자 상태 고지 의무</span><br />
+          신청인은 안전상의 이유로 돌봄 대상자 상태 및 환경에 대하여<br />
+          정확하게 고지하여야 하며 돌봄 대상자의 개인정보를<br />
+          제공할 정당한 권한을 보유하고 있어야 합니다.
+          <i class="fa-solid fa-chevron-right fa-xs"></i>
+        </a>
+      </div>
+    </main>
+    <nav class="previous-next-bar">
+      <div class="previous-next-bar__list">
+        <div class="previous-next-bar__previous">
+          <a href="senior-info-(2).html" class="nav__link__text">이전</a>
+        </div>
+        <div class="previous-next-bar__next">
+          <a href="senior-info-(4).html" class="nav__link__text">다음</a>
+        </div>
+      </div>
+    </nav>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // 선택된 질환들, 거동 상태, 식사 상태, 돌봄 대상자와의 관계 저장할 변수
+      let selectedDiseases = [];
+      let selectedMobility = "";
+      let selectedMeal = "";
+      let selectedRelation = "";
+
+      // 질환 선택 함수
+      function updateSelection(disease) {
+        const selectedOption = document.getElementById(disease);
+
+        // 이미 선택된 항목이 있다면 배열에서 제거하고, 없으면 추가
+        if (selectedDiseases.includes(disease)) {
+          selectedDiseases = selectedDiseases.filter(
+            (item) => item !== disease
+          );
+          selectedOption.classList.remove("selected");
+        } else {
+          selectedDiseases.push(disease);
+          selectedOption.classList.add("selected");
+        }
+
+        console.log("선택된 질환들:", selectedDiseases);
+      }
+
+      // 거동 선택 함수
+      function updateMobility(selection) {
+        // 모든 거동 관련 옵션에서 selected 클래스를 제거
+        const mobilityOptions = document.querySelectorAll(".mobility-option");
+
+        mobilityOptions.forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // 선택한 거동 항목에만 selected 클래스 추가
+        const selectedOption = document.getElementById(selection);
+        selectedOption.classList.add("selected");
+
+        // 선택된 거동 상태 저장
+        selectedMobility = selection;
+        console.log("선택된 거동 상태:", selectedMobility);
+      }
+
+      // 식사 선택 함수
+      function updateMeal(selection) {
+        // 모든 식사 관련 옵션에서 selected 클래스를 제거
+        const mealOptions = document.querySelectorAll(".meal-option");
+
+        mealOptions.forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // 선택한 식사 항목에만 selected 클래스 추가
+        const selectedOption = document.getElementById(selection);
+        selectedOption.classList.add("selected");
+
+        // 선택된 식사 상태 저장
+        selectedMeal = selection;
+        console.log("선택된 식사 상태:", selectedMeal);
+      }
+
+      // 돌봄 대상자와의 관계 선택 함수
+      function updateRelation(selection) {
+        const options = document.querySelectorAll(".relation-option");
+
+        // 모든 옵션에서 selected 클래스를 제거하고, 해당 항목에만 추가
+        options.forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        const selectedOption = document.getElementById(selection);
+        selectedOption.classList.add("selected");
+
+        // 선택된 돌봄 대상자와의 관계 저장
+        selectedRelation = selection;
+        console.log("선택된 돌봄 대상자와의 관계:", selectedRelation);
+      }
+
+      // 폼 제출 함수
+      function submitForm() {
+        const form = document.getElementById("senior-sickness-info-form");
+
+        // 질환 정보 전송
+        const selectedDiseasesInput =
+          document.getElementById("selected-diseases");
+        selectedDiseasesInput.value = selectedDiseases.join(", ");
+
+        // 거동 상태 전송
+        const selectedMobilityInput =
+          document.getElementById("selected-mobility");
+        selectedMobilityInput.value = selectedMobility;
+
+        // 식사 상태 전송
+        const selectedMealInput = document.getElementById("selected-meal");
+        selectedMealInput.value = selectedMeal;
+
+        // 돌봄 대상자와의 관계 전송
+        const selectedRelationInput =
+          document.getElementById("selected-relation");
+        selectedRelationInput.value = selectedRelation;
+
+        // 폼 제출
+        form.submit();
+      }
+    </script>
+  </body>
+</html>
+
+<!-- 
+ Web에서는 index html 부터 찾아봄
+
+-->

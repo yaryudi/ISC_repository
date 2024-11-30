@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery Cookie Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 홈 스위티 홈</title>
+  </head>
+  <body>
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <!-- To Do: wifi-icon -->
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header id="home" class="main-screen-header">
+      <div class="main-screen-header__icons">
+        <img
+          class="main-screen-header-logo"
+          src="../static/ISC-logo_trans.png"
+        />
+      </div>
+      <h1 class="main-screen-header__title">
+        {{ role }} {{ username }}님 반갑습니다.
+      </h1>
+    </header>
+
+    <main class="main-screen">
+      <div class="user-component">
+        <div class="user-component__column">
+          <img
+            class="user-component__avatar user-component__avatar--xl"
+            src="https://th.bing.com/th/id/OIP.m310tc1mDYXWpUjc4mfZhAHaEJ?w=306&h=180&c=7&r=0&o=5&pid=1.7"
+          />
+          <div class="user-component__text">
+            <h4 class="user-component__title">Tiger</h4>
+            <!-- <h6 class="user-component__subtitle">this is whatever</h6> -->
+          </div>
+        </div>
+        <div class="user-component__column"></div>
+      </div>
+      <div class="friends-screen__channel">
+        <div class="friends-screen__channel-header">
+          <span>Channel</span>
+          <i class="fa-solid fa-chevron-up fa-xs"></i>
+        </div>
+      </div>
+
+      <div class="user-component">
+        <div class="user-component__column">
+          <img
+            class="user-component__avatar user-component__avatar--sm"
+            src="https://th.bing.com/th/id/OIP.m310tc1mDYXWpUjc4mfZhAHaEJ?w=306&h=180&c=7&r=0&o=5&pid=1.7"
+          />
+          <div class="user-component__text">
+            <h4 class="user-component__title user-component__title--notBold">
+              Channel
+            </h4>
+          </div>
+        </div>
+        <div class="user-component__column">
+          <span>2<i class="fa-solid fa-chevron-right fa-xs"></i></span>
+        </div>
+      </div>
+    </main>
+
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__btn">
+          <a class="nav__link" href="#" onclick="go_match()">
+            <i class="fa-regular fa-handshake fa-2x"></i>
+            <span>매칭하기</span>
+          </a>
+        </li>
+
+        <li class="nav__btn">
+          <a class="nav__link" onclick="go_chat_with_mate() ">
+            <i class="fa-regular fa-message fa-2x"></i>
+            <span>케톡!</span>
+          </a>
+        </li>
+        <li class="nav__btn">
+          <!-- 정현 -->
+          <a class="nav__link">
+            <i class="fa-regular fa-clipboard fa-2x"></i>
+            <span>돌봄 기록</span>
+          </a>
+        </li>
+        <!-- 정현 -->
+        <li class="nav__btn">
+          <a class="nav__link" onclick="go_senior_set()">
+            <i class="fa-solid fa-person-cane fa-2x"></i>
+            <span>시니어 정보</span></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+
+<script>
+  function go_match() {
+    window.location.href = "/match";
+  }
+
+  //정현
+  function go_senior_set() {
+    window.location.href = "/#";
+  }
+
+  function go_chat_with_mate() {
+    $.ajax({
+      type: "POST",
+      url: "/api/findchatroom_mate",
+      data: {
+        id_give: $("#input-id").val(),
+      },
+      success: function (response) {
+        console.log(response);
+        if (response["result"] == "success") {
+          // 방찾기에 성공하면 chattoken을 쿠키에 저장!!!! -> 클라이언트는 chattoken, usertoken이라는 2개의 토큰을 가지게 된다.
+          $.cookie("chattoken", response["token"]);
+          alert(response["msg"]);
+
+          //채팅 페이지로 이동 - 채팅방의 데이터를 토큰과 db를 통해 가져온다.
+          window.location.href = "/inroom";
+        } else {
+          //오류 발생 시 해당 페이지에 그대로 있는다.
+          alert(response["msg"]);
+        }
+      },
+    });
+  }
+</script>
