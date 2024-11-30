@@ -1,71 +1,82 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
+    <link href="..\static\css\style.css" rel="stylesheet" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ISC: 오늘의 기록</title>
     <link rel="shortcut icon" href="#" />
-    href="{{ url_for('static', filename='css/todo_carecody.css') }}"
-    <!-- <link href="../static/css/diary.css" rel="stylesheet" / -->
   </head>
 
   <body>
-    <header>
-      <h1>내 ToDo</h1>
-      <div class="button-group">
-        <form action="/care/attendance" method="POST" style="display: inline">
-          <button type="submit" class="attendance-btn">출근/퇴근</button>
-        </form>
+    <!-- Component -->
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
       </div>
-      <div class="navigation">
-        <button class="nav-btn prev-week">◀ 지난 주</button>
-        <span class="current-week">11월 둘째 주</span>
-        <button class="nav-btn next-week">다음 주 ▶</button>
+      <div class="status-bar__column">
+        <span>18:43</span>
       </div>
-    </header>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <div class="screen-header">
+      <span><i class="screen-header__icon"></i></span>
+      <h1 class="screen-header__title">오늘의 To-Do List를 작성하세요 !</h1>
+      <img src="#" class="screen-header__img" />
+    </div>
 
-    <div class="care-container">
+    <!-- 오늘 날짜 랜더링 -->
+
+    <div id="todo_carecody-container">
       {% for care in cares %}
-      <div class="care-item">
+      <div class="todo_carecody__items">
         <!-- 시간 표시 -->
-        <div class="care-time">{{ care.time }}</div>
+        <div class="todo_carecody__items__time">{{ care.time }}</div>
         <!-- 세부 내용 -->
-        <div class="care-details">
-          <div class="care-title">{{ care.content }}</div>
-
+        <div class="todo_carecody__items__details">
+          <div class="todo_carecody__items__details__title">
+            {{ care.content }}
+          </div>
           <!-- 사진 및 코멘트 표시: 출근/퇴근 항목은 제외 -->
           {% if care.content != "출근" and care.content != "퇴근" %}
           <!-- 사진 표시 -->
           {% if care.photo %}
-          <div class="care-photo">
+          <div class="todo_carecody__items__details__photo">
             <img
               src="{{ url_for('static', filename=care.photo) }}"
               alt="첨부된 사진"
             />
           </div>
           {% endif %}
-
           <!-- 코멘트 표시 -->
           {% if care.comment %}
-          <div class="care-comment">{{ care.comment }}""</div>
+          <div class="todo_carecody__items__details__comment">
+            " {{ care.comment }} "
+          </div>
           {% endif %}
 
-          <!-- 수정 버튼 -->
+          <!-- 저장/수정 버튼 -->
           <form
+            class="todo_carecody__items__details__form"
             action="/care/update/{{ care._id }}"
             method="POST"
             enctype="multipart/form-data"
           >
-            <label for="photo-{{ care._id }}">사진 추가</label>
+            <label for="photo-{{ care._id }}"></label>
             <input type="file" name="photo" id="photo-{{ care._id }}" />
-
-            <label for="comment-{{ care._id }}">코멘트 작성:</label>
+            <label for="comment-{{ care._id }}"></label>
             <textarea
               name="comment"
               id="comment-{{ care._id }}"
               placeholder="코멘트를 작성하세요..."
             ></textarea>
-
             <button type="submit">저장</button>
           </form>
           {% endif %}
@@ -73,6 +84,7 @@
       </div>
       {% endfor %}
     </div>
+
     <div class="resume-link">
       <a href="/resume">이력서 페이지로 이동</a>
       <a href="/diary">돌봄 다이어리 페이지로 이동</a>

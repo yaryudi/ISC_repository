@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .care-container {
         padding: 10px;
     }
@@ -8,27 +8,11 @@
     .care-time, .care-details {
         text-align: center;
     }
-}
+} */
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-}
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #ffd6d6;
-}
-header h1 {
-  font-size: 24px;
-  margin: 0;
-}
-/* 출근/퇴근 버튼 스타일 */
+
+/* 출근/퇴근 버튼 스타일
 .btn {
     padding: 10px 20px;
     border: none;
@@ -37,72 +21,132 @@ header h1 {
     cursor: pointer;
 }
 .attendance-btn {
-  background-color: #f0a500; /* 주황색 */
+  background-color: #f0a500;
   color: white;
   margin-right: 10px;
 }
 .attendance-btn:hover {
-  background-color: #d88a00; /* 어두운 주황색 */
-}
-/* 기존 버튼 스타일 */
-.navigate-btn {
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-}
-.navigate-btn:hover {
-  background-color: #0056b3;
+  background-color: #d88a00;
+} */
+
+/* 공통 스타일 */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flext-start; /* 수직 맨위 정렬 */
+  align-items: center; /* 수평 중앙 정렬 */
 }
 
 /* 전체 컨테이너 스타일 */
-.care-container {
+#todo_carecody-container {
+  overflow-y: auto;
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-.care-item {
-  margin-bottom: 20px;
+
+.todo_carecody__items {
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff7e6;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.todo_carecody__items__time {
+  flex: 0 0 60px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #ffc9c9;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  align-self: flex-start;
+  align-self: flex-start;
+}
+
+.todo_carecody__items__details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   gap: 10px;
-  background-color: #fff8dc;
-  padding: 15px;
+}
+.todo_carecody__items__details__title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* .todo_carecody__details__photo {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+} */
+
+.todo_carecody__items__details__photo img {
+  object-fit: cover;
+  max-width: 100%;
   border-radius: 8px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-.care-time {
-  font-weight: bold;
-  color: #d9534f;
-  text-align: center;
-  background-color: #ffe4e4;
-  padding: 10px;
-  border-radius: 8px;
-  flex: 1;
-}
-.care-details {
-  flex: 4;
-  background-color: #ffe6b8;
-  padding: 15px;
-  border-radius: 8px;
-}
-.care-title {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-.care-photo img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-.care-comment {
+.todo_carecody__items__details__comment {
   font-size: 14px;
   color: #333;
   margin-bottom: 10px;
 }
-.care-actions {
+
+.todo_carecody__items__details__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 15px;
+
+}
+
+.todo_carecody__items__details__form input {
+  cursor: pointer;
+  width: 180px;
+}
+
+.todo_carecody__items__details__form textarea {
+  height:100px;
+  width: 500px;
+  margin: 0px 10px;
+  padding: 20px;
+  border-radius: 15px;
+  resize: none;
+}
+
+.todo_carecody__items__details__form button {
+  cursor: pointer;
+  background-color: var(--orange);
+  border: none;
+  margin: 10px;
+  height: 40px;
+  width: 70px;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+}
+
+.todo_carecody__items__details__form button:hover {
+  background-color: var(--orangeHover);
+}
+
+/* .care-actions {
   display: flex;
   gap: 10px;
   margin-top: 10px;
@@ -131,4 +175,4 @@ form button {
 }
 form button:hover {
   background-color: #45a049;
-}
+} */

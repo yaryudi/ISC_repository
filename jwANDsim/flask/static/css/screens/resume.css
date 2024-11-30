@@ -87,11 +87,11 @@
     border-radius: 15px;
 }
 
-.resume-button {
+.resume-introduction__button {
     text-align: center;
 }
 
-.resume-button button {
+.resume-introduction__button button {
     text-align: center;
     background-color: var(--orange);
     border: none;
@@ -105,6 +105,6 @@
     color: white;
 }
 
-.resume-button button:hover {
+.resume-introduction__button button:hover {
     background-color: var(--orangeHover);
 }

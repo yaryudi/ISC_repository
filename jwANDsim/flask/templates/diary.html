@@ -46,11 +46,6 @@
         >▶</a
       >
     </div>
-    <!-- <div class="navigation-bar">
-      <button class="navigation-bar__prev">◀</button>
-      <span class="navigation-bar__current">11월 둘째 주</span>
-      <button class="navigation-bar__next">▶</button>
-    </div> -->
 
     <!-- 요일 선택 -->
     <div class="diary__weekend">
@@ -69,8 +64,10 @@
     <div id="diary__container">
       {% if cares %} {% for care in cares %}
       <div class="diary__items">
-        <div class="diary__items__time">{{ care.time }}</div>
-        <div class="diary__items__details">
+        <!-- 시간 표시 -->
+        <div class="todo_carecody__items__time">{{ care.time }}</div>
+        <!-- 세부 내용 -->
+        <div class="todo_carecody__items__details">
           <div class="diary__items__details__title">{{ care.content }}</div>
           {% if care.photo %}
           <div class="diary__items__details__photo">

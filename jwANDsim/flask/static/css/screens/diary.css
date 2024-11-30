@@ -47,7 +47,7 @@ body {
 
 /* 케어 기록 카드 스타일 */
 #diary__container {
-    overflow-y: auto; /* 세로 스크롤 활성화 */
+    /* overflow-y: auto; 세로 스크롤 활성화 */
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
@@ -63,7 +63,7 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 8px;
-    background-color: #fff7e6; /* 밝은 크림색 */
+    background-color: #fff7e6;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -77,9 +77,8 @@ body {
     border-radius: 5px;
     margin-right: 10px;
     align-self: flex-start;
-    align-self: flex-start; /* 개별 요소를 최상단으로 */
+    align-self: flex-start;
 }
-
 
 .diary__items__details {
     display: flex;
@@ -92,12 +91,11 @@ body {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 5px;
+    text-align: center;
 }
 
 .diary__items__details__photo {
     flex: 1;
-    /* max-width: 150px;
-    max-height: 100px; */
     overflow: hidden;
     display: flex;
     justify-content: left;
