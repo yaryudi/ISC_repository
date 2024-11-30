@@ -25,6 +25,21 @@ socketio = SocketIO(app)
 client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/')
 db = client.ISC_database #사용자 탐색용 db
 
+#사용자 토큰 명
+USERTOKEN = "usertoken"
+
+#JWT토큰 암호/복호화 알고리즘 
+ALGORITHMS_JWT = "HS256" 
+
+HTML_INDEX = "index.html"
+HTML_LOGIN = "login.html"
+HTML_SIGNUP =  "sign-up.html"
+HTML_MAIN = "main_page.html"
+HTML_OUTROOM = "chat_test_outroom.html"
+HTML_INROOM = "chat.html"
+HTML_MATCH =  "match_page.html"
+HTML_REQUEST = "match_personal.html"
+
 ####################
 #  범용       함수   # --> 보안이나 편의성을 위하여 전반적으로 사용되는 함수
 ####################
@@ -33,14 +48,14 @@ db = client.ISC_database #사용자 탐색용 db
 #  api_valid() -> 프론트에서 요청, is_valid(asdf) -> 백에서 알아서 검사
 def is_valid():
     
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
         return (False)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return (True)
@@ -53,14 +68,14 @@ def is_valid():
 
 # 현재 토큰 보유자의 json를 리턴한다. -> 지금은 안씀
 def what_user():
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
         return (False)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return (userinfo)
@@ -88,28 +103,28 @@ def render_template_nocash(html):
 def home():
     if is_valid():
         return redirect("/main")
-    return (render_template("index.html"))
+    return (render_template(HTML_INDEX))
 
 #로그인 페이지
 @app.route("/login")
 def login():
     if is_valid():
             return redirect("/main")
-    return render_template("login.html")
+    return render_template(HTML_LOGIN)
 
 #회원가입 페이지
 @app.route("/signup")
 def signup():
     if is_valid():
             return redirect("/main")
-    return render_template("sign-up.html")
+    return render_template(HTML_SIGNUP)
 
 #메칭 페이지 - 매칭 요청, 관게 끊기 
 @app.route("/match")
 def match():
     if not is_valid():
             return redirect("/")
-    return render_template(("match_page.html"))
+    return render_template((HTML_MATCH))
 
 #메인 페이지 - 정보 확인 및 페이지 이동가능
 @app.route("/main")
@@ -118,12 +133,12 @@ def main():
     if not is_valid():
         return redirect("/")
     
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
         # token을 시크릿키로 디코딩합니다.
     if token_receive:
         try:
             # token을 시크릿키로 디코딩합니다.
-            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
             # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
             user = db.user.find_one({'id': payload['id']}, {'_id': 0})
             username = user['nick'] if user else ""
@@ -141,9 +156,9 @@ def main():
         username = ""
         role = ""
     if role == "care_coordi":
-        return render_template("main_page.html", username = username, role = "케어코디")
+        return render_template(HTML_MAIN, username = username, role = "케어코디")
     elif role == "keeper":
-        return render_template("main_page.html", username = username, role = "보호자")
+        return render_template(HTML_MAIN, username = username, role = "보호자")
     
     #비정상적인 접근 차단
     return redirect("/")
@@ -153,7 +168,7 @@ def main():
 def match_personal():
     if not is_valid():
             return redirect("/match_personal")
-    return render_template(("match_personal.html"))
+    return render_template((HTML_REQUEST))
  
 #채팅방 내부 - 채팅 가능
 @app.route('/inroom' , methods=['GET', 'POST'])
@@ -162,12 +177,12 @@ def go_inroom():
     if not is_valid():
         return redirect("/")
     
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
         # token을 시크릿키로 디코딩합니다.
     if token_receive:
         try:
             # token을 시크릿키로 디코딩합니다.
-            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
             # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
             user = db.user.find_one({'id': payload['id']}, {'id': 0})
             matename = user['mate'] 
@@ -182,25 +197,22 @@ def go_inroom():
         matename == ""
         return redirect("/")
 
-    return render_template('chat.html', matename = matename)
+    return render_template(HTML_INROOM, matename = matename)
 
 #채팅방 외부 - 채팅방을 골라서 들어갈 수 있음, 다만 디버깅 용임
 @app.route('/chat')
 def go_outroom():
-    
-    
-    
-    if not is_valid():
-            return redirect("/")
 
+    if not is_valid():
+        return redirect("/")
     
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
         # token을 시크릿키로 디코딩합니다.
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
     username = db.user.find_one({'id': payload['id']}, {'_id': 0})
     
-    return render_template(('chat_test_outroom.html'), username=username['nick'])
+    return render_template((HTML_OUTROOM), username=username['nick'])
 
 ####################
 #       기능 함수   # - @app.route("/api 를 사용하는 함수, 주로 methods= 가 존재함
@@ -258,7 +270,7 @@ def api_login():
             "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=1000),
         }
         # 토큰의 암호화!
-        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다.
         return jsonify({"result": "success", "token": token})
@@ -274,14 +286,14 @@ def api_logout():
     # 클라이언트에서 보내는 JWT 토큰을 지워줍니다.
     resp = jsonify({"result": "success", "msg": "로그아웃 되었습니다."})
     resp.set_cookie(
-        "usertoken", "", expires=0
+        USERTOKEN, "", expires=0
     )  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
     return resp
 
 # 보안: 로그인한 사용자만 통과할 수 있는 API - front에서 사용
 @app.route("/api/isAuth", methods=["GET"])
 def api_valid():
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
@@ -289,7 +301,7 @@ def api_valid():
 
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return jsonify({"result": "success", "nickname": userinfo["nick"]})
@@ -305,11 +317,11 @@ def api_valid():
 #outroom에서 사용하는 방 생성및 입장 코드
 @app.route('/api/findchatroom', methods=['POST'])
 def api_findchatroom():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token에서 정보를 뽑아 냅니다.
         #입력받은 id의 유저를 찾습니다.
-        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         id_receive = request.form['id_give']
         
         #예외조건 - 자신 - 자신 제외, 상대가 DB에 없을 시 오류 출력
@@ -344,7 +356,7 @@ def api_findchatroom():
         }
 
         #토큰의 암호화!
-        token = jwt.encode(payload_chat, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다. - 채팅방 입장
         return jsonify({'result': 'success', 'token': token, 'msg': '채팅방 접속 성공'})
@@ -358,11 +370,11 @@ def api_findchatroom():
      
 @app.route('/api/findchatroom_mate', methods=['POST'])
 def api_findchatroom_mate():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token에서 정보를 뽑아 냅니다.
         #입력받은 id의 유저를 찾습니다.
-        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         user = db.user.find_one({"id" : payload_user["id"]})
         if "mate" in user:
             user_mate = db.user.find_one({"id": user["mate"]})
@@ -401,7 +413,7 @@ def api_findchatroom_mate():
         }
 
         #토큰의 암호화!
-        token = jwt.encode(payload_chat, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다. - 채팅방 입장
         return jsonify({'result': 'success', 'token': token, 'msg': '채팅방 접속 성공'})
@@ -425,10 +437,10 @@ def api_send_match():
     if nickname_receive == "" :
         return jsonify({'result': 'fail', 'msg': '공란이 존재합니다!'})
     
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         userinfo_sender = db.user.find_one({"id": payload["id"]})
@@ -466,10 +478,10 @@ def api_send_match():
 @app.route("/api/dis_match", methods=["POST"])
 def api_dis_match():
     #우선 사용자가 매칭된 상대가 있는지 확인한다. - 사용자가 누군지는 토큰 활용
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -507,11 +519,11 @@ def api_dis_match():
 #DB에서 자신에게 요청된 match를 list화 시켜서 보관한다.
 @app.route("/api/hear_match", methods=["POST"])
 def api_hear_match():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token에서 정보를 뽑아 냅니다.
         #입력받은 id의 유저를 찾습니다.
-        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         #유저에게 온 요청들을 처리한다. - 과거에 온 요청을 우선적으로 띄운다.
         request_list = db.mate_request.find({"receiver": payload_user["id"]}).sort("_id", 1)
             
@@ -523,7 +535,7 @@ def api_hear_match():
         
 
         #토큰의 암호화! -> 해당 리스트는 클라이언트에 저장된다. -> 항후 페이지 넘김에 적용
-        token = jwt.encode(payload_chat, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다. - 채팅방 입장
         return jsonify({'result': 'success', 'token': token, 'msg': '매칭 요청 조회 성공'})
@@ -540,14 +552,14 @@ def api_hear_match():
 @app.route("/api/allow_match", methods=["POST"])
 def api_allow_match():
     nickname_receive = request.form["nick_give"]
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if nickname_receive == "":
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #수신자 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -590,14 +602,14 @@ def api_allow_match():
 @app.route("/api/disallow_match", methods=["POST"])
 def disallow_match():
     nickname_receive = request.form["nick_give"]
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if nickname_receive == "":
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -632,14 +644,14 @@ def disallow_match():
 @app.route("/api/pred_match", methods=["POST"])
 def pred_match():
     nickname_receive = request.form["nick_give"]
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if nickname_receive == "":
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -674,14 +686,14 @@ def pred_match():
 @app.route("/api/next_match", methods=["POST"])
 def next_match():
     nickname_receive = request.form["nick_give"]
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if nickname_receive == "":
         return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -724,7 +736,7 @@ def join_chat():
     print("hello,")
     try:
         # 쿠키에서 토큰 가져오기
-        token_receive_user = request.cookies.get('usertoken')
+        token_receive_user = request.cookies.get(USERTOKEN)
         token_receive_chat = request.cookies.get('chattoken')
         if not token_receive_user or not token_receive_chat:
             print("Error: Missing tokens in cookies.")
@@ -732,8 +744,8 @@ def join_chat():
 
         print("hello,")
         # 토큰 디코딩
-        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=['HS256'])
-        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         room_id = payload_chat['_id']  # 대화방 ID
         customer_id = payload_user['id']  # 고객 ID
@@ -777,15 +789,15 @@ def join_chat():
 def send_message(data):
     try:
         # 쿠키에서 토큰 가져오기
-        token_receive_user = request.cookies.get('usertoken')
+        token_receive_user = request.cookies.get(USERTOKEN)
         token_receive_chat = request.cookies.get('chattoken')
         if not token_receive_user or not token_receive_chat:
             print("Error: Missing tokens in cookies.")
             return
 
         # 토큰 디코딩
-        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=['HS256'])
-        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         room_id = payload_chat['_id']  # 대화방 ID
         user_id = payload_user['id']  # 고객 ID
