@@ -8,11 +8,7 @@
     <!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap JavaScript -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <title>ISC - 시니어 정보(4)</title>
   </head>
@@ -36,17 +32,13 @@
     </div>
     <header class="senior-info-header">
       <div class="senior-info-header__column">
-        <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        <a href="#"><i class="fa-solid fa-angles-left fa-2x"></i></a>
       </div>
       <div class="senior-info-header__column">
         <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
       </div>
       <div class="senior-info-header_column">
-        <span
-          ><img
-            class="senior-info-header-logo"
-            src="../static/ISC-logo_trans.png"
-        /></span>
+        <span><img class="senior-info-header-logo" src="../static/ISC-logo_trans.png" /></span>
       </div>
     </header>
 
@@ -59,15 +51,13 @@
     </div>
 
     <div class="screen-header">
-      <span class="screen-header__title"> 돌봄시간을 선택해주세요<br /> </span>
+      <span class="screen-header__title">돌봄시간을 선택해주세요<br /></span>
     </div>
     <main class="main-screen">
       <form id="senior-time-form">
         <!-- 시간 선택 시작 -->
         <div class="start-time-screen">
-          <label class="start-time-screen__text" for="start-time"
-            >시작 시간</label
-          >
+          <label class="start-time-screen__text" for="start-time">시작 시간</label>
           <select id="select-start" name="select-start">
             <option value="08:00">08:00</option>
             <option value="08:30">08:30</option>
@@ -144,9 +134,7 @@
         </div>
       </form>
       <div class="senior-info-four">
-        <span class="red-warnning"
-          >* 2시간 미만 신청시, 회당 오천원의 추가 요금이 가산됩니다.</span
-        >
+        <span class="red-warnning">* 2시간 미만 신청시, 회당 오천원의 추가 요금이 가산됩니다.</span>
       </div>
 
       <a id="service-display-link">
@@ -163,13 +151,44 @@
           <a href="/senior_info_3" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="/senior_info_5" class="nav__link__text">다음</a>
+          <a href="/senior_info_5" class="nav__link__text" onclick="submitFormAndSendData()">다음</a>
         </div>
       </div>
     </nav>
-    <script
-      src="https://kit.fontawesome.com/d5055e0a20.js"
-      crossorigin="anonymous"
-    ></script>
+
+    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+
+    <script>
+      function submitFormAndSendData() {
+      
+        // 선택된 시작 시간과 종료 시간 가져오기
+        //const startTime = $('#select-start').val()
+        //const endTime = $('#select-end').val()
+
+        const data = {
+          start_time: document.getElementById('select-start').value,
+          end_time: document.getElementById('select-end').value
+        }
+      
+        // 데이터 전송
+        fetch('/senior_info_4', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // JSON 형식
+          },
+          body: JSON.stringify(data)
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = '/senior_info_5'
+            } else {
+              alert('서버와의 통신에 실패했습니다.')
+            }
+          })
+          .catch((error) => {
+            alert('네트워크 오류가 발생했습니다.')
+          })
+      }
+    </script>
   </body>
 </html>

@@ -8,11 +8,7 @@
     <!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap JavaScript -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <title>ISC - 시니어 정보(1)</title>
   </head>
@@ -36,17 +32,13 @@
     </div>
     <header class="senior-info-header">
       <div class="senior-info-header__column">
-        <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        <a href="#"><i class="fa-solid fa-angles-left fa-2x"></i></a>
       </div>
       <div class="senior-info-header__column">
         <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
       </div>
       <div class="senior-info-header_column">
-        <span
-          ><img
-            class="senior-info-header-logo"
-            src="../static/ISC-logo_trans.png"
-        /></span>
+        <span><img class="senior-info-header-logo" src="../static/ISC-logo_trans.png" /></span>
       </div>
     </header>
 
@@ -66,23 +58,13 @@
     </div>
     <main class="main-screen">
       <form id="senior-address-form">
-        <input
-          id="input-basic-address"
-          required
-          type="text"
-          placeholder="아래 형식의 주소를 입력해주세요."
-        />
+        <input id="input-basic-address" required type="text" placeholder="아래 형식의 주소를 입력해주세요." />
         <div class="address-guidelines">
           <li>건물명 (예: 삼성빌딩)</li>
           <li>도로명 + 건물번호 (예: 강남대로 123)</li>
           <li>지역명 + 번지 (예: 서울시 강남구 역삼동 456번지)</li>
         </div>
-        <input
-          id="input-detail-address"
-          required
-          type="text"
-          placeholder="상세주소(필수)"
-        />
+        <input id="input-detail-address" required type="text" placeholder="상세주소(필수)" />
       </form>
 
       <a id="service-display-link">
@@ -95,21 +77,47 @@
     <nav class="previous-next-bar">
       <div class="previous-next-bar__list">
         <div class="previous-next-bar__previous">
-          <a href="/main" class="nav__link__text">이전</a>
+          <a href="/home" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="/senior_info_2" class="nav__link__text">다음</a>
+          <a href="/senior_info_2" class="nav__link__text" onclick="submitFormAndSendData()">다음</a>
         </div>
       </div>
     </nav>
-    <script
-      src="https://kit.fontawesome.com/d5055e0a20.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+
+    <script>
+      // 서버에 데이터 전송 함수
+      function submitFormAndSendData() {
+        const formData = new FormData()
+        const data = {
+          basic_address: document.getElementById('input-basic-address').value,
+          detail_address: document.getElementById('input-detail-address').value
+        }
+      
+        fetch('/senior_info_1', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // JSON 형식
+          },
+          body: JSON.stringify(data)
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = '/senior_info_2'
+            } else {
+              alert('서버와의 통신에 실패했습니다.')
+            }
+          })
+          .catch((error) => {
+            alert('네트워크 오류가 발생했습니다.')
+          })
+      }
+    </script>
   </body>
 </html>
 
-<!-- 
+<!--   
  Web에서는 index html 부터 찾아봄
 
--->
+  -->

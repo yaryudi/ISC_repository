@@ -221,15 +221,6 @@ def go_outroom():
     
     return render_template((HTML_OUTROOM), username=username['nick'])
 
-#시니어 페이지 1 - 페이지를 수정함
-@app.route("/senior_info_1")
-def senior_info_1():
-    if not is_valid():
-            return redirect("/")
-    return render_template((HTML_SENIOR_INFO1))
-
-
-
 ####################
 #       기능 함수   # - @app.route("/api 를 사용하는 함수, 주로 methods= 가 존재함
 ####################
@@ -443,7 +434,7 @@ def api_findchatroom_mate():
     
 #### 시니어 정보 관련 함수 ####
 
-##### 주소 입력 및 입력값 출력 #####
+# 주소 입력 및 입력값 출력
 @app.route('/address', methods=['GET', 'POST'])
 def address():
     # 기본 값
@@ -488,7 +479,52 @@ def address():
 
     return render_template(HTML_SENIOR_INFO1, address=address, detail_address=detail_address)
 
-##### 2 페이지 - 성함, 성별, 출생년도, 체중 #####
+
+@app.route("/senior_info_1", methods=['GET', 'POST'])
+def senior_info_1():
+    if request.method == 'POST':
+        data = request.get_json()
+        basic_address = data.get('basic_address')
+        detail_address = data.get('detail_address')
+
+        # 유효성 검사
+        if not (basic_address and detail_address):
+            return jsonify({"message": "모든 필드를 입력해주세요."}), 400
+
+        # 데이터베이스 저장
+        existing_entry = db.page1.find_one()
+        if existing_entry:
+            print("기존 업데이트")
+            # 기존 데이터 업데이트
+            db.page1.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "basic_address": basic_address,
+                    "detail_address": detail_address
+                }}
+            )
+        else:
+            print("새로운 업데이트")
+            # 새로운 데이터 삽입
+            db.page1.insert_one({  # page1 컬렉션에 데이터 삽입
+                "basic_address": basic_address,
+                "detail_address": detail_address
+            })
+
+        return jsonify({"message": "데이터가 성공적으로 저장되었습니다."}), 200
+
+    # GET 요청 처리
+    senior = db.page1.find_one()
+    basic_address = senior["basic_address"] if senior else ""
+    detail_address = senior["detail_address"] if senior else ""  # detail_address를 올바르게 할당
+
+    return render_template(
+        HTML_SENIOR_INFO1,  # 이 부분은 적절한 템플릿 파일명을 사용해야 합니다.
+        basic_address=basic_address,
+        detail_address=detail_address
+    )
+
+#2 페이지 - 성함, 성별, 출생년도, 체중 
 @app.route('/senior_info_2', methods=['GET', 'POST'])
 def senior_info_2():
     if request.method == 'POST':
@@ -499,13 +535,13 @@ def senior_info_2():
         weight = data.get('weight')
 
         # 유효성 검사
-        
-        # if not (name and gender and birth and weight):
-            # return jsonify({"message": "모든 필드를 입력해주세요."}), 400
+        if not (name and gender and birth and weight):
+            return jsonify({"message": "모든 필드를 입력해주세요."}), 400
 
         # 데이터베이스 저장
         existing_entry = db.page2.find_one()
         if existing_entry:
+            print("기존 업데이트")
             # 기존 데이터 업데이트
             db.page2.update_one(
                 {"_id": existing_entry["_id"]},
@@ -514,18 +550,20 @@ def senior_info_2():
                     "gender": gender,
                     "birth": birth,
                     "weight": weight,
-                }},
+                }}
             )
         else:
+            print("새로운 업데이트")
             # 새로운 데이터 삽입
             db.page2.insert_one({
                 "name": name,
                 "gender": gender,
                 "birth": birth,
-                "weight": weight,
+                "weight": weight
             })
 
         return jsonify({"message": "데이터가 성공적으로 저장되었습니다."}), 200
+
 
     # GET 요청 처리
     senior = db.page2.find_one()
@@ -535,15 +573,14 @@ def senior_info_2():
     weight = senior["weight"] if senior else ""
 
     return render_template(
-        'senior-info-(2).html',
+        HTML_SENIOR_INFO2,
         name=name,
         gender=gender,
         birth=birth,
         weight=weight,
     )
 
-
-##### 3 페이지  - 질환, 일상생활 능력 #####
+# 3 페이지  - 질환, 일상생활 능력
 @app.route('/senior_info_3', methods=['GET', 'POST'])
 def senior_info_3():
     if request.method == 'POST':
@@ -594,22 +631,114 @@ def senior_info_3():
 
     # HTML 템플릿 렌더링
     return render_template(
-        'senior-info-(3).html',
+        HTML_SENIOR_INFO3,
         selected_diseases=selected_diseases,
         selected_mobility=selected_mobility,
         selected_meal=selected_meal,
         selected_relation=selected_relation
     )
 
-##### 4페이지 라우트 #####
-@app.route('/senior_info_4', methods=['GET'])
+# 4페이지 라우트 #####
+@app.route('/senior_info_4', methods=['GET', 'POST'])
 def senior_info_4():
-    return render_template('senior-info-(4).html')
+    if request.method == 'POST':
+        # POST 요청 처리
+        print("POST 요청 수신됨")
+        # JSON 형식으로 데이터를 받음
+        data = request.get_json()  # 요청 데이터를 JSON 형식으로 받음
+        start_time = data.get('start_time')
+        end_time = data.get('end_time')
 
-##### 5페이지 라우트 #####
-@app.route('/senior_info_5', methods=['GET'])
+        print("수신한 데이터:", start_time, end_time)
+
+        # 기존 데이터베이스 항목 가져오기
+        existing_entry = db.page4.find_one()
+
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page4.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "start_time": start_time,
+                    "end_time": end_time
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page4.insert_one({
+                "start_time": start_time,
+                "end_time": end_time
+            })
+
+        # POST 요청 후 페이지 리다이렉트
+        return redirect('/senior_info_5')
+
+    else:
+        # GET 요청 처리
+        # 기존 데이터 불러오기
+        senior_info = db.page4.find_one()
+        start_time = senior_info["start_time"] if senior_info else ""
+        end_time = senior_info["end_time"] if senior_info else ""
+
+        # HTML 템플릿 렌더링
+        return render_template(
+            HTML_SENIOR_INFO4,
+            start_time=start_time,
+            end_time=end_time
+        )
+
+# 5페이지 라우트 
+@app.route('/senior_info_5', methods=['GET', 'POST'])
 def senior_info_5():
-    return render_template('senior-info-(5).html')
+    if request.method == 'POST':
+        print("POST 요청 수신됨")
+        print("요청 데이터:", request.form)
+        # 사용자가 선택한 데이터 수집
+        data = request.get_json()  # JSON 데이터 받기
+        services = data.get('services')
+        gender = data.get('gender')
+
+        print("POST 요청 수신")
+        print("수신한 데이터:", services, gender)
+
+
+        # 기존 데이터베이스 항목 가져오기
+        existing_entry = db.page5.find_one()
+
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page5.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "selected_gender": gender,
+                    "selected_service": services
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page5.insert_one({
+                "selected_gender": gender,
+                "selected_service": services
+            })
+
+        # POST 요청 후 페이지 리다이렉트
+        return redirect('/senior_info_5')
+
+    # GET 요청 시 기존 데이터 불러오기
+    senior_info = db.page5.find_one()
+    gender = senior_info["selected_gender"] if senior_info else ""
+    services = senior_info["selected_service"] if senior_info else []
+
+
+    # HTML 템플릿 렌더링
+    return render_template(
+        HTML_SENIOR_INFO5,
+        selected_gender = gender,
+        selected_service = services
+    )
+    
+    
+
     
     
 #### mate 관련 함수 ####
