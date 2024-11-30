@@ -116,7 +116,7 @@ def manage_todo():
         return redirect('/todo')
 
     # 데이터 조회 (출근/퇴근 제외)
-    todos = list(todo_db.db.todo.find({"content": {"$nin": ["출근", "퇴근"]}}))
+    todos = list(todo_db.db.todo.find({"content": {"$nin": ["출근", "퇴근"]}}).sort("time", 1))
     return render_template('todo_maker.html', todos=todos)
 
 @app.route('/todo/delete/<todo_id>', methods=['POST'])

@@ -32,85 +32,90 @@
     </div>
 
     <main>
-      <!-- 개인 정보 입력 및 이미지 업로드-->
-      <form action="/" method="POST" enctype="multipart/form-data">
-        <div class="resume-infomation">
-          <!-- 개인 정보를 입력-->
-          <div class="resume-infomation__basic">
-            <input
-              type="hidden"
-              name="resume_id"
-              value="{{ resume._id if resume else '' }}"
-            />
-            <label
-              >이름<br /><input
-                type="text"
-                id="name"
-                name="name"
-                value="{{ resume.name if resume else '' }}"
-                required
-            /></label>
-            <label
-              >나이<br /><input
-                type="text"
-                id="age"
-                name="age"
-                value="{{ resume.age if resume else '' }}"
-                required
-            /></label>
-            <label
-              >성별<br />
-              <select id="gender" name="gender" required>
-                <option value="" {% if not resume or not resume.gender %}selected{% endif %}>선택</option>
-                <option value="Male" {% if resume and resume.gender == "Male" %}selected{% endif %}>남성</option>
-                <option value="Female" {% if resume and resume.gender == "Female" %}selected{% endif %}>여성</option>
-              </select>
-            </label>
-            <!-- 경력 연월 placeholder 처리 -->
-            <label
-              >경력 <br />
+      <form class="resume-introduction" action="/" method="POST" enctype="multipart/form-data">
+        <!-- 기본 정보+이미지 -->
+        <div id="basicAndimage-container">
+          <div id="basic-container" >
+            <!-- 개인 정보를 입력-->
+            <div class="resume-introduction__basic">
               <input
-                type="text"
-                id="experience_year"
-                name="experience_year"
-                value="{{ resume.experience if resume else '' }}"
-                placeholder="(년)"
-                required
+                type="hidden"
+                name="resume_id"
+                value="{{ resume._id if resume else '' }}"
               />
-              <input
-                type="text"
-                id="experience_month"
-                name="experience_month"
-                placeholder="(월)"
-                required
-              />
-            </label>
+              <!-- 이름 -->
+              <label
+                >이름<br /><input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value="{{ resume.name if resume else '' }}"
+                  placeholder="예시: 김순옥"
+                  required
+              /></label>
+              <!-- 나이 -->
+              <label
+                >나이<br /><input
+                  type="text"
+                  id="age"
+                  name="age"
+                  value="{{ resume.age if resume else '' }}"
+                  placeholder="예시: XX (세)"
+                  required
+              /></label>
+              <!-- 성별 -->
+              <label
+                >성별<br />
+                <select id="gender" name="gender" required>
+                  <option value="" {% if not resume or not resume.gender %}selected{% endif %}>선택</option>
+                  <option value="Male" {% if resume and resume.gender == "Male" %}selected{% endif %}>남성</option>
+                  <option value="Female" {% if resume and resume.gender == "Female" %}selected{% endif %}>여성</option>
+                </select>
+              </label>
+              <!-- 경력 -->
+              <label
+                >경력<br/>
+                <input
+                  type="text"
+                  id="experience"
+                  name="experience"
+                  value="{{ resume.experience if resume else '' }}"
+                  placeholder="예시: X년 X월"
+                  required
+                />
+              </label>
+            </div>
           </div>
-          <!-- 이미지를 업로드-->
-          <div class="resume-infomation__image">
-          {% if resume and resume.photo %}
-            <img
-              src="{{ url_for('static', filename=resume.photo) }}"
-              alt="첨부된 사진"
-              width="200"
-            />
-            {% else %}
-            <img src="https://via.placeholder.com/200" alt="첨부된 사진" />
-            {% endif %}
-            <div class="resume-infomation__image__upload">
-              <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept="image/png, image/jpeg"
+          <div id="image-container">
+            <!-- 이미지를 업로드-->
+            <div class="resume-introduction__image">
+              {% if resume and resume.photo %}
+              <img
+                src="{{ url_for('static', filename=resume.photo) }}"
+                alt="첨부된 사진"
+                width="200"
               />
+              {% else %}
+              <img src="https://via.placeholder.com/200" alt="첨부된 사진" />
+              {% endif %}
+              <div class="resume-introduction__image__upload">
+                <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  accept="image/png, image/jpeg"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </form>
-      <!-- 자기 소개 입력 -->
-      <form action="/" method="POST" enctype="multipart/form-data">
-        <div class="resume-introduction">
+        <!-- 자기소개 -->
+        <div id="text-container">
+          <input
+          type="hidden"
+          name="resume_id"
+          value="{{ resume._id if resume else '' }}"
+          />
           <h2 class="resume-introduction__title">
             자기소개 (경력, 원하는 사항 등)
           </h2>
@@ -119,15 +124,14 @@
             id="introduction"
             name="introduction"
             placeholder="자기소개를 입력해주세요."
-            style="resize: none"
             required
-          ></textarea>
+          >{{ resume.introduction if resume else '' }}</textarea>
         </div>
+        <!-- 제출 버튼 -->
         <div class="resume-introduction__button">
           <button type="submit" name="action" value="update">저장</button>
         </div>
       </form>
-
     </main>
 
     <div class="todo-link">
