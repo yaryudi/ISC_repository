@@ -240,7 +240,7 @@ def care_record_page():
 
     # 데이터를 HTML 템플릿으로 전달
     return render_template(
-        'diary_jw.html',
+        'diary.html',
         cares=cares,
         week_dates=zip(days, formatted_week),
         current_week=f"{current_year}년 {current_month}월 {week_number_in_month(base_date)}째주",

@@ -1,93 +1,140 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
+    <link href="..\static\css\style.css" rel="stylesheet" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISC: 내 이력서 편집</title>
+    <title>ISC: 내 이력서 편집하기</title>
     <link rel="shortcut icon" href="#" />
-    <link href="..\static\css\resume.css" rel="stylesheet" />
   </head>
 
   <body>
-    <h1>내 이력서</h1>
-    <div></div>
-    <!-- 개인 정보 입력 및 이미지 업로드-->
-    <form action="/" method="POST" enctype="multipart/form-data">
-      <div class="container">
-        <!-- 개인 정보를 입력-->
-        <div class="form-section">
-          <input
-            type="hidden"
-            name="resume_id"
-            value="{{ resume._id if resume else '' }}"
-          />
-          <label
-            >이름<input type="text" id="name" name="name" required
-          /></label>
-          <label>나이<input type="text" id="age" name="age" required /></label>
-          <label
-            >성별
-            <select id="gender" name="gender" required>
-              <option value="">선택</option>
-              <option value="Male">남성</option>
-              <option value="Female">여성</option>
-            </select>
-          </label>
-          <label
-            >경력(연도)<input
-              type="text"
-              id="experience_year"
-              name="experience_year"
-              required
-          /></label>
-          <label
-            >경력(월)<input
-              type="text"
-              id="experience_month"
-              name="experience_month"
-              required
-          /></label>
-        </div>
-        <!-- 이미지를 업로드-->
-        <div class="image-section">
-          <img src="https://via.placeholder.com/200" alt="첨부된 사진" />
-          <div class="upload-actions">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <div class="screen-header">
+      <span><i class="screen-header__icon"></i></span>
+      <h1 class="screen-header__title">나의 이력서</h1>
+      <img src="#" class="screen-header__img" />
+    </div>
+
+    <main>
+      <!-- 개인 정보 입력 및 이미지 업로드-->
+      <form action="/" method="POST" enctype="multipart/form-data">
+        <div class="resume-infomation">
+          <!-- 개인 정보를 입력-->
+          <div class="resume-infomation__basic">
             <input
-              type="file"
-              id="photo"
-              name="photo"
-              accept="image/png, image/jpeg"
+              type="hidden"
+              name="resume_id"
+              value="{{ resume._id if resume else '' }}"
             />
+            <label
+              >이름<br /><input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ resume.name if resume else '' }}"
+                required
+            /></label>
+            <label
+              >나이<br /><input
+                type="text"
+                id="age"
+                name="age"
+                value="{{ resume.age if resume else '' }}"
+                required
+            /></label>
+            <label
+              >성별<br />
+              <select id="gender" name="gender" required>
+                <option value="" {% if not resume or not resume.gender %}selected{% endif %}>선택</option>
+                <option value="Male" {% if resume and resume.gender == "Male" %}selected{% endif %}>남성</option>
+                <option value="Female" {% if resume and resume.gender == "Female" %}selected{% endif %}>여성</option>
+              </select>
+            </label>
+            <!-- 경력 연월 placeholder 처리 -->
+            <label
+              >경력 <br />
+              <input
+                type="text"
+                id="experience_year"
+                name="experience_year"
+                value="{{ resume.experience if resume else '' }}"
+                placeholder="(년)"
+                required
+              />
+              <input
+                type="text"
+                id="experience_month"
+                name="experience_month"
+                placeholder="(월)"
+                required
+              />
+            </label>
+          </div>
+          <!-- 이미지를 업로드-->
+          <div class="resume-infomation__image">
+          {% if resume and resume.photo %}
+            <img
+              src="{{ url_for('static', filename=resume.photo) }}"
+              alt="첨부된 사진"
+              width="200"
+            />
+            {% else %}
+            <img src="https://via.placeholder.com/200" alt="첨부된 사진" />
+            {% endif %}
+            <div class="resume-infomation__image__upload">
+              <input
+                type="file"
+                id="photo"
+                name="photo"
+                accept="image/png, image/jpeg"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </form>
-    <!-- 자기 소개 입력 -->
-    <form action="/" method="POST" enctype="multipart/form-data">
-      <div class="container textarea-section">
-        <label for="introduction"
-          >자기소개 (경력, 원하는 사항 등)<textarea
+      </form>
+      <!-- 자기 소개 입력 -->
+      <form action="/" method="POST" enctype="multipart/form-data">
+        <div class="resume-introduction">
+          <h2 class="resume-introduction__title">
+            자기소개 (경력, 원하는 사항 등)
+          </h2>
+          <textarea
+            class="resume-introduction__text"
             id="introduction"
             name="introduction"
+            placeholder="자기소개를 입력해주세요."
+            style="resize: none"
             required
-          >
-자기소개를 입력해주세요.</textarea
-          >
-        </label>
-      </div>
-      <div class="button-container">
+          ></textarea>
+        </div>
+      </form>
+      <div class="resume-button">
         <button type="submit" name="action" value="update">저장</button>
       </div>
-    </form>
+    </main>
 
     <div class="todo-link">
-      <a href="/todo">ToDo 페이지로 이동</a>
+      <a href="/todo">todo-maker</a>
       <a href="/todo_carecody" style="margin-left: 20px"
         >내 ToDo 페이지로 이동</a
       >
-      <a href="/care_record" style="margin-left: 20px"
-        >케어 기록 페이지로 이동</a
-      >
+      <a href="/diary" style="margin-left: 20px">돌봄 diary로 이동</a>
     </div>
   </body>
 </html>

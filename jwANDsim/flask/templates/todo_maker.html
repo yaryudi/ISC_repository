@@ -1,62 +1,97 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
+    <link href="..\static\css\style.css" rel="stylesheet" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISC: To Do 리스트 작성</title>
+    <title>ISC: To-Do List 생성</title>
     <link rel="shortcut icon" href="#" />
-    <link href="..\static\css\todo_maker.css" rel="stylesheet" />
   </head>
 
   <body>
-    <header>
-      <h1>To Do 리스트 작성</h1>
-      <div class="navigate-btn">
-        <span>&larr;</span>
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
       </div>
-    </header>
-    <div></div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <div class="screen-header">
+      <span><i class="screen-header__icon"></i></span>
+      <h1 class="screen-header__title">To-Do List 생성 및 편집하기</h1>
+      <img src="#" class="screen-header__img" />
+    </div>
 
-    <div class="todo-container">
-      <!-- 기존 To-Do list들을 display -->
+    <!-- 기존 To-Do list들을 display -->
+    <div class="todo-maker__original">
       <ul>
         {% for todo in todos %}
-        <li class="todo-item">
-          <span class="todo-time">{{ todo.time }}</span>
-          <span class="todo-content">{{ todo.content }}</span>
-          <div class="todo-actions">
-            <!-- 수정 폼 -->
-            <form action="/todo/edit/{{ todo._id }}" method="POST">
-              <button type="submit" class="edit-btn">수정</button>
-            </form>
+        <li class="todo-maker__original__box">
+          <span class="todo-maker__original__box__time">{{ todo.time }}</span>
+          <span class="todo-maker__original__box__content"
+            >{{ todo.content }}</span
+          >
+          <div class="todo-maker__original__box__actions">
+            <!-- 수정 폼
+            <form
+              id="todo-edit-btn"
+              action="/todo/edit/{{ todo._id }}"
+              method="POST"
+            >
+              <button type="submit" class="todo-edit-btn">수정</button>
+            </form> -->
             <!-- 삭제 폼 -->
-            <form action="/todo/delete/{{ todo._id }}" method="POST">
-              <button type="submit" class="delete-btn">삭제</button>
+            <form
+              id="todo-delete-btn"
+              action="/todo/delete/{{ todo._id }}"
+              method="POST"
+            >
+              <button type="submit" class="todo-delete-btn">삭제</button>
             </form>
           </div>
         </li>
         {% endfor %}
       </ul>
     </div>
+
     <!-- 새로운 To-Do list를 추가하는 부분 -->
-    <div id="input-section" class="todo-container">
+    <div class="todo-maker__new" id="input-section">
       <form
+        class="todo-maker__new__form"
         method="POST"
         action="/todo"
         style="display: flex; width: 100%; gap: 10px"
       >
-        <input type="time" id="time" name="time" class="input-time" required />
         <input
+          class="todo-maker__new__form__time"
+          type="time"
+          id="time"
+          name="time"
+          required
+        />
+        <input
+          class="todo-maker__new__form__content"
           type="text"
           id="content"
           name="content"
-          class="input-content"
           placeholder="내용 입력"
           required
         />
-        <button type="submit">작성</button>
+        <button class="todo-maker__new__form__button" type="submit">
+          작성
+        </button>
       </form>
     </div>
+
     <div class="resume-link">
       <a href="/resume">이력서 페이지로 이동</a>
       <a href="/diary">돌봄 다이어리 페이지로 이동</a>

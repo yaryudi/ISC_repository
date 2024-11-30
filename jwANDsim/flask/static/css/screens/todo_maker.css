@@ -1,0 +1,272 @@
+/* 
+nav bar 스타일 수정
+새로운 거 추가할 때 ""뿅""하는 애니메이션 추가하기
+배경 색깔 바꾸기
+
+*/
+
+body {
+    max-width: calc(100vw - 16px);
+    max-height: 100vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 기존 컨텐츠 랜더링 */
+.todo-maker__original {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 40px;
+    margin: 1px solid rgba(0,0,0,1);
+    
+}
+
+.todo-maker__original__box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin: 20px;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.todo-maker__original__box__time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 18px;
+    padding: 10px;
+    width: 40px;
+    height: 20px;
+    border: none;
+    background-color: var(--orange);
+    color: var(--#07434d);
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.todo-maker__origina__box__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100px;
+    height: 20px;
+    padding: 10px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    word-wrap: break-word;
+    white-space: normal;
+    height: auto;
+}
+
+.todo-maker__original__box__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80px;
+    padding: 0 5px;
+}
+
+.todo-maker__original__box__actions button {
+    height: 40px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+}
+
+.todo-maker__original__box__actions button:hover {
+    background-color: var(--littlePink);
+}
+
+/* 새로운 컨텐츠 생성 */
+.todo-maker__new {
+    display: flex;
+    position: fixed;
+    box-sizing: border-box;
+    bottom:0;
+    width: 100%;
+    padding: 10px;
+    background-color: whitesmoke;
+    border: 2px solid var(--orange);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.todo-maker__new__form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-maker__new__form__time {
+    flex: 1;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.todo-maker__new__form__content {
+    flex: 10;
+    height: 40px;
+    border-radius: 10px;
+    border-radius: 10px;
+}
+
+.todo-maker__new__form__button {
+    height: 40px;
+    width: 60px;
+    border-radius: 10px;
+    background-color: var(--orange);
+    border: none;
+    color: white;
+}
+
+.todo-maker__new__form__button:hover {
+    cursor: pointer;
+    background-color: var(--littlePink);
+}
+
+
+/*
+header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; 
+        height: 66px;
+        margin: 20px;
+        width: 80%; 
+        max-width: 800px;
+    }
+        header h1 {
+            font-size: 50px;
+            text-align: left;
+        }
+        .navigate-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            font-size: 75px;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            color: gray;
+            font-size: 75px;
+            border: none;
+            margin-left: auto;
+        }
+        .navigate-btn:hover {
+            background-color: #df4b8d;
+            color: white;
+        }
+    header ~ div {
+        height: 20px;
+        background-color: #e69696;
+        width: 80%;
+        max-width: 800px;
+        border-radius: 10px;
+    }*/
+
+/* To-Do List: Display, edit, delete, add
+.todo-container {
+    flex: 1;
+    overflow-y: auto;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+}
+    .todo-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .todo-time {
+        flex: 1;
+        text-align: center;
+        font-weight: bold;
+        background-color: #ffc9c9;
+        color: black;
+        padding: 5px;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+    .todo-content {
+        flex: 5;
+        background-color: #ffe6b8;
+        color: black;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .todo-actions {
+        display: flex;
+        padding: 5px;
+        gap: 5px;
+    }
+    .todo-actions button {
+        background-color: #ffc107;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .todo-actions button:hover {
+        background-color: #e0a800;
+        color: black;
+    }
+*/
+    /* 새로운 todo를 add 
+#input-section {
+    width: 80%;
+    max-width: 800px;
+    max-height: 80px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffc400;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+#input-section input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.input-time {
+    background-color: #ffc9c9;
+    color: black;
+    flex: 1;
+}
+.input-content {
+    flex: 5;
+    background-color: #ffe6b8;
+    color: black;
+}
+#input-section button {
+    padding: 10px 20px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+#input-section button:hover {
+    background-color: #00ff08; /* hover 시 배경색 변경
+    color: white;
+}
+    */

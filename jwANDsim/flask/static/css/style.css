@@ -1,0 +1,41 @@
+
+@import url(reset.css);
+@import url(variable.css);
+
+/* 컴포넌트 */
+@import url(components/status-bar.css);
+@import url(components/navigation-bar.css);
+@import url(components/screen-header.css);
+
+
+/* 스크린 */
+@import url(screens/resume.css);
+@import url(screens/todo_maker.css);
+@import url(screens/diary.css);
+/* @import url(screens/todo_carecody.css); */
+
+
+body {
+  height: 300vh;
+  max-width: 100%;
+  overflow-x: hidden;
+  color: #2e363e;
+  box-sizing: border-box;
+}
+
+body:lang(en){
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body:lang(ko){
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+input {
+  border-color:rgba(0,0,0,0.3);
+  height: 20px;
+}
