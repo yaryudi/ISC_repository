@@ -67,8 +67,8 @@
               <span class="question-click__text">선호하시는 케어코디 성별을 골라주세요</span>
               <div class="question-click__container">
                 <!-- 첫 번째 줄 -->
-                <div class="click-option gender-options" id="남성" onclick="updateGender('남성')">남성</div>
-                <div class="click-option gender-options" id="여성" onclick="updateGender('여성')">여성</div>
+                <div class="click-option gender-options {% if selected_gender == '남성' %}selected{% endif %}" id="남성" onclick="updateGender('남성')">남성</div>
+                <div class="click-option gender-options {% if selected_gender == '여성' %}selected{% endif %}" id="여성" onclick="updateGender('여성')">여성</div>
 
                 <!-- 두 번째 줄 -->
                 <div class="click-option gender-options" id="모두 가능" onclick="updateGender('모두 가능')">모두 가능</div>
@@ -81,26 +81,26 @@
             <span class="question-click__text">필요한 서비스를 선택해 주세요</span>
             <div class="question-click__container">
               <!-- 첫 번째 줄 -->
-              <div class="click-option" id="바닥청소" onclick="updateSelection('바닥청소')">바닥청소</div>
-              <div class="click-option" id="설거지" onclick="updateSelection('설거지')">설거지</div>
-              <div class="click-option" id="빨래및건조" onclick="updateSelection('빨래및건조')">빨래및건조</div>
-              <div class="click-option" id="쓰레기 배출" onclick="updateSelection('쓰레기 배출')">쓰레기 배출</div>
+              <div class="click-option {% if '바닥청소' in selected_service %}selected{% endif %}" id="바닥청소" onclick="updateSelection('바닥청소')">바닥청소</div> 
+              <div class="click-option {% if '설거지' in selected_service %}selected{% endif %}" id="설거지" onclick="updateSelection('설거지')">설거지</div>
+              <div class="click-option {% if '빨래및건조' in selected_service %}selected{% endif %}" id="빨래및건조" onclick="updateSelection('빨래및건조')">빨래및건조</div>
+              <div class="click-option {% if '쓰레기 배출' in selected_service %}selected{% endif %}" id="쓰레기 배출" onclick="updateSelection('쓰레기 배출')">쓰레기 배출</div>
 
               <!-- 두 번째 줄 -->
-              <div class="click-option" id="식사 준비 및 정리" onclick="updateSelection('식사 준비 및 정리')">식사 준비 및 정리</div>
-              <div class="click-option" id="복약확인/디스크" onclick="updateSelection('복약확인/디스크')">복약확인/디스크</div>
+              <div class="click-option {% if '식사 준비 및 정리' in selected_service %}selected{% endif %}" id="식사 준비 및 정리" onclick="updateSelection('식사 준비 및 정리')">식사 준비 및 정리</div>
+              <div class="click-option {% if '복약확인/디스크' in selected_service %}selected{% endif %}" id="복약확인/디스크" onclick="updateSelection('복약확인/디스크')">복약확인/디스크</div>
 
               <!-- 세 번째 줄 -->
-              <div class="click-option" id="세면보조" onclick="updateSelection('세면보조')">세면보조</div>
-              <div class="click-option" id="빨래개기" onclick="updateSelection('빨래개기')">빨래개기</div>
+              <div class="click-option {% if '세면보조' in selected_service %}selected{% endif %}" id="세면보조" onclick="updateSelection('세면보조')">세면보조</div>
+              <div class="click-option {% if '빨래개기' in selected_service %}selected{% endif %}" id="빨래개기" onclick="updateSelection('빨래개기')">빨래개기</div>
 
               <!-- 네 번째 줄 -->
-              <div class="click-option" id="식사조리" onclick="updateSelection('식사조리')">식사조리</div>
-              <div class="click-option" id="말벗/정서케어" onclick="updateSelection('말벗/정서케어')">말벗/정서케어</div>
+              <div class="click-option" id="식사조리{% if '식사조리' in selected_service %}selected{% endif %}" onclick="updateSelection('식사조리')">식사조리</div>
+              <div class="click-option" id="말벗/정서케어{% if '말벗/정서케어' in selected_service %}selected{% endif %}" onclick="updateSelection('말벗/정서케어')">말벗/정서케어</div>
 
               <!-- 다섯 번째 줄 -->
-              <div class="click-option" id="간단한 부축" onclick="updateSelection('간단한 부축')">간단한 부축</div>
-              <div class="click-option" id="안전 및 안부확인" onclick="updateSelection('안전 및 안부확인')">안전 및 안부확인</div>
+              <div class="click-option" id="간단한 부축{% if '간단한 부축' in selected_service %}selected{% endif %}" onclick="updateSelection('간단한 부축')">간단한 부축</div>
+              <div class="click-option" id="안전 및 안부확인{% if '안전 및 안부확인' in selected_service %}selected{% endif %}" onclick="updateSelection('안전 및 안부확인')">안전 및 안부확인</div>
             </div>
             <span class="red-warnning">* 식사 조리 서비스는 시간당 1만원 혹은 케톡(카톡 아님!)에서 상의하세요</span>
           </div>

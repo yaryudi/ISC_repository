@@ -58,13 +58,13 @@
     </div>
     <main class="main-screen">
       <form id="senior-address-form">
-        <input id="input-basic-address" required type="text" placeholder="아래 형식의 주소를 입력해주세요." />
+        <input id="input-basic-address" required type="text" placeholder="아래 형식의 주소를 입력해주세요." value="{{ basic_address }}"/>
         <div class="address-guidelines">
           <li>건물명 (예: 삼성빌딩)</li>
           <li>도로명 + 건물번호 (예: 강남대로 123)</li>
           <li>지역명 + 번지 (예: 서울시 강남구 역삼동 456번지)</li>
         </div>
-        <input id="input-detail-address" required type="text" placeholder="상세주소(필수)" />
+        <input id="input-detail-address" required type="text" placeholder="상세주소(필수)" value="{{ detail_address }}"/>
       </form>
 
       <a id="service-display-link">
