@@ -457,6 +457,10 @@ def api_send_match():
         if userinfo_receiver["mate"] != "" :
             return jsonify({'result': 'fail', 'msg': '이미 매칭이 된 상대입니다.'})
         
+        result = db.mate_request.find({"sender" : userinfo_sender["nick"], "receiver" : userinfo_receiver["nick"]})
+        if result is None:
+            return jsonify({'result': 'fail', 'msg': '이미 존재하는 매칭입니다'})
+            
 
         #해당 요청을 DB에 업로드
         result = db.mate_request.insert_one({"sender" : userinfo_sender["nick"], "receiver" : userinfo_receiver["nick"]})
@@ -646,36 +650,30 @@ def disallow_match():
 def first_match():
     nickname_receive = request.form["nick_give"]
     token_receive = request.cookies.get(USERTOKEN)
-    
 
     try:
         # token을 시크릿키로 디코딩합니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
-        #수신자 정보 확인
+        # 수신자 정보 확인
         user = db.user.find_one({"id": payload["id"]})
-        
-        #첫 페이지 입장시 
-        #사용자에게 온 요청이 있는 지 확인한다.
-        #해당 요청이 현재 존재하는 지 확인
-        
+
+        # 첫 페이지 입장 시, 사용자에게 온 요청이 있는지 확인
         request_inform = db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1).limit(1)
-        
-        #사용자에게 온 요청이 없다면, 오류 메시지를 출력하고 밖으로 내보낸다.
-        if request_inform.count_documents() == 0:
+
+        # 커서를 리스트로 변환하여 요청이 없을 경우 처리
+        request_inform_list = list(request_inform)
+        if len(request_inform_list) == 0:
             return jsonify({"result": "fail", "msg": "온 요청이 없습니다."}), 404
 
         # 요청이 있을 경우 첫 번째 항목 가져오기
-        request_data = request_inform[0]  # 첫 번째 요청
-        
-        
-        #관련 정보를 프론트로 다시 넘겨준다    
-        return jsonify({'result': 'success', 'msg': '매칭 요청 확인 성공', 'data':request_data["sender"]})
-    
+        request_data = request_inform_list[0]  # 첫 번째 요청
+
+        # 관련 정보를 프론트로 다시 넘겨준다
+        return jsonify({'result': 'success', 'msg': '매칭 요청 확인 성공', 'data': request_data["sender"]})
+
     except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
     except jwt.exceptions.DecodeError:
-        # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
 
@@ -685,23 +683,51 @@ def pred_match():
     nickname_receive = request.form["nick_give"]
     token_receive = request.cookies.get(USERTOKEN)
     
-    if nickname_receive == "":
-        return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         #첫 페이지 입장시 
         #우선 현재 페이지에 nick이 공란인지 확인한다.
-        
+        if nickname_receive == "":
+            return jsonify({"result": "fail", "msg": "오류입니다."})
         #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
         
+        # 수신자 정보 확인
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        user = db.user.find_one({"id": payload["id"]})
         
         #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
+        # request_inform을 커서로 가져온 후, 리스트로 변환
+        request_inform_list = list(db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1))
+
+        # 찾고자 하는 특정 요소 (예: sender가 "example_sender"인 요소)의 인덱스를 찾기
+        target_sender = nickname_receive
+        index_of_element = next((index for index, item in enumerate(request_inform_list) if item["sender"] == target_sender), -1)
+
+        print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        if index_of_element != -1:
+            print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        else:
+            print(nickname_receive+"를 찾을 수 없습니다.")
+            return jsonify({"result": "fail", "msg": "찾을 수 없습니다."})
         
-        #해당 요청이 존재하지 않는다면 오류를 발생시키고 main페이지로 보낸다.
+        if index_of_element == 0:
+            return jsonify({"result": "fail", "msg": "이전 페이지가 존재하지 않습니다."})
         
-        #해당 요청이 존재한다면, 해당 요청 이전 값을 찾아 해당 값을 띄운다.
-        #이전 값이 존재하지 않는다면 오류를 표기하고 해당 페이지에 머문다.
-        return jsonify({'result': 'success', 'msg': '매칭 요청 페이지 이전 이동 성공'})
+        # 주어진 인덱스 (예: 2번째 인덱스)로 문서 찾기
+        index_to_find = index_of_element - 1  # 예시로 2번째 인덱스를 찾고자 할 때
+
+
+        if index_to_find < len(request_inform_list):
+            document = request_inform_list[index_to_find]
+            print(f"인덱스 {index_to_find}에 해당하는 문서: {document}")
+        else:
+            print(f"인덱스 {index_to_find}가 범위를 벗어났습니다.")
+            
+        
+        request_data = request_inform_list[index_to_find]
+            
+        return jsonify({'result': 'success', 'msg': '이전 매칭 요청 확인 성공', 'data': request_data["sender"]})
+    
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
@@ -711,28 +737,54 @@ def pred_match():
 
 #지금 보고 있는 페이지의 다음 요청을 확인한다.
 @app.route("/api/next_match", methods=["POST"])
-def next_match():
-    #데이터는 span에서 받아온다.
+def next_match():    
     nickname_receive = request.form["nick_give"]
     token_receive = request.cookies.get(USERTOKEN)
     
-    if nickname_receive == "":
-        return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
     
     try:
         #첫 페이지 입장시 
         #우선 현재 페이지에 nick이 공란인지 확인한다.
-        
+        if nickname_receive == "":
+            return jsonify({"result": "fail", "msg": "오류입니다."})
         #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
         
+        # 수신자 정보 확인
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        user = db.user.find_one({"id": payload["id"]})
         
         #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
+        # request_inform을 커서로 가져온 후, 리스트로 변환
+        request_inform_list = list(db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1))
+
+        # 찾고자 하는 특정 요소 (예: sender가 "example_sender"인 요소)의 인덱스를 찾기
+        target_sender = nickname_receive
+        index_of_element = next((index for index, item in enumerate(request_inform_list) if item["sender"] == target_sender), -1)
+
+        print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        if index_of_element != -1:
+            print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        else:
+            print(nickname_receive+"를 찾을 수 없습니다.")
+            return jsonify({"result": "fail", "msg": "찾을 수 없습니다."})
         
-        #해당 요청이 존재하지 않는다면 오류를 발생시키고 main페이지로 보낸다.
+        if index_of_element == len(request_inform_list)-1:
+            return jsonify({"result": "warn", "msg": "다음 페이지가 존재하지 않습니다."})
         
-        #해당 요청이 존재한다면, 해당 요청 다음 값을 찾아 해당 값을 띄운다.
-        #다음 값이 존재하지 않는다면 오류를 표기하고 해당 페이지에 머문다.
-        return jsonify({'result': 'success', 'msg': '매칭 요청 페이지 다음 이동 성공'})
+        # 주어진 인덱스 (예: 2번째 인덱스)로 문서 찾기
+        index_to_find = index_of_element + 1  # 예시로 2번째 인덱스를 찾고자 할 때
+
+
+        if index_to_find < len(request_inform_list):
+            document = request_inform_list[index_to_find]
+            print(f"인덱스 {index_to_find}에 해당하는 문서: {document}")
+        else:
+            print(f"인덱스 {index_to_find}가 범위를 벗어났습니다.")
+            
+        
+        request_data = request_inform_list[index_to_find]
+            
+        return jsonify({'result': 'success', 'msg': '다음 매칭 요청 확인 성공', 'data': request_data["sender"]})
     
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.

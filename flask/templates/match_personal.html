@@ -101,22 +101,22 @@
           url: '/api/first_match',
           data: {
             nick_give: $('#nickname').text()
-            //nick_give: $('#input-nick').val()
           },
           success: function (response) {
             console.log(response)
             if (response['result'] == 'success') {
               // 요청에 성공시 알림
               alert('첫 페이지 불러오기 성공!')
-              $('#input-nick').text(response.data)
+              $('#nickname').text(response.data)
               //새로고침!
             } else {
               alert(response['msg'])
+              window.location.pathname === '/main'
             }
           }
         })
       }
-      
+        
       //이전 요청 보기
       function pred_match() {
         $.ajax({
@@ -124,17 +124,18 @@
           url: '/api/pred_match',
           data: {
             nick_give: $('#nickname').text()
-            //nick_give: $('#input-nick').val()
           },
           success: function (response) {
             console.log(response)
             if (response['result'] == 'success') {
               // 요청에 성공시 알림
               alert('이전 페이지 이동!')
+              $('#nickname').text(response.data)
       
               //새로고침!
             } else {
               alert(response['msg'])
+              window.location.href = '/main' //새로고침!
             }
           }
         })
@@ -146,14 +147,14 @@
           type: 'POST',
           url: '/api/next_match',
           data: {
-            nick_give: $('#input-nick').val()
+            nick_give:  $('#nickname').text()
           },
           success: function (response) {
             console.log(response)
             if (response['result'] == 'success') {
               // 요청에 성공시 알림
-      
               alert('다음 페이지 이동')
+              $('#nickname').text(response.data)
       
               //새로고침!
             } else {
