@@ -41,7 +41,7 @@
       }
     </style>
     <script>
-      //페이지 이동 - URL을 고치고, 고쳐진 URL은 백에서 인식하여 html을 불러온다.
+      //매칭 요청을 보냄
       function send_match() {
         $.ajax({
           type: 'POST',
@@ -63,12 +63,13 @@
         })
       }
       
+      //현재 자신의 매칭관계를 끊어냄
       function dis_match() {
         $.ajax({
           type: 'POST',
           url: '/api/dis_match',
           data: {
-            nick_give: $('#input-nick').val()
+            nick_give: $('#input-nick').val() //이 줄 필요 없음
           },
           success: function (response) {
             console.log(response)
@@ -83,27 +84,12 @@
           }
         })
       }
-      
-      function allow_match() {
-        $.ajax({
-          type: 'POST',
-          url: '/api/allow_match',
-          data: {
-            nick_give: $('#input-nick').val()
-          },
-          success: function (response) {
-            console.log(response)
-            if (response['result'] == 'success') {
-              // 요청에 성공시 알림
-              alert('매칭 완료!')
-              //메인 페이지로 이동
-              window.location.href = '/main'
-            } else {
-              alert(response['msg'])
-            }
-          }
-        })
+
+      //매칭 요청 허락 버튼시 작동
+      function hear_match() {
+        window.location.href = '/match_personal'
       }
+
     </script>
   </head>
 
@@ -118,7 +104,7 @@
         <div class="posting-box" id="post-box">
           <button type="submit" onclick="send_match()" class="btn btn-primary">매칭 요청</button>
           <button type="submit" onclick="dis_match()" class="btn btn-primary">매칭 끊기</button>
-          <button type="submit" onclick="allow_match()" class="btn btn-primary">매칭 수락</button>
+          <button type="submit" onclick="hear_match()" class="btn btn-primary">매칭 조회</button>
         </div>
       </div>
     </div>
