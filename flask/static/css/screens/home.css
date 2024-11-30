@@ -1,0 +1,22 @@
+#home .main-screen-header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px var(--horizontal-space);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    padding-top: 40px;
+    border-bottom:2px solhome rgba(7,67,77, 0.5);
+}
+
+#home .main-screen-header__title{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+
+#home .main-screen-header-logo{
+    height: 50px;
+    width: 50px;
+    margin-right: 15px;
+}

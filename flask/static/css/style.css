@@ -10,12 +10,24 @@
 @import url(components/badge.css);
 @import url(components/icon-row.css);
 @import url(components/alt-screen-header.css);
+@import url(components/senior-info-header.css);
+@import url(components/progress-bar.css);
+@import url(components/previous-next-bar.css);
+@import url(components/service-display-link.css);
+@import url(components/question-click.css);
+@import url(components/question-text.css);
+@import url(components/main-screen-header.css);
 
 /* 스크린 */
 @import url(screens/login.css);
 @import url(screens/first-home.css);
 @import url(screens/sign-up.css);
 @import url(screens/chat.css);
+@import url(screens/home.css);
+@import url(screens/senior-info-\(1\).css);
+@import url(screens/senior-info-\(2\).css);
+@import url(screens/senior-info-\(3\).css);
+@import url(screens/senior-info-\(4\).css);
 
 body{
   color: var(--green);
@@ -46,6 +58,11 @@ body:lang(ko){
     font-weight: bold; 
     
   }
+
+.main-screen{
+    padding: 0px var(--horizontal-space);
+    
+}
 
 
 

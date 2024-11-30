@@ -5,7 +5,6 @@
     padding: var(--horizontal-space);
     margin-bottom: 15px;
     padding-top: 40px;
-   
 }
 
 .screen-header__title{
@@ -22,32 +21,8 @@
     position: relative;
 }
 
-.screen__focus{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    left: 70px;
-    bottom: 15px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: tomato;
-    color: tomato;
-
-}
-
-.screen__focus__gear{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    left: 115px;
-    bottom: 15px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: tomato;
-    color: tomato;
-
-}
+.screen-header__title br {
+    display: block;
+    margin-bottom: 10px; /* 원하는 간격 */
+    content: "";
+  }

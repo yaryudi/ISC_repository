@@ -1,0 +1,68 @@
+.senior-info-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--horizontal-space);
+    padding-top: 40px;
+    
+}
+
+.senior-info-header__title{
+    font-size: 22px;
+    font-weight: 600;
+    
+}
+
+/* .senior-info-header__column:first-child{
+    margin-right: auto;
+}
+.senior-info-header__column:last-child{
+    margin-left: auto;
+} */
+
+.senior-info-header__column span{
+    margin-left: 20px;
+}
+
+.senior-info-header__column:first-child i {
+    color: var(--green); /* 원하는 색상 코드 */
+}
+
+.senior-info-header-logo{
+    height: 60px;
+    width: 60px;
+}
+
+#senior-info .senior-info-header,
+#senior-info .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    
+}
+
+.senior-info-header-logo{
+    height: 60px;
+    width: 60px;
+}
+
+
+#senior-info .status-bar{
+    z-index: 2;
+}
+
+#senior-info .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    
+}
+
+#senior-info .senior-info-header{
+    z-index: 1;
+} 
+

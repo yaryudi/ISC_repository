@@ -15,34 +15,54 @@ from pymongo import MongoClient
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from bson import ObjectId
 
-
+#!!!!!암호화키!!!!!
 SECRET_KEY = 'SPARTA'
 
+#서버 구동 초기 설정
 app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = '비밀번호 설정'
 socketio = SocketIO(app)
 
+#데이터 베이스 설정
 client = MongoClient('mongodb+srv://rjh0162_rw:difbel0162@cluster0.6twyc.mongodb.net/')
-db = client.user_data #사용자 탐색용 db
-db_chat = client.ChatDB #채팅 탐색용 db
+db = client.ISC_database #사용자 탐색용 db
 
+#사용자 토큰 명
+USERTOKEN = "usertoken"
+
+#JWT토큰 암호/복호화 알고리즘 
+ALGORITHMS_JWT = "HS256" 
+
+HTML_INDEX = "index.html"
+HTML_LOGIN = "login.html"
+HTML_SIGNUP =  "sign-up.html"
+HTML_MAIN = "home.html"
+HTML_OUTROOM = "chat_test_outroom.html"
+HTML_INROOM = "chat.html"
+HTML_MATCH =  "match_page.html"
+HTML_REQUEST = "match_personal.html"
+HTML_SENIOR_INFO1 = "senior-info-(1).html" 
+HTML_SENIOR_INFO2 = "senior-info-(2).html" 
+HTML_SENIOR_INFO3 = "senior-info-(3).html" 
+HTML_SENIOR_INFO4 = "senior-info-(4).html" 
+HTML_SENIOR_INFO5 = "senior-info-(5).html" 
 
 ####################
-#  범용       함수   # --> 보안이나 편의성을 위하여 아래에서 전반적으로 사용되는 함수
+#  범용       함수   # --> 보안이나 편의성을 위하여 전반적으로 사용되는 함수
 ####################
 
 # 보안: 유효한 캐시를 가지고 있는 사용자만
-#  api_valid() -> 프론트에서 요청, valid_movement(ㅁㄴㅇㄹ) -> 백에서 알아서 검사
+#  api_valid() -> 프론트에서 요청, is_valid(asdf) -> 백에서 알아서 검사
 def is_valid():
     
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
         return (False)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return (True)
@@ -53,16 +73,16 @@ def is_valid():
         # 로그인 정보가 없으면 에러가 납니다!
         return (False)
 
-# 현재 토큰 보유자의 json를 리턴한다.
+# 현재 토큰 보유자의 json를 리턴한다. -> 지금은 안씀
 def what_user():
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
         return (False)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return (userinfo)
@@ -73,8 +93,7 @@ def what_user():
         # 로그인 정보가 없으면 에러가 납니다!
         return (None)
 
-#백엔드에서 캐시 방지 헤더
-
+#백엔드에서 캐시 방지 헤더 -> 지금은 안씀
 def render_template_nocash(html):
     response = make_response(render_template(html))
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -86,63 +105,47 @@ def render_template_nocash(html):
 #  페이지 이동 함수   # --> render_template를 이용해 html을 불러오는 함수
 ####################
 
+#index - 첫 페이지, 잘못된 접근 시 해당 페이지로 이동
 @app.route("/")
 def home():
     if is_valid():
         return redirect("/main")
-    return (render_template("index.html"))
+    return (render_template(HTML_INDEX))
 
+#로그인 페이지
 @app.route("/login")
 def login():
     if is_valid():
             return redirect("/main")
-    return render_template("login.html")
+    return render_template(HTML_LOGIN)
 
+#회원가입 페이지
 @app.route("/signup")
 def signup():
     if is_valid():
             return redirect("/main")
-    return render_template("sign-up.html")
+    return render_template(HTML_SIGNUP)
 
+#메칭 페이지 - 매칭 요청, 관게 끊기 
 @app.route("/match")
 def match():
     if not is_valid():
             return redirect("/")
-    return render_template(("match_page.html"))
- 
-@app.route('/inroom' , methods=['GET', 'POST'])
-def go_inroom():
-    if not is_valid():
-            return redirect("/")
-    return render_template(('chat.html'))
+    return render_template((HTML_MATCH))
 
-@app.route('/chat')
-def go_outroom():
-    
-    if not is_valid():
-            return redirect("/")
-
-    
-    token_receive = request.cookies.get('usertoken')
-        # token을 시크릿키로 디코딩합니다.
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-    username = db.user.find_one({'id': payload['id']}, {'_id': 0})
-    
-    return render_template(('chat_test_outroom.html'), username=username['nick'])
-
+#메인 페이지 - 정보 확인 및 페이지 이동가능
 @app.route("/main")
 def main():
     
     if not is_valid():
         return redirect("/")
     
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
         # token을 시크릿키로 디코딩합니다.
     if token_receive:
         try:
             # token을 시크릿키로 디코딩합니다.
-            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
             # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
             user = db.user.find_one({'id': payload['id']}, {'_id': 0})
             username = user['nick'] if user else ""
@@ -160,17 +163,78 @@ def main():
         username = ""
         role = ""
     if role == "care_coordi":
-        return render_template("main_page.html", username = username, role = "케어코디")
+        return render_template(HTML_MAIN, username = username, role = "케어코디")
     elif role == "keeper":
-        return render_template("main_page.html", username = username, role = "보호자")
+        return render_template(HTML_MAIN, username = username, role = "보호자")
     
     #비정상적인 접근 차단
-    return render_template("index.html")
+    return redirect("/")
+ 
+#매칭 요청 관리 페이지 - 매칭 요청 거절, 매칭 요청 수락
+@app.route("/match_personal")
+def match_personal():
+    if not is_valid():
+            return redirect("/match_personal")
+    return render_template((HTML_REQUEST))
+ 
+#채팅방 내부 - 채팅 가능
+@app.route('/inroom' , methods=['GET', 'POST'])
+def go_inroom():
+    
+    if not is_valid():
+        return redirect("/")
+    
+    token_receive = request.cookies.get(USERTOKEN)
+        # token을 시크릿키로 디코딩합니다.
+    if token_receive:
+        try:
+            # token을 시크릿키로 디코딩합니다.
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+            # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
+            user = db.user.find_one({'id': payload['id']}, {'id': 0})
+            matename = user['mate'] 
+        except jwt.ExpiredSignatureError:
+            # 토큰이 만료된 경우
+            matename == ""
+        except jwt.InvalidTokenError:
+            # 토큰이 유효하지 않은 경우
+            matename == ""
+    else:
+        # 토큰이 없는 경우
+        matename == ""
+        return redirect("/")
+
+    return render_template(HTML_INROOM, matename = matename)
+
+#채팅방 외부 - 채팅방을 골라서 들어갈 수 있음, 다만 디버깅 용임
+@app.route('/chat')
+def go_outroom():
+
+    if not is_valid():
+        return redirect("/")
+    
+    token_receive = request.cookies.get(USERTOKEN)
+        # token을 시크릿키로 디코딩합니다.
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
+    username = db.user.find_one({'id': payload['id']}, {'_id': 0})
+    
+    return render_template((HTML_OUTROOM), username=username['nick'])
+
+#시니어 페이지 1 - 페이지를 수정함
+@app.route("/senior_info_1")
+def senior_info_1():
+    if not is_valid():
+            return redirect("/")
+    return render_template((HTML_SENIOR_INFO1))
+
 
 
 ####################
 #       기능 함수   # - @app.route("/api 를 사용하는 함수, 주로 methods= 가 존재함
 ####################
+
+#### 계정 관련 함수 ####
 
 # 회원가입
 @app.route("/api/signup", methods=["POST"])
@@ -222,7 +286,7 @@ def api_login():
             "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=1000),
         }
         # 토큰의 암호화!
-        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다.
         return jsonify({"result": "success", "token": token})
@@ -232,21 +296,20 @@ def api_login():
             {"result": "fail", "msg": "아이디/비밀번호/역힐 (이)가 일치하지 않습니다."}
         )
 
-
 # 로그아웃
 @app.route("/api/logout", methods=["POST"])
 def api_logout():
     # 클라이언트에서 보내는 JWT 토큰을 지워줍니다.
     resp = jsonify({"result": "success", "msg": "로그아웃 되었습니다."})
     resp.set_cookie(
-        "usertoken", "", expires=0
+        USERTOKEN, "", expires=0
     )  # JWT 토큰을 삭제하기 위해 만료 시간을 0으로 설정
     return resp
 
 # 보안: 로그인한 사용자만 통과할 수 있는 API - front에서 사용
 @app.route("/api/isAuth", methods=["GET"])
 def api_valid():
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     
     if token_receive is None:
     # 쿠키가 없을 때의 처리
@@ -254,7 +317,7 @@ def api_valid():
 
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         userinfo = db.user.find_one({"id": payload["id"]}, {"_id": 0})
         return jsonify({"result": "success", "nickname": userinfo["nick"]})
@@ -265,14 +328,16 @@ def api_valid():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
     
+#### 채팅 관련 함수 ####
+    
 #outroom에서 사용하는 방 생성및 입장 코드
 @app.route('/api/findchatroom', methods=['POST'])
 def api_findchatroom():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token에서 정보를 뽑아 냅니다.
         #입력받은 id의 유저를 찾습니다.
-        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         id_receive = request.form['id_give']
         
         #예외조건 - 자신 - 자신 제외, 상대가 DB에 없을 시 오류 출력
@@ -283,7 +348,7 @@ def api_findchatroom():
             return jsonify({'result': 'fail', 'msg': '대화상대가 존재하지않습니다.'})
 
         #두 유저가 존재하면서 활성화된 방이 없다면 새로운 방을 생성
-        chatroom_info = db_chat.chat_room.find_one({
+        chatroom_info = db.chat_room.find_one({
             "talker_box": {"$all": [payload_user['id'], id_receive]},
             "Is_room_active": True
         })  # 하나의 문서만 반환됩니다  
@@ -296,18 +361,18 @@ def api_findchatroom():
             "Is_room_active": True
         }    
             # MongoDB에 채팅 방 데이터 삽입
-            result = db_chat.chat_room.insert_one(chatroom_data)
+            result = db.chat_room.insert_one(chatroom_data)
             # 새로 생성된 채팅방 정보 가져오기 - none이기 때문
-            chatroom_info = db_chat.chat_room.find_one({"_id": result.inserted_id}) 
+            chatroom_info = db.chat_room.find_one({"_id": result.inserted_id}) 
             
         #토큰에 넣을 데이터 생성
         payload_chat = {
             '_id': str(chatroom_info['_id']),
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=500)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1000)
         }
 
         #토큰의 암호화!
-        token = jwt.encode(payload_chat, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다. - 채팅방 입장
         return jsonify({'result': 'success', 'token': token, 'msg': '채팅방 접속 성공'})
@@ -321,11 +386,11 @@ def api_findchatroom():
      
 @app.route('/api/findchatroom_mate', methods=['POST'])
 def api_findchatroom_mate():
-    token_receive = request.cookies.get('usertoken')
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token에서 정보를 뽑아 냅니다.
         #입력받은 id의 유저를 찾습니다.
-        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
         user = db.user.find_one({"id" : payload_user["id"]})
         if "mate" in user:
             user_mate = db.user.find_one({"id": user["mate"]})
@@ -340,7 +405,7 @@ def api_findchatroom_mate():
             return jsonify({'result': 'fail', 'msg': 'mate가 존재하지않습니다. 운영팀에 연락바랍니다.'})
 
         #두 유저가 존재하면서 활성화된 방이 없다면 새로운 방을 생성
-        chatroom_info = db_chat.chat_room.find_one({
+        chatroom_info = db.chat_room.find_one({
             "talker_box": {"$all": [payload_user['id'], user_mate['id']]},
             "Is_room_active": True
         })  # 하나의 문서만 반환됩니다  
@@ -353,9 +418,9 @@ def api_findchatroom_mate():
             "Is_room_active": True
         }    
             # MongoDB에 채팅 방 데이터 삽입
-            result = db_chat.chat_room.insert_one(chatroom_data)
+            result = db.chat_room.insert_one(chatroom_data)
             # 새로 생성된 채팅방 정보 가져오기 - none이기 때문
-            chatroom_info = db_chat.chat_room.find_one({"_id": result.inserted_id}) 
+            chatroom_info = db.chat_room.find_one({"_id": result.inserted_id}) 
             
         #토큰에 넣을 데이터 생성
         payload_chat = {
@@ -364,7 +429,7 @@ def api_findchatroom_mate():
         }
 
         #토큰의 암호화!
-        token = jwt.encode(payload_chat, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
         # token을 줍니다. - 채팅방 입장
         return jsonify({'result': 'success', 'token': token, 'msg': '채팅방 접속 성공'})
@@ -376,6 +441,179 @@ def api_findchatroom_mate():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
     
+#### 시니어 정보 관련 함수 ####
+
+##### 주소 입력 및 입력값 출력 #####
+@app.route('/address', methods=['GET', 'POST'])
+def address():
+    # 기본 값
+    address = ""
+    detail_address = ""
+
+    if request.method == 'POST':
+        # 입력 데이터 받기
+        address = request.form.get('address')
+        detail_address = request.form.get('detail_address')
+
+        # 기존 데이터 확인
+        existing_address = db.page1.find_one()
+
+        if existing_address:
+            # 기존 데이터 업데이트
+            db.page1.update_one(
+                {"_id": existing_address["_id"]},  # 기존 데이터 조건 (_id 사용)
+                {"$set": {
+                    "address": address,
+                    "detail_address": detail_address
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page1.insert_one({
+                "address": address or "",
+                "detail_address": detail_address or "",
+            })
+
+        # 입력값 확인 (빈 값 처리)
+        if not (address and detail_address):
+            # 값이 없을 경우 에러 처리
+            error_message = "모든 필드를 입력해 주세요."
+            return render_template(HTML_SENIOR_INFO1, address=address, detail_address=detail_address, error=error_message)
+
+    # GET 요청 시 데이터 불러오기
+    latest_data = db.page1.find_one()
+    if latest_data:
+        address = latest_data.get("address", "")
+        detail_address = latest_data.get("detail_address", "")
+
+    return render_template(HTML_SENIOR_INFO1, address=address, detail_address=detail_address)
+
+##### 2 페이지 - 성함, 성별, 출생년도, 체중 #####
+@app.route('/senior_info_2', methods=['GET', 'POST'])
+def senior_info_2():
+    if request.method == 'POST':
+        data = request.get_json()
+        name = data.get('name')
+        gender = data.get('gender')
+        birth = data.get('birth')
+        weight = data.get('weight')
+
+        # 유효성 검사
+        
+        # if not (name and gender and birth and weight):
+            # return jsonify({"message": "모든 필드를 입력해주세요."}), 400
+
+        # 데이터베이스 저장
+        existing_entry = db.page2.find_one()
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page2.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "name": name,
+                    "gender": gender,
+                    "birth": birth,
+                    "weight": weight,
+                }},
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page2.insert_one({
+                "name": name,
+                "gender": gender,
+                "birth": birth,
+                "weight": weight,
+            })
+
+        return jsonify({"message": "데이터가 성공적으로 저장되었습니다."}), 200
+
+    # GET 요청 처리
+    senior = db.page2.find_one()
+    name = senior["name"] if senior else ""
+    gender = senior["gender"] if senior else ""
+    birth = senior["birth"] if senior else ""
+    weight = senior["weight"] if senior else ""
+
+    return render_template(
+        'senior-info-(2).html',
+        name=name,
+        gender=gender,
+        birth=birth,
+        weight=weight,
+    )
+
+
+##### 3 페이지  - 질환, 일상생활 능력 #####
+@app.route('/senior_info_3', methods=['GET', 'POST'])
+def senior_info_3():
+    if request.method == 'POST':
+        print("POST 요청 수신됨")
+        print("요청 데이터:", request.form)
+        # 사용자가 선택한 데이터 수집
+        selected_diseases = request.form.get('selected-diseases', '').split(", ")
+        selected_mobility = request.form.get('selected-mobility', '')
+        selected_meal = request.form.get('selected-meal', '')
+        selected_relation = request.form.get('selected-relation', '')
+
+        print("POST 요청 수신")
+        print("수신한 데이터:", selected_diseases, selected_mobility, selected_meal, selected_relation)
+
+
+        # 기존 데이터베이스 항목 가져오기
+        existing_entry = db.page3.find_one()
+
+        if existing_entry:
+            # 기존 데이터 업데이트
+            db.page3.update_one(
+                {"_id": existing_entry["_id"]},
+                {"$set": {
+                    "selected_diseases": selected_diseases,
+                    "selected_mobility": selected_mobility,
+                    "selected_meal": selected_meal,
+                    "selected_relation": selected_relation
+                }}
+            )
+        else:
+            # 새로운 데이터 삽입
+            db.page3.insert_one({
+                "selected_diseases": selected_diseases,
+                "selected_mobility": selected_mobility,
+                "selected_meal": selected_meal,
+                "selected_relation": selected_relation
+            })
+
+        # POST 요청 후 페이지 리다이렉트
+        return redirect('/senior_info_3')
+
+    # GET 요청 시 기존 데이터 불러오기
+    senior_info = db.page3.find_one()
+    selected_diseases = senior_info["selected_diseases"] if senior_info else []
+    selected_mobility = senior_info["selected_mobility"] if senior_info else ""
+    selected_meal = senior_info["selected_meal"] if senior_info else ""
+    selected_relation = senior_info["selected_relation"] if senior_info else ""
+
+    # HTML 템플릿 렌더링
+    return render_template(
+        'senior-info-(3).html',
+        selected_diseases=selected_diseases,
+        selected_mobility=selected_mobility,
+        selected_meal=selected_meal,
+        selected_relation=selected_relation
+    )
+
+##### 4페이지 라우트 #####
+@app.route('/senior_info_4', methods=['GET'])
+def senior_info_4():
+    return render_template('senior-info-(4).html')
+
+##### 5페이지 라우트 #####
+@app.route('/senior_info_5', methods=['GET'])
+def senior_info_5():
+    return render_template('senior-info-(5).html')
+    
+    
+#### mate 관련 함수 ####
+    
 #mate 요청 보내기
 @app.route("/api/send_match", methods=["POST"])
 def api_send_match():
@@ -386,10 +624,10 @@ def api_send_match():
     if nickname_receive == "" :
         return jsonify({'result': 'fail', 'msg': '공란이 존재합니다!'})
     
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         userinfo_sender = db.user.find_one({"id": payload["id"]})
@@ -404,8 +642,12 @@ def api_send_match():
         if userinfo_sender["mate"] != "" :
             return jsonify({'result': 'fail', 'msg': '매칭자가 있는 상태에서는 매칭 요청을 할 수 없습니다.'})
         if userinfo_receiver["mate"] != "" :
-            return jsonify({'result': 'fail', 'msg': '이미 매칭이 된 상대입니다.'})
+            return jsonify({'result': 'fail', 'msg': '이미 다른 매칭이 된 상대입니다.'})
         
+        result = db.mate_request.find({"sender" : userinfo_sender["nick"], "receiver" : userinfo_receiver["nick"]})
+        if result is None:
+            return jsonify({'result': 'fail', 'msg': '이미 해당 하는 매칭을 요청하셨습니다'})
+            
 
         #해당 요청을 DB에 업로드
         result = db.mate_request.insert_one({"sender" : userinfo_sender["nick"], "receiver" : userinfo_receiver["nick"]})
@@ -427,10 +669,10 @@ def api_send_match():
 @app.route("/api/dis_match", methods=["POST"])
 def api_dis_match():
     #우선 사용자가 매칭된 상대가 있는지 확인한다. - 사용자가 누군지는 토큰 활용
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
@@ -465,32 +707,30 @@ def api_dis_match():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
     
-
-
-#DB에서 자신에게 요청된 match를 조회한다. - 사용자가 누군지는 토큰 활용
+#DB에서 자신에게 요청된 match를 list화 시켜서 보관한다.
 @app.route("/api/hear_match", methods=["POST"])
 def api_hear_match():
-    token_receive = request.cookies.get("usertoken")
+    token_receive = request.cookies.get(USERTOKEN)
     try:
-        # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        # token에서 정보를 뽑아 냅니다.
+        #입력받은 id의 유저를 찾습니다.
+        payload_user = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        #유저에게 온 요청들을 처리한다. - 과거에 온 요청을 우선적으로 띄운다.
+        request_list = db.mate_request.find({"receiver": payload_user["id"]}).sort("_id", 1)
+            
+        for request_part in request_list:
+            payload_chat = {
+                'id': str(request_part.get('id')),  # 'id' 필드
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1000)
+        }
+        
 
-        #요청자와 수신자의 정보 확인
-        user = db.user.find_one({"id": payload["id"]})
-        if "mate" in user:
-            user_mate = db.user.find_one({"id": user["mate"]})
-        else:
-            return jsonify({'result': 'fail', 'msg': 'mate된 상대가 없습니다..'})
-        
-        
-        #자신이 받은 요청을 리스트화 시킨다. 
-        #해당 리스트를 바탕으로 시니어 정보들을 담은 큰 데이터를 프론트로 넘긴다.
-        #넘긴 데이터를 프론트는 유지하고 있고, 해당 페이지에서 요청 및 사용자에 대한 정보를 볼 수 있다.
-        #거기서 허가 및 거절을 통하여 DB의 정보를 수정한다.
+        #토큰의 암호화! -> 해당 리스트는 클라이언트에 저장된다. -> 항후 페이지 넘김에 적용
+        token = jwt.encode(payload_chat, SECRET_KEY, algorithm=ALGORITHMS_JWT)
 
+        # token을 줍니다. - 채팅방 입장
+        return jsonify({'result': 'success', 'token': token, 'msg': '매칭 요청 조회 성공'})
 
-        
-        
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
@@ -499,23 +739,48 @@ def api_hear_match():
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
     #
 
-#자신에게 요청된 요청을 허가한다. - 사용자가 누군지는 토큰 활용
+#자신에게 요청된 요청을 리스트에서 찾아서 허가한다. 
 @app.route("/api/allow_match", methods=["POST"])
 def api_allow_match():
-    token_receive = request.cookies.get("usertoken")
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+    
+    if nickname_receive == "":
+        return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
+    
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
-        #요청자와 수신자의 정보 확인
+        #수신자 정보 확인
         user = db.user.find_one({"id": payload["id"]})
-        if user["mate"] == "":
-            return jsonify({'result': 'fail', 'msg': 'mate된 상대가 있어 추가로 받을 수 없습니다.'})
-            
+        if(user["mate"] != "") :
+            return jsonify({"result": "fail", "msg": "매칭이 된 상태입니다. 추가로 매칭할 수 없습니다."})
         
-        #자신이 받은 요청을 허가한다.
-        #
+        #요청자 정보확인
+        user_mate = db.user.find_one({"nick": nickname_receive})
+        if(user_mate["mate"] != "") :
+            return jsonify({"result": "fail", "msg": "상대가 매칭이 된 상태입니다. 매칭되지 않습니다."})
+        
+        #해당 요청이 현재 존재하는 지 확인
+        request_inform = db.mate_request.find_one({"receiver": user["nick"], "sender": user_mate["nick"]})
+        if(request_inform == None) :
+            return jsonify({"result": "fail", "msg": "해당 요청은 존재하지 않는 요청입니다."})
+        
+        #자신이 받은 요청을 삭제한다.
+        result = db.mate_request.delete_one({"receiver": user["nick"], "sender": user_mate["nick"]})
+        #mate를 바꾼다.
 
+        db.user.update_one(
+            {"nick": user["nick"]},  # user의 mate를 요청자의 닉네임으로 설정
+            {"$set": {"mate" : user_mate["nick"]}} 
+        )
+        
+        db.user.update_one(
+            {"nick": user_mate["nick"]},  # user_mate의 mate를 수신자의 닉네임으로 설정
+            {"$set": {"mate" : user["nick"]}}  
+        )
+        return jsonify({'result': 'success',  'msg': '매칭 요청 허가 성공'})
 
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
@@ -523,31 +788,42 @@ def api_allow_match():
     except jwt.exceptions.DecodeError:
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
-    
-    
+       
 #자신에게 요청된 요청을 거절한다. - 사용자가 누군지는 토큰 활용
 @app.route("/api/disallow_match", methods=["POST"])
 def disallow_match():
-    token_receive = request.cookies.get("usertoken")
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+    
+    if nickname_receive == "":
+        return jsonify({"result": "fail", "msg": "대상이 공란입니다. 입력해주세요"})
+    
     try:
         # token을 시크릿키로 디코딩합니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         #요청자와 수신자의 정보 확인
         user = db.user.find_one({"id": payload["id"]})
-        if "mate" in user:
-            user_mate = db.user.find_one({"id": user["mate"]})
-        else:
-            return jsonify({'result': 'fail', 'msg': 'mate된 상대가 없습니다..'})
         
-        result = db.mate_request.delete_one({"sender": user["nick"], "receiver": user_mate["nick"]})
+        if(user["mate"] != "") :
+            return jsonify({"result": "fail", "msg": "매칭이 된 상태입니다. 추가로 매칭할 수 없습니다."})
         
-        #자신이 받은 요청을 허가한다.
-
-
-
+        #해당 로직은 메이트를 바깥에서 받아야한다.
+        user_mate = db.user.find_one({"nick": nickname_receive})
         
+        if(user_mate["mate"] != "") :
+            return jsonify({"result": "fail", "msg": "상대가 매칭이 된 상태입니다. 매칭되지 않습니다."})
         
+        #해당 요청이 현재 존재하는 지 확인
+        request_inform = db.mate_request.find_one({"receiver": user["nick"], "sender": user_mate["nick"]})
+        if(request_inform == None) :
+            return jsonify({"result": "fail", "msg": "해당 요청은 존재하지 않는 요청입니다."})
+        
+        #자신이 받은 요청을 삭제한다.
+        result = db.mate_request.delete_one({"receiver": user["nick"], "sender": user_mate["nick"]})
+        
+        return jsonify({'result': 'success', 'msg': '매칭 요청 거절 성공'})
+    
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
@@ -555,6 +831,159 @@ def disallow_match():
         # 로그인 정보가 없으면 에러가 납니다!
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
+#자신에게 온 요청들을 확인한다. 
+#메인 페이지에서 요청 확인 페이지로 가는 버튼을 누른 후에 작동한다.
+@app.route("/api/first_match", methods=["POST"])
+def first_match():
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+
+    try:
+        # token을 시크릿키로 디코딩합니다.
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        # 수신자 정보 확인
+        user = db.user.find_one({"id": payload["id"]})
+
+        # 첫 페이지 입장 시, 사용자에게 온 요청이 있는지 확인
+        request_inform = db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1).limit(1)
+
+        # 커서를 리스트로 변환하여 요청이 없을 경우 처리
+        request_inform_list = list(request_inform)
+        
+        if request_inform_list:
+            print("데이터를 찾았습니다:", request_inform_list)
+        else:
+            print("데이터를 찾지 못했습니다.")
+            return jsonify({"result": "fail", "msg": "온 요청이 없습니다.", 'data': "요청없음"}), 404
+        if len(request_inform_list) == 0:
+            return jsonify({"result": "fail", "msg": "온 요청이 없습니다.", 'data': "요청없음"}), 404
+
+        # 요청이 있을 경우 첫 번째 항목 가져오기
+        request_data = request_inform_list[0]  # 첫 번째 요청
+
+        # 관련 정보를 프론트로 다시 넘겨준다
+        return jsonify({'result': 'success', 'msg': '매칭 요청 확인 성공', 'data': request_data["sender"]})
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
+    except jwt.exceptions.DecodeError:
+        return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
+
+#지금 보고 있는 페이지의 이전 요청을 확인한다. 
+@app.route("/api/pred_match", methods=["POST"])
+def pred_match():
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+    
+    
+    try:
+        #첫 페이지 입장시 
+        #우선 현재 페이지에 nick이 공란인지 확인한다.
+        if nickname_receive == "":
+            return jsonify({"result": "fail", "msg": "오류입니다."})
+        #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
+        
+        # 수신자 정보 확인
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        user = db.user.find_one({"id": payload["id"]})
+        
+        #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
+        # request_inform을 커서로 가져온 후, 리스트로 변환
+        request_inform_list = list(db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1))
+
+        # 찾고자 하는 특정 요소 (예: sender가 "example_sender"인 요소)의 인덱스를 찾기
+        target_sender = nickname_receive
+        index_of_element = next((index for index, item in enumerate(request_inform_list) if item["sender"] == target_sender), -1)
+
+        print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        if index_of_element != -1:
+            print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        else:
+            print(nickname_receive+"를 찾을 수 없습니다.")
+            return jsonify({"result": "fail", "msg": "찾을 수 없습니다."})
+        
+        if index_of_element == 0:
+            return jsonify({"result": "fail", "msg": "이전 페이지가 존재하지 않습니다."})
+        
+        # 주어진 인덱스 (예: 2번째 인덱스)로 문서 찾기
+        index_to_find = index_of_element - 1  # 예시로 2번째 인덱스를 찾고자 할 때
+
+
+        if index_to_find < len(request_inform_list):
+            document = request_inform_list[index_to_find]
+            print(f"인덱스 {index_to_find}에 해당하는 문서: {document}")
+        else:
+            print(f"인덱스 {index_to_find}가 범위를 벗어났습니다.")
+            
+        
+        request_data = request_inform_list[index_to_find]
+            
+        return jsonify({'result': 'success', 'msg': '이전 매칭 요청 확인 성공', 'data': request_data["sender"]})
+    
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
+    except jwt.exceptions.DecodeError:
+        # 로그인 정보가 없으면 에러가 납니다!
+        return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
+
+#지금 보고 있는 페이지의 다음 요청을 확인한다.
+@app.route("/api/next_match", methods=["POST"])
+def next_match():    
+    nickname_receive = request.form["nick_give"]
+    token_receive = request.cookies.get(USERTOKEN)
+    
+    
+    try:
+        #첫 페이지 입장시 
+        #우선 현재 페이지에 nick이 공란인지 확인한다.
+        if nickname_receive == "":
+            return jsonify({"result": "fail", "msg": "오류입니다."})
+        #공란이라면 오류 메시지를 출력후 메인페이지로 이동한다.
+        
+        # 수신자 정보 확인
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        user = db.user.find_one({"id": payload["id"]})
+        
+        #공란이 아니라면 해당 nick을 db에서 사용자에게 온 요청중 찾아본다
+        # request_inform을 커서로 가져온 후, 리스트로 변환
+        request_inform_list = list(db.mate_request.find({"receiver": user["nick"]}).sort("createdAt", 1))
+
+        # 찾고자 하는 특정 요소 (예: sender가 "example_sender"인 요소)의 인덱스를 찾기
+        target_sender = nickname_receive
+        index_of_element = next((index for index, item in enumerate(request_inform_list) if item["sender"] == target_sender), -1)
+
+        print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        if index_of_element != -1:
+            print(nickname_receive+"는 "+str(index_of_element)+" 번째 인덱스에 있습니다.")
+        else:
+            print(nickname_receive+"를 찾을 수 없습니다.")
+            return jsonify({"result": "fail", "msg": "찾을 수 없습니다."})
+        
+        if index_of_element == len(request_inform_list)-1:
+            return jsonify({"result": "warn", "msg": "다음 페이지가 존재하지 않습니다."})
+        
+        # 주어진 인덱스 (예: 2번째 인덱스)로 문서 찾기
+        index_to_find = index_of_element + 1  # 예시로 2번째 인덱스를 찾고자 할 때
+
+
+        if index_to_find < len(request_inform_list):
+            document = request_inform_list[index_to_find]
+            print(f"인덱스 {index_to_find}에 해당하는 문서: {document}")
+        else:
+            print(f"인덱스 {index_to_find}가 범위를 벗어났습니다.")
+            
+        
+        request_data = request_inform_list[index_to_find]
+            
+        return jsonify({'result': 'success', 'msg': '다음 매칭 요청 확인 성공', 'data': request_data["sender"]})
+    
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return jsonify({"result": "fail", "msg": "로그인 시간이 만료되었습니다."})
+    except jwt.exceptions.DecodeError:
+        # 로그인 정보가 없으면 에러가 납니다!
+        return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
     
 ####################
@@ -568,7 +997,7 @@ def join_chat():
     print("hello,")
     try:
         # 쿠키에서 토큰 가져오기
-        token_receive_user = request.cookies.get('usertoken')
+        token_receive_user = request.cookies.get(USERTOKEN)
         token_receive_chat = request.cookies.get('chattoken')
         if not token_receive_user or not token_receive_chat:
             print("Error: Missing tokens in cookies.")
@@ -576,8 +1005,8 @@ def join_chat():
 
         print("hello,")
         # 토큰 디코딩
-        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=['HS256'])
-        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         room_id = payload_chat['_id']  # 대화방 ID
         customer_id = payload_user['id']  # 고객 ID
@@ -591,7 +1020,7 @@ def join_chat():
         #array에 따른 반복문 하나
         #반복문은 emit을 통해서 서서히 출력한다.
         socketio.emit('clean_message')
-        document = db_chat.chat_room.find_one({"_id": ObjectId(room_id)})
+        document = db.chat_room.find_one({"_id": ObjectId(room_id)})
         talk_box = document.get("talk_box", [])
         for item in talk_box:
             sender = item.get("talker", "Unknown")
@@ -621,15 +1050,15 @@ def join_chat():
 def send_message(data):
     try:
         # 쿠키에서 토큰 가져오기
-        token_receive_user = request.cookies.get('usertoken')
+        token_receive_user = request.cookies.get(USERTOKEN)
         token_receive_chat = request.cookies.get('chattoken')
         if not token_receive_user or not token_receive_chat:
             print("Error: Missing tokens in cookies.")
             return
 
         # 토큰 디코딩
-        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=['HS256'])
-        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=['HS256'])
+        payload_user = jwt.decode(token_receive_user, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
+        payload_chat = jwt.decode(token_receive_chat, SECRET_KEY, algorithms=[ALGORITHMS_JWT])
 
         room_id = payload_chat['_id']  # 대화방 ID
         user_id = payload_user['id']  # 고객 ID
@@ -647,7 +1076,7 @@ def send_message(data):
         }
         # 배열에 객체 삽입
         try:
-            result = db_chat.chat_room.update_one(filter_query, {"$push": {"talk_box": talk_box}})
+            result = db.chat_room.update_one(filter_query, {"$push": {"talk_box": talk_box}})
             if result.matched_count == 0:
                 print("No document matched the filter query.")
             elif result.modified_count == 0:

@@ -30,7 +30,7 @@
         <a href="chats.html"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
       </div>
       <div class="alt-screen-header__column">
-        <h1 class="alt-screen-header__title">Tiger</h1>
+        <h1 class="alt-screen-header__title">{{ matename }}</h1>
       </div>
       <div class="alt-screen-header__column">
         <!-- <span><i class="fa-sharp fa-solid fa-magnifying-glass fa-2x"></i></span>
@@ -43,16 +43,20 @@
       </div>
     </header>
 
-    <main class="main-screen main-chat">
+    <main class="main-chat">
       <div class="chat__timestamp">Tuesday, June 30, 2020</div>
-      <!-- <div class="message_holder"></div> -->
     </main>
+
     <form class="reply">
       <div class="reply__column">
         <i class="far fa-plus-square fa-lg"></i>
       </div>
       <div class="reply__column">
-        <input type="text" class="message" placeholder="Write a message..." />
+        <input
+          type="text"
+          class="message"
+          placeholder="메세지를 작성해주세요 ..."
+        />
         <button class="reply__btn">
           <i class="fas fa-arrow-up"></i>
         </button>

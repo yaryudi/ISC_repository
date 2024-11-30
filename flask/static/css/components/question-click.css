@@ -1,0 +1,46 @@
+.question-click {
+  margin-bottom: 35px;
+}
+
+.question-click__text {
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* 버튼들을 두 개씩 한 줄에 배치 */
+.question-click__container {
+  display: flex;
+  flex-wrap: wrap; /* 항목들이 줄 바꿈 되도록 설정 */
+  gap: 20px; /* 항목 간 간격 */
+  margin-top: 15px;
+  margin-bottom: 35px;
+}
+
+/* 각 버튼의 크기 및 배치 설정 */
+.click-option {
+  width: 180px;
+  height: 60px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  padding: 10px 20px;
+  border: 2px solid var(--lightGray);
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease-in-out;
+}
+
+.click-option.selected {
+  background-color: rgba(255, 165, 0, 0.2); /* 약간 투명한 오렌지 배경 */
+  color: var(--orange); 
+  border-color: var(--orange);
+  border-width: 2px; 
+  border-style: solid; 
+  font-weight: 600;
+}
+
+.click-option:hover {
+  background-color: var(--littlePink);
+  color: white;
+}

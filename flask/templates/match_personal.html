@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--             
+로그인 예제 - 메인 페이지
+ 홈페이지/로그인 페이지에서 사용자 인증 후 페이지를 옮겨도 사용자 인증이 유지되는 지 확인하는 용도
+              -->
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>ISC - 매칭화면</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        font-family: 'Jua', sans-serif;
+      }
+      
+      .wrap {
+        margin: auto;
+        width: 900px;
+      }
+      
+      .title {
+        background-color: gainsboro;
+        padding: 20px 30px;
+      }
+      
+      .posting-box {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 10px auto;
+        width: 500px;
+        border: 3px solid black;
+        border-radius: 5px;
+        padding: 25px;
+      }
+    </style>
+    <script>
+      //매칭 요청 허락 버튼시 작동
+      function allow_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/allow_match',
+          data: {
+            nick_give: $('#nickname').text()
+            //nick_give: $('#input-nick').val()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 완료!')
+              //메인 페이지로 이동
+              window.location.href = '/main'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+      
+      //매칭 요청 거절 버튼시 작동
+      function disallow_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/disallow_match',
+          data: {
+            nick_give: $('#nickname').text()
+            //nick_give: $('#input-nick').val()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 요청 거절 성공!')
+      
+              window.location.href = '/match_personal' //새로고침!
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+      
+      window.onload = function () {
+        if (window.location.pathname === '/match_personal') {
+          first_match() // 특정 URL에 접근했을 때 자동 실행할 함수
+        }
+      }
+
+      
+      //첫 요청 보기
+      function first_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/first_match',
+          data: {
+            nick_give: $('#nickname').text()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('첫 페이지 불러오기 성공!')
+              $('#nickname').text(response.data)
+              //새로고침!
+            } else {
+              alert(response['msg'])
+              $('#nickname').text(response.data)
+              window.location.pathname === '/main'
+            }
+          }
+        })
+      }
+        
+      //이전 요청 보기
+      function pred_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/pred_match',
+          data: {
+            nick_give: $('#nickname').text()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('이전 페이지 이동!')
+              $('#nickname').text(response.data)
+      
+              //새로고침!
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+      
+      //다음 요청 보기
+      function next_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/next_match',
+          data: {
+            nick_give:  $('#nickname').text()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('다음 페이지 이동')
+              $('#nickname').text(response.data)
+      
+              //새로고침!
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="title">
+        <h1 class="display-4">매칭화면</h1>
+        <hr class="my-4" />
+
+        <input id="input-nick" name="userName" required type="text" placeholder="Enter match nickname" />
+        <h1>User Data</h1>
+        <form>
+          <label for="nickname">nickname:</label>
+          <span id="nickname" name="nickname"></span><br />
+        </form>
+
+        <div class="posting-box" id="post-box">
+          <button type="submit" onclick="pred_match()" class="btn btn-primary">이전</button>
+          <button type="submit" onclick="next_match()" class="btn btn-primary">다음</button>
+          <button type="submit" onclick="allow_match()" class="btn btn-primary">조회</button>
+          <button type="submit" onclick="allow_match()" class="btn btn-primary">매칭 수락</button>
+          <button type="submit" onclick="disallow_match()" class="btn btn-primary">매칭 거절</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
