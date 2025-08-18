@@ -30,3 +30,8 @@
 
 <img width="1919" height="889" alt="image" src="https://github.com/user-attachments/assets/3583d337-5fa1-4f0d-b20f-64331a4daeba" />
 <img width="1919" height="896" alt="image" src="https://github.com/user-attachments/assets/c465bb5f-3d88-4761-a0f5-06b726c5a215" />
+
+---
+## 실행 방법
+
+- python /flask/ISC_server.py 
