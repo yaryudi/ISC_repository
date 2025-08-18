@@ -32,6 +32,12 @@
 <img width="1919" height="896" alt="image" src="https://github.com/user-attachments/assets/c465bb5f-3d88-4761-a0f5-06b726c5a215" />
 
 ---
+## 데이터 베이스
+- 데이터 베이스는 MongoDB를 이용하여 사용자 데이터를 관리
+  <img width="1683" height="640" alt="image" src="https://github.com/user-attachments/assets/92fcefab-f448-4af9-933c-5c7e1b1577a5" />
+
+
+---
 ## 실행 방법
 
 - python /flask/ISC_server.py 
