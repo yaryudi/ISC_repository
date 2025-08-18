@@ -1,0 +1,24 @@
+#service-display-link .highlight{
+    font-weight: 700;
+    color: var(--green);
+}
+#service-display-link{
+    font-size: 18px;
+}
+
+#service-display-link i{
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 15px;
+}
+
+#senior-sickness-info-form {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.red-warnning{
+    color: var(--littlePink); 
+    font-weight: 700; 
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--           
+로그인 예제 - 메인 페이지
+ 홈페이지/로그인 페이지에서 사용자 인증 후 페이지를 옮겨도 사용자 인증이 유지되는 지 확인하는 용도
+            -->
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>ISC - 매칭화면</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        font-family: 'Jua', sans-serif;
+      }
+      
+      .wrap {
+        margin: auto;
+        width: 900px;
+      }
+      
+      .title {
+        background-color: gainsboro;
+        padding: 20px 30px;
+      }
+      
+      .posting-box {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 10px auto;
+        width: 500px;
+        border: 3px solid black;
+        border-radius: 5px;
+        padding: 25px;
+      }
+    </style>
+    <script>
+      //매칭 요청을 보냄
+      function send_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/send_match',
+          data: {
+            nick_give: $('#input-nick').val()
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 요청 완료!')
+              //메인 페이지로 이동
+              window.location.href = '/main'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+      
+      //현재 자신의 매칭관계를 끊어냄
+      function dis_match() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/dis_match',
+          data: {
+            nick_give: $('#input-nick').val() //이 줄 필요 없음
+          },
+          success: function (response) {
+            console.log(response)
+            if (response['result'] == 'success') {
+              // 요청에 성공시 알림
+              alert('매칭 해제 완료!')
+              //메인 페이지로 이동
+              window.location.href = '/main'
+            } else {
+              alert(response['msg'])
+            }
+          }
+        })
+      }
+
+      //매칭 요청 허락 버튼시 작동
+      function hear_match() {
+        window.location.href = '/match_personal'
+      }
+
+    </script>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="title">
+        <h1 class="display-4">매칭화면</h1>
+        <hr class="my-4" />
+
+        <input id="input-nick" name="userName" required type="text" placeholder="Enter match nickname" />
+
+        <div class="posting-box" id="post-box">
+          <button type="submit" onclick="send_match()" class="btn btn-primary">매칭 요청</button>
+          <button type="submit" onclick="dis_match()" class="btn btn-primary">매칭 끊기</button>
+          <button type="submit" onclick="hear_match()" class="btn btn-primary">매칭 조회</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

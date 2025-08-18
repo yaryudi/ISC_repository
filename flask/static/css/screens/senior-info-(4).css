@@ -1,0 +1,86 @@
+#senior-time-form {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end; /* 세로 아래로 정렬 */
+    margin-bottom: 100px;
+  }
+  
+  .start-time-screen__text,
+  .end-time-screen__text {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  .time-seperator {
+    color: var(--green);
+    font-size: 25px;
+    font-weight: 700;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30%;
+    height: 80px;
+    width: 150px;
+    color: white;
+    background-color: var(--orange);
+    opacity: 0.9;
+  }
+  
+  #select-start,
+  #select-end {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 80px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid var(--orange);
+  
+    transition: border-bottom 1s ease, transform 1s ease;
+  }
+  
+  .start-time-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .end-time-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .senior-info-four {
+    margin-bottom: 50px;
+  }
+  
+  /* hover 상태에서 테두리 색 변경 */
+  #select-start:hover,
+  #select-end:hover {
+    border-bottom: 2px solid var(--littlePink);  /* 하단 테두리만 빨간색으로 변경 */
+    outline: none; /* 기본 아웃라인 제거 */
+    cursor: pointer;
+    transform: scale(1.05); /* 크기 확대 효과 */
+  }
+  
+  /* 포커스 시 테두리 색상 변경 */
+  #select-start:focus,
+  #select-end:focus {
+    border-bottom: 2px solid var(--littlePink);   /* 포커스 시 전체 테두리 색상 변경 */
+    outline: none; /* 기본 아웃라인 제거 */
+    transform: scale(1.05); /* 크기 확대 효과 */
+  }
+
+ 
+  /* 선택된 옵션 스타일 */
+  #select-start option:checked,
+  #select-end option:checked {
+    background-color: var(--orange);  /* 선택된 옵션 배경색 변경 */
+    color: white; /* 선택된 옵션 텍스트 색 변경 */
+  }
+  

@@ -1,0 +1,50 @@
+#senior-address-form{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 0px;
+}
+
+#senior-address-form input {
+    padding: 15px 0px;
+    border: none;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+/* input type 이 submit이 아닐때, []이 사이에 쓰인 것들은 특정 선택자 
+    input 타입이 submit가 아닐 때에만 아래가 작동.
+*/
+#senior-address-form input:not([type="submit"]){
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    transition: border-color 1s ease-in-out;
+}
+
+#senior-address-form input::placeholder{
+    color: rgba(0, 0, 0, 0.3);
+}
+
+#senior-address-form input:focus{
+    border-color: var(--orange);
+}
+
+#senior-address-form input[type="submit"]{
+    color:rgba(255,255,255,0.7);
+    background-color: var(--orange);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 15px;
+}
+
+.address-guidelines{
+    color: black;
+    opacity: 0.3;
+    font-size: 20px;
+
+    margin-bottom: 30px;
+}
+.address-guidelines li{
+    margin-bottom: 10px;
+}
+

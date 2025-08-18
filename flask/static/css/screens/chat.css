@@ -1,0 +1,205 @@
+#chat-screen{
+    background-color: white;
+    height: 100%;
+}
+ 
+#chat-screen .status-bar{
+    z-index: 2;
+}
+
+#chat-screen .alt-screen-header,
+#chat-screen .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    
+}
+
+#chat-screen .alt-screen-header{
+    z-index: 1;
+} 
+
+.main-chat{
+    margin-top: 145px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    padding: 0px var(--horizontal-space) 15px 0px;
+
+    /* 스크롤 코드 */
+    overflow-y: auto; /* 스크롤 활성화 */
+    max-height: calc(100vh - 130px - 50px); /* 상태 바, 헤더, reply 높이 제외 */
+    box-sizing: border-box;
+}
+
+.chat__timestamp{
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 9px 15px;
+    border-radius: 25px ;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+.message-row{
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.message-row img { 
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.message__author{
+    display: block;
+    opacity: 0.6;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.message__info{
+    display: flex;
+    align-items: flex-end;
+}
+/* .message__bubble{
+    background-color: white;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border-top-left-radius: 1px;
+    margin-right: 5px;
+} */
+
+.message__time{
+    opacity: 0.6;
+    font-size: 15px;
+
+}
+
+.message__bubble {
+    position: relative; /* 부모 요소 위치 기준 */
+    background-color: var(--lightGray);
+    padding: 8px 10px;
+    border-radius: 10px;
+    border-top-left-radius: 12px;
+    margin-right: 5px;
+}
+
+.balloon-tail__left {
+    position: absolute; /* 부모 요소에 상대적 위치 */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid var(--lightGray); /* 말풍선과 같은 색상 */
+    bottom: 20px; /* 말풍선 아래로 배치 */
+    left: -6px; /* 삼각형 위치 */
+}
+
+
+.message-row__own{
+    color: white;
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+    justify-content: flex-end;
+}
+
+.message-row__own .message__info{
+    flex-direction: row-reverse;
+}
+/* .message__bubble{
+    background-color: white;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border-top-left-radius: 1px;
+    margin-right: 5px;
+} */
+
+.message-row__own .message__time{
+    color: var(--green);
+    opacity: 0.6;
+    opacity: 0.6;
+    font-size: 15px;
+
+}
+
+.message-row__own .message__bubble {
+    background-color: var(--littleGreen);
+    border-top-right-radius: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    position: relative;
+}
+
+.message-row__own .balloon-tail__right {
+    position: absolute; /* 부모 요소에 상대적 위치 */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid var(--littleGreen); /* 말풍선과 같은 색상 */
+    bottom: 20px; 
+    right: -5px;
+}
+
+.reply {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 25px;
+    box-sizing: border-box;
+    align-items: center;
+    border-top: var(--main-border);
+  }
+  .reply .reply__column:first-child {
+    width: 8%;
+  }
+  .reply .reply__column:last-child {
+    width: 92%;
+    position: relative;
+  }
+  .reply i {
+    opacity: 0.5;
+  }
+  .reply input {
+    padding: 14px;
+    width: 100%;
+    border: var(--main-border);
+    border-radius: 25px;
+    box-sizing: border-box;
+  }
+  .reply__column:last-child > i,
+  .reply__column:last-child button {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+  }
+  .reply__column:last-child > i {
+    right: 50px;
+    top: 15px;
+  }
+  .reply__column button {
+    background-color: var(--littleGreen);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .reply__column button i {
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+  }
+  .reply__column button:focus,
+  .reply__column button:active {
+    outline: none;
+  }

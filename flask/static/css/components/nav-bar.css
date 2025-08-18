@@ -1,0 +1,37 @@
+.nav{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f9f9fa;
+    padding: 20px 50px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.nav__list{
+    display: flex ;
+    justify-content: space-between;
+}
+
+.nav__link{
+    color: var(--green);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+
+}
+
+.nav__link span{
+    padding-top: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    display: inline-block; /* block 레이아웃으로 변환 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+    line-height: 1; /* 줄 간격 조절 */
+}
+
+
+

@@ -1,0 +1,132 @@
+
+.welcome-header{
+    margin: 90px 0px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.welcome-header__title{
+    margin-bottom: 90px;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.welcome-header__text{
+    opacity: 0.6;
+    width: 80%;
+}
+
+#login-form{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 30px;
+}
+
+#login-form input {
+    padding: 15px 0px;
+    border: none;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+/* input type 이 submit이 아닐때, []이 사이에 쓰인 것들은 특정 선택자 
+    input 타입이 submit가 아닐 때에만 아래가 작동.
+*/
+#login-form input:not([type="submit"]){
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    transition: border-color 1s ease-in-out;
+}
+
+#login-form input::placeholder{
+    color: rgba(0, 0, 0, 0.3);
+}
+
+#login-form input:focus{
+    border-color: var(--orange);
+}
+
+#login-form input[type="submit"]{
+    color:rgba(255,255,255,0.7);
+    background-color: var(--orange);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 15px;
+}
+
+#login-form a{
+    text-align: center;
+    text-decoration: none;
+    color:inherit;
+    font-size: 13px;
+    /* 앵커가 색상을 아버지로부터 상속박아 오는 것.
+    default는 블랙 */
+}
+
+
+#login-form input[type="submit"]:hover{
+    background-color: var(--littlePink);
+  }
+
+#greet{
+    background-color: white;
+    border: none;
+    text-decoration: none;
+    color: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+}
+
+#login-form fieldset{
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--orange);
+}
+
+ #login-form label span {
+    font-size: 20px;
+    line-height: 2rem; 
+    border: none;
+    color: rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease-in-out; /* 색상 변화 애니메이션 */
+    
+  }
+
+
+#login-form input[type="radio"]{
+    appearance: none;
+    padding: 0;     
+    vertical-align: middle;
+    width: 1.25em;
+    height: 1.25em;
+    border-radius: 30%;
+    border: 2px solid var(--littlePink);
+    margin-bottom: 15px; 
+    border: max(2px, 0.1em) solid var(--littlePink);
+    transition: border 0.3s ease-in-out;
+  }
+
+  #login-form [type="radio"]:checked {
+    border: 0.4em solid var(--littlePink);
+  }
+
+  #login-form [type="radio"]:checked + span{
+    color: var(--orange);
+    font-weight: bolder;
+  }
+
+  #login-form [type="radio"]:focus-visible {
+    outline: max(2px, 0.1em) dotted var(--orange);
+    outline-offset: max(2px, 0.1em);
+  }
+
+  #login-form [type="radio"]:hover {
+    box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+    cursor: pointer;
+  }
+  
+  #login-form [type="radio"]:hover + span {
+    cursor: pointer;
+  }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>User Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // 데이터 가져오기 /가져온 데이터를 표기한다.
+      //
+      function fetchUserData() {
+        $.ajax({
+          type: 'GET',
+          url: '/get_user_data',
+          success: function (data) {
+            // 데이터를 HTML에 표시
+            $('#nickname').text(data.nickname)
+          },
+          error: function (xhr, status, error) {
+            alert('Failed to fetch user data: ' + error)
+          }
+        })
+      }
+      
+      // 백으로 데이터 보내기
+      function sendDataToBackend() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/process_email',
+          contentType: 'application/json',
+          data: JSON.stringify({ email: email }),
+          success: function (response) {
+            alert(response.message) // 백엔드 응답 메시지
+          },
+          error: function (xhr, status, error) {
+            alert('Failed to send data to backend: ' + error)
+          }
+        })
+      }
+      
+      // 다음 요청 보기
+      function next() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/next_request',
+          contentType: 'application/json',
+          data: JSON.stringify({ email: email }),
+          success: function (response) {
+            alert(response.message) // 백엔드 응답 메시지
+          },
+          error: function (xhr, status, error) {
+            alert('Failed to send data to backend: ' + error)
+          }
+        })
+      }
+      
+      // 이전 요청 보기
+      function pred() {
+        $.ajax({
+          type: 'POST',
+          url: '/api/pred_request',
+          contentType: 'application/json',
+          data: JSON.stringify({ email: email }),
+          success: function (response) {
+            alert(response.message) // 백엔드 응답 메시지
+          },
+          error: function (xhr, status, error) {
+            alert('Failed to send data to backend: ' + error)
+          }
+        })
+      }
+      
+      // 페이지 로드 시 데이터 가져오기
+      $(document).ready(fetchUserData)
+    </script>
+  </head>
+
+
+
+  <body>
+    
+    <button type="button" onclick="sendDataToBackend()">Send Email to Backend</button>
+    <button type="button" onclick="next()">다음 요청 보기</button>
+    <button type="button" onclick="pred()">이전 요청 보기</button>
+    <button type="button" onclick="next()">메인 화면으로 돌아가기</button>
+  </body>
+</html>

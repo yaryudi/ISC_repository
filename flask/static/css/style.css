@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oswald:wght@200..700&display=swap');
+@import url(reset.css);
+@import url(variable.css);
+
+/* 컴포넌트 */
+@import url(components/status-bar.css);
+@import url(components/nav-bar.css);
+@import url(components/screen-header.css);
+@import url(components/user-component.css);
+@import url(components/badge.css);
+@import url(components/icon-row.css);
+@import url(components/alt-screen-header.css);
+@import url(components/senior-info-header.css);
+@import url(components/progress-bar.css);
+@import url(components/previous-next-bar.css);
+@import url(components/service-display-link.css);
+@import url(components/question-click.css);
+@import url(components/question-text.css);
+@import url(components/main-screen-header.css);
+
+/* 스크린 */
+@import url(screens/login.css);
+@import url(screens/first-home.css);
+@import url(screens/sign-up.css);
+@import url(screens/chat.css);
+@import url(screens/home.css);
+@import url(screens/senior-info-\(1\).css);
+@import url(screens/senior-info-\(2\).css);
+@import url(screens/senior-info-\(3\).css);
+@import url(screens/senior-info-\(4\).css);
+
+body{
+  color: var(--green);
+}
+
+body:lang(en){
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    
+}
+
+body:lang(ko){
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.important-text {
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-weight: bolder;
+  }
+
+.highlight {
+    color: #fa937e;
+    font-weight: bold; 
+    
+  }
+
+.main-screen{
+    padding: 0px var(--horizontal-space);
+    
+}
+
+
+
+

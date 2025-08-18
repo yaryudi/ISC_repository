@@ -1,0 +1,94 @@
+
+
+.greet-header{
+  margin-top: 30px;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.greet-header__title{
+  margin-bottom: 35px;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.greet-header__text{
+  opacity: 0.5;
+  width: 75%;
+}
+
+.vision{
+  opacity: 0.8;
+  color: white;
+  margin-bottom: 50px;
+}
+ 
+body.no-scroll {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* 전체 화면 높이 */
+    overflow: hidden; /* 스크롤 방지 */
+  }
+
+  body.with-background::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("../../smile.jpg"); /* 배경 이미지 */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5; /* 배경 이미지만 50% 투명도 적용 */
+    pointer-events: none; /* 배경 이미지가 클릭되지 않도록 설정 */
+    z-index: -1; /* 배경 이미지를 다른 콘텐츠 뒤로 보내기 */
+    background-repeat: no-repeat;
+    animation: fadeInBackground 1.5s linear ;
+  }
+
+  /* 배경 이미지 애니메이션 */
+@keyframes  fadeInBackground{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+  .wrap {
+    margin: auto;
+    width: 500px;
+    height: 100vh;
+  }
+
+  .title {
+    background-color: #07434d;
+    padding: 10px 10px;
+    text-align: center;
+    height: 100vh;
+  }
+
+ 
+
+  #start{
+    margin-top: 80px;
+    background-color: var(--orange);
+    color:rgba(255,255,255,0.7);
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 100px;
+    border-radius: 15px;
+    transition: background-color 0.5s ease-in-out;
+  }
+
+  #start:hover{
+    background-color: var(--littlePink);
+  }
