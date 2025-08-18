@@ -1,6 +1,6 @@
 # ISC (InSpired Care For Connection)  
 노인과 복지사를 연결하는 매칭 웹서비스  
-![Uploading ISC_logo.png…]()
+<img width="814" height="814" alt="ISC_logo" src="https://github.com/user-attachments/assets/edb85fc7-1556-4549-8ff7-6e898b45c7cb" />
 
 
 ---
