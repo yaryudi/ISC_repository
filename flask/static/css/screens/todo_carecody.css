@@ -1,0 +1,147 @@
+#todo-carecody .status-bar{
+  top:0;
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+  z-index: 2;
+}
+
+#todo-carecody .top-screen-header{
+  z-index: 1;
+  background-color: white;
+}
+
+
+#todo_carecody-container {
+  margin-top: 150px;
+}
+
+.todo_carecody__items {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff7e6;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.todo_carecody__items__time {
+  flex: 0 0 60px;
+  text-align: center;
+  font-weight: bold;
+  background-color: var(--littlePink);
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  align-self: flex-start;
+  align-self: flex-start;
+}
+
+.todo_carecody__items__details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+}
+.todo_carecody__items__details__title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* .todo_carecody__details__photo {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+} */
+
+.todo_carecody__items__details__photo img {
+  object-fit: cover;
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+.todo_carecody__items__details__comment {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.todo_carecody__items__details__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 15px;
+
+}
+
+.todo_carecody__items__details__form input {
+  cursor: pointer;
+  width: 180px;
+}
+
+.todo_carecody__items__details__form textarea {
+  height:100px;
+  width: 500px;
+  margin: 0px 10px;
+  padding: 20px;
+  border-radius: 15px;
+  resize: none;
+}
+
+.todo_carecody__items__details__form button {
+  cursor: pointer;
+  background-color: var(--orange);
+  border: none;
+  margin: 10px;
+  height: 40px;
+  width: 70px;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+}
+
+.todo_carecody__items__details__form button:hover {
+  background-color: var(--littlePink);
+}
+
+/* .care-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.care-actions form {
+  flex: 1;
+}
+form input[type="file"],
+form textarea,
+form button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+form textarea {
+  resize: none;
+  height: 50px;
+}
+form button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+form button:hover {
+  background-color: #45a049;
+} */

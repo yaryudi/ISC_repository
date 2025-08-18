@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery Cookie Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 케어코디 찾기</title>
+  </head>
+
+  <body id="find-codi">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header class="top-screen-header">
+      <div class="top-screen-header__column">
+        <a onclick="go_home()">
+          <i class="fa-solid fa-chevron-left fa-2x"></i>
+        </a>
+      </div>
+      <div class="top-screen-header__column">
+        <h1 class="top-screen-header__title">케어코디 목록</h1>
+      </div>
+      <div class="top-screen-header__column">
+        <span>
+          <img
+            class="top-screen-header-logo"
+            src="../static/ISC-logo_trans.png"
+          />
+        </span>
+      </div>
+    </header>
+
+    <main class="main-screen">
+      {% for resume in resumes %}
+      <div class="care-coordinator-card">
+        <div class="care-coordinator-card__container">
+          <div class="care-coordinator-card__profile">
+            <img
+              src="{{ url_for('static', filename=resume.photo) }}"
+              alt="프로필 이미지"
+              class="care-coordinator-card__profile-image"
+            />
+          </div>
+
+          <div class="care-coordinator-card__info">
+            <h3 class="care-coordinator-card__name">
+              {{ resume.name }} ({{ resume.age }}세)
+            </h3>
+            <div class="care-coordinator-card__career">
+              <span class="care-coordinator-card__section">경력 - </span>
+              <span class="care-coordinator-card__content"
+                >{{ resume.experience }}</span
+              >
+            </div>
+            <div class="care-coordinator-card__local">
+              <span class="care-coordinator-card__section">성별 - </span>
+              <span class="care-coordinator-card__content">
+                {% if resume.gender == "Male" %} 남 {% else %} 여 {% endif %}
+              </span>
+            </div>
+            <div class="care-coordinator-card__local">
+              <span class="care-coordinator-card__section">자기소개 - </span>
+              <span class="care-coordinator-card__content"
+                >{{ resume.introduction }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="care-coordinator-card__container">
+          <div
+            class="resume-btn"
+            data-nick="{{resume.name}}"
+            onclick="resume_onlysee(this)"
+          >
+            {{ resume.name }} 님의 <br />이력서 확인하기
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </main>
+  </body>
+  <script
+    src="https://kit.fontawesome.com/d5055e0a20.js"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+
+    function resume_onlysee(element) {
+      //해당하는 이력서를 불러오는 resume_onlysee 로 이동
+      const nick = element.dataset.nick; // data-nick 값 가져오기
+      console.log(nick); // 출력: 해당 nick 값
+      window.location.href = `/resume_onlysee?nick=${encodeURIComponent(nick)}`;
+    }
+  </script>
+</html>

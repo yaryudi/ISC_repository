@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery Cookie Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>ISC - 매칭 요청 확인</title>
+    <style>
+      .container {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin: 20px;
+        font-family: Arial, sans-serif;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .section h2 {
+        border-bottom: 2px solid #4caf50;
+        padding-bottom: 5px;
+        color: #4caf50;
+      }
+      .service-list li {
+        list-style: circle;
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+
+  <body id="match-check">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header class="top-screen-header">
+      <div class="top-screen-header__column">
+        <a onclick="go_home()"><i class="fa-solid fa-chevron-left fa-2x"></i></a>
+      </div>
+      <div class="top-screen-header__column">
+        <h1 class="top-screen-header__title">시니어 정보</h1>
+      </div>
+      <div class="top-screen-header__column">
+        <span><img class="top-screen-header-logo" src="../static/ISC-logo_trans.png" /></span>
+      </div>
+    </header>
+    <main class="main-screen">
+      <div class="previous-next-bar__screen">
+        <div class="matching-request-section">
+          <div class="matching-request-section__column">
+            <h1 class="matching-request-section__title">다음과 같은 매칭 요청이 왔습니다!</h1>
+            <p class="matching-request-section__contents">
+              <span id="nickname" name="nickname" class="matching-request-section__contents-name"></span>
+              (
+              <span class="matching-request-section__contents-relation" id="relation"></span>
+              ) 님의 동행 요청!
+            </p>
+          </div>
+          <div class="matching-request-section__column">
+            <form class="match-confirm-form">
+              <input type="submit" value="요청 거절하기" class="button match-confirm-form__button--reject" onclick="disallow_match()" />
+              <input type="submit" value="요청 수락하기" class="button match-confirm-form__button--accept" onclick="allow_match()" />
+            </form>
+          </div>
+        </div>
+
+        <div class="info-show-section">
+          <h2 class="info-show-section__title">요청 정보</h2>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title">성함:</span>
+            <span class="info-show-section__contents-content" id="name"> </span>
+            <span class="info-show-section__contents-content" id="age"> </span>
+          </p>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title">성별:</span>
+            <span class="info-show-section__contents-content" id="gender"></span>
+          </p>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title" id="care_time">케어 시간:</span>
+            <span class="info-show-section__contents-content"></span>
+          </p>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title">지역:</span>
+            <span class="info-show-section__contents-content" id="care_place"></span>
+          </p>
+        </div>
+        <div class="info-show-section">
+          <h2 class="info-show-section__title">시니어 상태</h2>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title" id="diseases">특수 질환:</span>
+            <span class="info-show-section__contents-content"></span>
+          </p>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title">거동:</span>
+            <span class="info-show-section__contents-content" id="mobility"></span>
+          </p>
+          <p class="info-show-section__contents">
+            <span class="info-show-section__contents-title">식사:</span>
+            <span class="info-show-section__contents-content" id="meal"></span>
+          </p>
+        </div>
+        <div class="service-list-section">
+          <h2 class="service-list-section__title">필요한 서비스</h2>
+          <ul class="service-list-section__contents" id="service">
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <nav class="previous-next-bar">
+      <div class="previous-next-bar__list">
+        <div class="previous-next-bar__previous">
+          <a class="nav__link__text" onclick="pred_match()">이전</a>
+        </div>
+        <div class="previous-next-bar__next">
+          <a class="nav__link__text" onclick="next_match()">다음</a>
+        </div>
+      </div>
+    </nav>
+  </body>
+  <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+  <script>
+    function go_home() {
+      window.location.href = '/main'
+    }
+    
+    window.onload = function () {
+      if (window.location.pathname == '/match_check') {
+        // 특정 URL에 접근했을 때 자동 실행할 함수
+        first_match()
+    
+        // 0초 후에 실행하여 DOM이 완전히 렌더링된 후 처리
+        setTimeout(function () {
+          const nickname = $('#nickname').text()
+          console.log('dasf')
+          console.log(nickname)
+          if (nickname) {
+            match_check_info_update(nickname) // nickname을 함수 인자로 전달
+          } else {
+            console.error('Nickname is not available yet.')
+          }
+        }, 200) // 50ms 지연, DOM이 준비된 후 실행
+      }
+    }
+    
+    function match_check_info_update(nickname) {
+      console.log($('#nickname').text())
+      console.log('dasf')
+      $.ajax({
+        type: 'POST',
+        url: '/api/match_check_info_update',
+        data: {
+          nick_give: $('#nickname').text()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            alert('업데이트!')
+            const data = response.data
+            if (data) {
+              $('#gender').text(data.gender)
+              $('#relation').text(data.selected_relation)
+              $('#name').text(data.name)
+              $('#age').text(data.birth+'년생')
+              $('#care_time').text(`${data.start_time} ~ ${data.end_time}`)
+              $('#care_place').text(`${data.basic_address} ${data.detail_address}`)
+    
+              $('#diseases').text(Array.isArray(data.selected_mobility) ? data.selected_diseases.join(', ') : data.selected_diseases) // 배열이 아니면 그대로 출력
+    
+              $('#mobility').text(Array.isArray(data.selected_mobility) ? data.selected_mobility.join(', ') : data.selected_mobility) // 배열이 아니면 그대로 출력
+    
+              $('#meal').text(Array.isArray(data.selected_meal) ? data.selected_meal.join(', ') : data.selected_meal) // 배열이 아니면 그대로 출력
+    
+              const serviceList = $('#service') // 서비스 리스트를 선택
+              serviceList.empty() // 기존 리스트 항목들 제거
+    
+              const tasks = data.selected_service.split(", ")
+              
+              tasks.forEach(service => {
+                const li = $('<li></li>').text(service);
+                serviceList.append(li); // jQuery의 append 사용
+              });
+              
+            }
+          } else {
+            alert(response['msg'])
+            window.location.pathname = '/main'
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error(`Error: ${status}, ${error}`)
+          alert('서버와 통신 중 오류가 발생했습니다.')
+        }
+      })
+    }
+    
+    //첫 요청 보기
+    function first_match() {
+      $.ajax({
+        type: 'POST',
+        url: '/api/first_match',
+        data: {
+          nick_give: $('#nickname').text()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            // 요청에 성공시 알림
+            alert('첫 페이지 불러오기 성공')
+            $('#nickname').text(response.data)
+            return response.data
+            //새로고침!
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+    
+    //이전 요청 보기
+    function pred_match() {
+      $.ajax({
+        type: 'POST',
+        url: '/api/pred_match',
+        data: {
+          nick_give: $('#nickname').text()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            // 요청에 성공시 알림
+            alert('이전 페이지 이동!')
+            $('#nickname').text(response.data)
+              
+            setTimeout(function () {
+              const nickname = $('#nickname').text()
+              console.log('dasf')
+              console.log(nickname)
+              if (nickname) {
+                match_check_info_update(nickname) // nickname을 함수 인자로 전달
+              } else {
+                console.error('Nickname is not available yet.')
+              }
+            }, 200) // 50ms 지연, DOM이 준비된 후 실행
+
+            //새로고침!
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+    
+    //다음 요청 보기
+    function next_match() {
+      $.ajax({
+        type: 'POST',
+        url: '/api/next_match',
+        data: {
+          nick_give: $('#nickname').text()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            // 요청에 성공시 알림
+            alert('다음 페이지 이동')
+            $('#nickname').text(response.data)
+            
+            setTimeout(function () {
+              const nickname = $('#nickname').text()
+              console.log('dasf')
+              console.log(nickname)
+              if (nickname) {
+                match_check_info_update(nickname) // nickname을 함수 인자로 전달
+              } else {
+                console.error('Nickname is not available yet.')
+              }
+            }, 200) // 50ms 지연, DOM이 준비된 후 실행
+
+            //새로고침!
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+    
+    //매칭 요청 허락 버튼시 작동
+    function allow_match() {
+      $.ajax({
+        type: 'POST',
+        url: '/api/allow_match',
+        data: {
+          nick_give: $('#nickname').text()
+          //nick_give: $('#input-nick').val()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            // 요청에 성공시 알림
+            alert('매칭 완료!')
+            //메인 페이지로 이동
+            window.location.href = '/main'
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+    
+    //매칭 요청 거절 버튼시 작동
+    function disallow_match() {
+      $.ajax({
+        type: 'POST',
+        url: '/api/disallow_match',
+        data: {
+          nick_give: $('#nickname').text()
+          //nick_give: $('#input-nick').val()
+        },
+        success: function (response) {
+          console.log(response)
+          if (response['result'] == 'success') {
+            // 요청에 성공시 알림
+            alert('매칭 요청 거절 성공!')
+    
+            window.location.href = '/match_personal' //새로고침!
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+  </script>
+</html>

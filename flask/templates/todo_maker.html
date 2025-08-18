@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="..\static\css\style.css?v=1.0" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC - To-Do List 생성</title>
+    <link rel="shortcut icon" href="#" />
+  </head>
+
+  <div class="status-bar">
+    <div class="status-bar__column">
+      <span>No Service</span>
+      <i class="fa-solid fa-wifi"></i>
+    </div>
+    <div class="status-bar__column">
+      <span>18:43</span>
+    </div>
+    <div class="status-bar__column">
+      <span>100%</span>
+      <!-- battery icon -->
+      <i class="fa-solid fa-battery-full fa-2x"></i>
+      <!-- lightning icon -->
+      <i class="fa-solid fa-bolt"></i>
+    </div>
+  </div>
+  <body id="todo-maker">
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
+    <header class="top-screen-header">
+      <div class="top-screen-header__column">
+        <a onclick="go_home()">
+          <i class="fa-solid fa-chevron-left fa-2x"></i>
+        </a>
+      </div>
+      <div class="top-screen-header__column">
+        <h1 class="top-screen-header__title">To-Do-List 수정하기</h1>
+      </div>
+      <div class="top-screen-header__column">
+        <span>
+          <img
+            class="top-screen-header-logo"
+            src="../static/ISC-logo_trans.png"
+          />
+        </span>
+      </div>
+    </header>
+
+    <!-- 기존 To-Do list들을 display -->
+    <div class="todo-maker__original">
+      <ul>
+        {% for todo in todos %}
+        <li class="todo-maker__original__box">
+          <span class="todo-maker__original__box__time">{{ todo.time }}</span>
+          <span class="todo-maker__original__box__content"
+            >{{ todo.content }}</span
+          >
+          <div class="todo-maker__original__box__actions">
+            <!-- 수정 폼
+            <form
+              id="todo-edit-btn"
+              action="/todo/edit/{{ todo._id }}"
+              method="POST"
+            >
+              <button type="submit" class="todo-edit-btn">수정</button>
+            </form> -->
+            <!-- 삭제 폼 -->
+            <form
+              id="todo-delete-btn"
+              action="/todo/delete/{{ todo._id }}"
+              method="POST"
+            >
+              <button type="submit" class="todo-delete-btn">삭제</button>
+            </form>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- 새로운 To-Do list를 추가하는 부분 -->
+    <div class="todo-maker__new" id="input-section">
+      <form
+        class="todo-maker__new__form"
+        method="POST"
+        action="/todo"
+        style="display: flex; width: 100%; gap: 10px"
+      >
+        <input
+          class="todo-maker__new__form__time"
+          type="time"
+          id="time"
+          name="time"
+          required
+        />
+        <input
+          class="todo-maker__new__form__content"
+          type="text"
+          id="content"
+          name="content"
+          placeholder="내용 입력"
+          required
+        />
+        <!-- <div class="resume-btn"> -->
+        <button class="todo-maker__new__form__button" type="submit">
+          작성
+        </button>
+        <!-- </div> -->
+      </form>
+    </div>
+
+  </body>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+
+    //매칭 요청을 보냄
+  </script>
+</html>

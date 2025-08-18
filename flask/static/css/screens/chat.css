@@ -27,7 +27,7 @@
     flex-direction: column;
     align-items: center;
     
-    padding: 0px var(--horizontal-space) 15px 0px;
+    padding: 0px var(--horizontal-space) 15px var(--horizontal-space);
 
     /* 스크롤 코드 */
     overflow-y: auto; /* 스크롤 활성화 */

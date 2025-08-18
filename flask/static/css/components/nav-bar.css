@@ -15,6 +15,7 @@
 }
 
 .nav__link{
+    cursor: pointer;
     color: var(--green);
     position: relative;
     display: flex;
@@ -28,10 +29,16 @@
     padding-top: 10px;
     font-weight: 600;
     font-size: 15px;
-    display: inline-block; /* block 레이아웃으로 변환 */
-    text-align: center; /* 텍스트를 가운데 정렬 */
-    line-height: 1; /* 줄 간격 조절 */
+    display: inline-block; 
+    text-align: center;
+    line-height: 1; 
 }
 
-
-
+.nav__btn i {
+    transition: transform 0.3s ease-in-out; 
+  }
+  
+  .nav__btn i:hover {
+    transform: scale(1.2); 
+  }
+  

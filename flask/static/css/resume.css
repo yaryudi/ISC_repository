@@ -1,0 +1,14 @@
+#resume-body .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 2;
+}
+
+#resume-body .top-screen-header{
+    z-index: 1;
+    background-color: white;
+}
+

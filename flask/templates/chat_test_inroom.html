@@ -32,6 +32,7 @@
 
       var socket = io.connect('http://' + document.domain + ':' + location.port);
 
+
       //클라이언트가 서버와 연결이 성공적으로 이루어졌을 때 실행
       socket.on( 'connect', function() {
         //서버에 'my event'라는 이벤트를 발생시키고, data: 'User Connected'라는 데이터를 보냄
@@ -70,11 +71,11 @@
         $( 'h3' ).remove()
 
           //div.message_holder 요소 안에 새로운 <div>를 추가합니다.
-          //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요
+          //채팅 내용을 추가한다. -> 항후 이 내용을 저장하고 불러오는 기능 필요 src="{{ url_for('static', filename=codi_info.photo) }}"
         $('div.message_holder').append(`
         <div class="message-row">
           <img
-            src="https://th.bing.com/th/id/OIP.-5sorRJ9rKAhvzVSJZEaTwHaEJ?w=300&h=180&c=7&r=0&o=5&pid=1.7"
+            src="{{ url_for('static', filename=codi_info.photo) }}"
             alt="User Avatar"
           />
           <div class="message-row__content">

@@ -8,7 +8,11 @@
     <!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
 
     <title>ISC - 시니어 정보(2)</title>
   </head>
@@ -33,13 +37,19 @@
       </div>
       <header class="senior-info-header">
         <div class="senior-info-header__column">
-          <a href="#"><i class="fa-solid fa-angles-left fa-2x"></i></a>
+          <a onclick="go_home()" style="cursor: pointer">
+            <i class="fa-solid fa-house fa-2x"></i
+          ></a>
         </div>
         <div class="senior-info-header__column">
           <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
         </div>
         <div class="senior-info-header_column">
-          <span><img class="senior-info-header-logo" src="../static/ISC-logo_trans.png" /></span>
+          <span
+            ><img
+              class="senior-info-header-logo"
+              src="../static/ISC-logo_trans.png"
+          /></span>
         </div>
       </header>
       <div class="progress-bar-container">
@@ -63,28 +73,67 @@
         <form id="senior-detail-info-form">
           <div class="question-text">
             <span class="question-text__text">성함(필수)</span>
-            <input id="input-senior-name" name="name" required type="text" placeholder="시니어 성함" value="{{ name }}" />
+            <input
+              id="input-senior-name"
+              name="name"
+              required
+              type="text"
+              placeholder="시니어 성함"
+              value="{{ name }}"
+            />
           </div>
 
           <div class="question-click">
             <span class="question-click__text">성별</span>
             <div class="question-click__container">
-              <div class="click-option gender-option {% if gender == '남성' %}selected{% endif %}" id="남성" onclick="updateGender('남성')">남성</div>
-              <div class="click-option gender-option {% if gender == '여성' %}selected{% endif %}" id="여성" onclick="updateGender('여성')">여성</div>
+              <div
+                class="click-option gender-option {% if gender == '남성' %}selected{% endif %}"
+                id="남성"
+                onclick="updateGender('남성')"
+              >
+                남성
+              </div>
+              <div
+                class="click-option gender-option {% if gender == '여성' %}selected{% endif %}"
+                id="여성"
+                onclick="updateGender('여성')"
+              >
+                여성
+              </div>
             </div>
           </div>
 
           <div class="question-text">
             <span class="question-text__text">출생년도</span>
             <div class="appendix__setting">
-              <input class="question-text__text__shirink" id="input-senior-bornyear" name="birth" required type="number" placeholder="출생년도(예: 1999)" min="1900" max="2020" value="{{ birth }}" />
+              <input
+                class="question-text__text__shirink"
+                id="input-senior-bornyear"
+                name="birth"
+                required
+                type="number"
+                placeholder="출생년도(예: 1999)"
+                min="1900"
+                max="2020"
+                value="{{ birth }}"
+              />
               <span class="question-text__appendix">년</span>
             </div>
           </div>
           <div class="question-text">
             <span class="question-text__text">체중(필수)</span>
             <div class="appendix__setting">
-              <input class="question-text__text__shirink" id="input-senior-weight" name="weight" required type="number" placeholder="체중(예: 80)" min="30" max="150" value="{{ weight }}" />
+              <input
+                class="question-text__text__shirink"
+                id="input-senior-weight"
+                name="weight"
+                required
+                type="number"
+                placeholder="체중(예: 80)"
+                min="30"
+                max="150"
+                value="{{ weight }}"
+              />
               <span class="question-text__appendix">Kg</span>
             </div>
           </div>
@@ -112,59 +161,73 @@
           <a href="/senior_info_1" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="/senior_info_3" class="nav__link__text" onclick="submitFormAndSendData()">다음</a>
+          <a
+            class="nav__link__text"
+            onclick="submitFormAndSendData()"
+            >다음</a
+          >
         </div>
       </div>
     </nav>
-    <script src="https://kit.fontawesome.com/d5055e0a20.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/d5055e0a20.js"
+      crossorigin="anonymous"
+    ></script>
 
     <script>
       // 성별 선택 함수
       function updateGender(selectedGender) {
         // 모든 성별 버튼에서 'selected' 클래스를 제거
-        document.querySelectorAll('.gender-option').forEach((option) => {
-          option.classList.remove('selected')
-        })
-      
+        document.querySelectorAll(".gender-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
         // 선택한 버튼에 'selected' 클래스 추가
-        const selectedOption = document.getElementById(selectedGender)
+        const selectedOption = document.getElementById(selectedGender);
         if (selectedOption) {
-          selectedOption.classList.add('selected')
+          selectedOption.classList.add("selected");
         }
-      
-        console.log(`성별 선택: ${selectedGender}`)
+
+        console.log(`성별 선택: ${selectedGender}`);
       }
-      
+
       // 서버에 데이터 전송 함수
       function submitFormAndSendData() {
-        const formData = new FormData()
+        const formData = new FormData();
         const data = {
-          name: document.getElementById('input-senior-name').value,
-          gender: document.querySelector('.gender-option.selected')?.id || '',
-          birth: document.getElementById('input-senior-bornyear').value,
-          weight: document.getElementById('input-senior-weight').value
-        }
-      
-        fetch('/senior_info_2', {
-          method: 'POST',
+          name: document.getElementById("input-senior-name").value,
+          gender: document.querySelector(".gender-option.selected")?.id || "",
+          birth: document.getElementById("input-senior-bornyear").value,
+          weight: document.getElementById("input-senior-weight").value,
+        };
+
+        fetch("/senior_info_2", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json' // JSON 형식
+            "Content-Type": "application/json", // JSON 형식
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         })
-          .then((response) => {
-            if (response.ok) {
-              window.location.href = '/senior_info_3'
-            } else {
-              alert('서버와의 통신에 실패했습니다.')
-            }
+        .then((response) => {
+          if (response.ok) {
+            window.location.href = "/senior_info_3";
+          } else {
+            alert("공란이 존재합니다");
+          }
           })
           .catch((error) => {
-            alert('네트워크 오류가 발생했습니다.')
-          })
+            alert("네트워크 오류가 발생했습니다.");
+          });
       }
     </script>
   </body>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+
+    //매칭 요청을 보냄
+  </script>
 </html>
 
 <!--     

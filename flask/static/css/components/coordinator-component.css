@@ -1,0 +1,77 @@
+.care-coordinator-card {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .care-coordinator-card__profile {
+    flex-shrink: 0;
+    margin-right: 15px;
+  }
+  
+  .care-coordinator-card__profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #d1d1d1;
+    object-fit: cover;
+  }
+  
+  .care-coordinator-card__info {
+    flex-grow: 1;
+  }
+  
+  .care-coordinator-card__name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .care-coordinator-card__details {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  
+  .care-coordinator-card__subjects {
+    font-size: 0.9rem;
+    color: #34495e;
+  }
+  
+  .care-coordinator-card__subjects-title {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .care-coordinator-card__tags {
+    margin-top: 10px;
+  }
+  
+  .care-coordinator-card__tag {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    margin-right: 5px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .care-coordinator-card__tag--highlight {
+    background-color: #e74c3c;
+  }
+  
+  .care-coordinator-card__tag--special {
+    background-color: #f1c40f;
+  }
+  
+  .care-coordinator-card__tag--basic {
+    background-color: #3498db;
+  }
+  

@@ -1,0 +1,101 @@
+#find-codi .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 2;
+}
+
+#find-codi .main-screen{
+    margin-top: 150px;
+    
+}
+
+#find-codi .top-screen-header{
+    z-index: 1;
+    background-color: white;
+}
+
+
+.care-coordinator-card__container{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.care-coordinator-card {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    align-items: center;
+    padding: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 35px;
+  }
+  
+  .care-coordinator-card__profile {
+    flex-shrink: 0;
+    margin-right: 15px;
+  }
+  
+  .care-coordinator-card__profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  /* .care-coordinator-card__info {
+    flex-grow: 1;
+  } */
+  
+  .care-coordinator-card__name {
+    margin: 10px 0px;
+    font-size: 26px;
+    font-weight: bold;
+    
+  }
+
+  .care-coordinator-card__section{
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 3px;
+}
+
+.care-coordinator-card__content{
+    font-size: 18px;    
+}
+
+
+.resume-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; 
+  }
+  
+  .resume-btn:hover {
+    background-color: var(--littlePink); 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .resume-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); 
+  }
+  

@@ -41,6 +41,10 @@
       }
     </style>
     <script>
+      //버튼은 사용가능
+      document.querySelector('button').disabled = false;
+
+
       //매칭 요청을 보냄
       function send_match() {
         $.ajax({

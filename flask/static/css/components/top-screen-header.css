@@ -1,0 +1,45 @@
+ 
+
+.top-screen-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--horizontal-space);
+    margin-bottom: 15px;
+    padding-top: 40px;
+    border-bottom: 3px solid rgb(243,243,243);
+    
+    width: 100%;
+    position: fixed;
+    top: 0;
+    box-sizing: border-box;
+}
+
+.top-screen-header__title{
+    font-size: 28px;
+    font-weight: 600;
+}
+.top-screen-header__column:first-child{
+    margin-right: auto;
+}
+.top-screen-header__column:last-child{
+    margin-left: auto;
+}
+
+.top-screen-header__column span{
+    margin-left: 20px;
+}
+
+.top-screen-header__column:first-child i {
+    color: var(--green); /* 원하는 색상 코드 */
+    cursor: pointer;
+}
+
+.top-screen-header-logo{
+    height: 50px;
+    width: 50px;
+}
+
+
+
+

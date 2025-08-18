@@ -19,7 +19,7 @@
       <div class="status-bar__column">
         <span>100%</span>
         <!-- battery icon -->
-        <i class="fa-solid fa-battery-full fa-2x" style="color: #74c0fc"></i>
+        <i class="fa-solid fa-battery-full fa-2x"></i>
         <!-- lightning icon -->
         <i class="fa-solid fa-bolt"></i>
       </div>
@@ -27,7 +27,9 @@
 
     <header class="alt-screen-header">
       <div class="alt-screen-header__column">
-        <a href="chats.html"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+        <a onclick="go_home()" style="cursor: pointer">
+          <i class="fa-solid fa-angles-left fa-2x"></i
+        ></a>
       </div>
       <div class="alt-screen-header__column">
         <h1 class="alt-screen-header__title">{{ matename }}</h1>
@@ -44,7 +46,7 @@
     </header>
 
     <main class="main-chat">
-      <div class="chat__timestamp">Tuesday, June 30, 2020</div>
+      <div class="chat__timestamp">연결된 매칭이 없습니다.</div>
     </main>
 
     <form class="reply">
@@ -67,6 +69,12 @@
       src="https://kit.fontawesome.com/d5055e0a20.js"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      function go_home() {
+        window.location.href = "/main";
+      }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 

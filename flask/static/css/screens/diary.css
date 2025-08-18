@@ -1,0 +1,152 @@
+#diary .status-bar{
+    top:0;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 2;
+}
+
+#diary .main-screen{
+    margin-top: 150px;    
+}
+
+#diary .top-screen-header{
+    z-index: 1;
+    background-color: white;
+}
+
+.navigation-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 600;
+
+}
+#current_week__day{
+    color: var(--littlePink);
+}
+
+.navigation-bar a {
+    text-decoration: none;
+    color: var(--green);
+}
+
+
+/* 요일 및 날짜 스타일 */
+.diary__weekend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.diary__weekend__day {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* border: 2px solid var(--orange); */
+    margin: 0px 0px;
+    height: 60px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: var(--green)
+}
+
+.diary__weekend__day:hover {
+    background-color: var(--littlePink);
+}
+
+.diary__weekend__day__number {
+    color: var(--green);
+}
+
+/* 케어 기록 카드 스타일 */
+#diary__container {
+    /* overflow-y: auto; 세로 스크롤 활성화 */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.diary__items {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: var(--lightGray);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.diary__items__time {
+    flex: 0 0 60px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 3px solid black;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+    align-self: flex-start;
+    align-self: flex-start;
+}
+
+
+
+.diary__items__details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+}
+
+.diary__items__details__title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.diary__items__details__photo {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 10px;
+}
+
+.diary__items__details__photo img {
+    object-fit: cover;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+/* 코멘트 스타일 */
+.diary__items__details__comment {
+    flex: 2; /* 코멘트가 사진보다 넓게 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#no-data {
+    /* blabla */
+    font-style:italic;
+}
+

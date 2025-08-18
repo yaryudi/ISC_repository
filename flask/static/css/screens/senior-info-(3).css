@@ -18,6 +18,10 @@
     
 }
 
+.red-warnning-div{
+    display: flex;
+    justify-content: center;
+}
 .red-warnning{
     color: var(--littlePink); 
     font-weight: 700; 

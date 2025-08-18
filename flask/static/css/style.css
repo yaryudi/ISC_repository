@@ -17,6 +17,9 @@
 @import url(components/question-click.css);
 @import url(components/question-text.css);
 @import url(components/main-screen-header.css);
+@import url(components/top-screen-header.css);
+@import url(components/btn-component.css);
+@import url(components/todo-list.css);
 
 /* 스크린 */
 @import url(screens/login.css);
@@ -28,6 +31,12 @@
 @import url(screens/senior-info-\(2\).css);
 @import url(screens/senior-info-\(3\).css);
 @import url(screens/senior-info-\(4\).css);
+@import url(screens/match_check.css);
+@import url(screens/find_codi.css);
+@import url(screens/resume.css);
+@import url(screens/todo_maker.css);
+@import url(screens/todo_carecody.css);
+@import url(screens/diary.css);
 
 body{
   color: var(--green);

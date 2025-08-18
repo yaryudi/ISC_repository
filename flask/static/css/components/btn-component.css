@@ -1,0 +1,35 @@
+
+.resume-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; 
+  }
+  
+  .resume-btn:hover {
+    background-color: var(--littlePink); 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .resume-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .resume-btn button[type="submit"] {
+    background-color: inherit;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+}

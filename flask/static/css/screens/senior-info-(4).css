@@ -57,6 +57,8 @@
   
   .senior-info-four {
     margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
   }
   
   /* hover 상태에서 테두리 색 변경 */

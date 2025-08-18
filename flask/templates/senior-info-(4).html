@@ -32,7 +32,9 @@
     </div>
     <header class="senior-info-header">
       <div class="senior-info-header__column">
-        <a href="#"><i class="fa-solid fa-angles-left fa-2x"></i></a>
+        <a onclick="go_home()" style="cursor: pointer">
+          <i class="fa-solid fa-house fa-2x"></i
+        ></a>
       </div>
       <div class="senior-info-header__column">
         <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
@@ -190,4 +192,11 @@
       }
     </script>
   </body>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+
+    //매칭 요청을 보냄
+  </script>
 </html>

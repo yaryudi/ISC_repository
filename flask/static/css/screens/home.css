@@ -1,16 +1,20 @@
+#home-screen{
+    margin-bottom: 130px;
+}
+
 #home .main-screen-header{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding: 0px var(--horizontal-space);
     padding-bottom: 12px;
     margin-bottom: 15px;
     padding-top: 40px;
-    border-bottom:2px solhome rgba(7,67,77, 0.5);
+    border-bottom:2px solid rgba(7,67,77, 0.5);
 }
 
 #home .main-screen-header__title{
-    font-size: 22px;
+    font-size: 33px;
     font-weight: 600;
 }
 
@@ -20,3 +24,60 @@
     width: 50px;
     margin-right: 15px;
 }
+
+.isMatchComplete{
+    margin: 20px 0px;
+    
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#ref-todo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+#ref-todo input:focus{
+    border-color: var(--orange);
+}
+
+#ref-todo input[type="submit"]{
+    width: 80%;
+    margin-top: 50px;
+    color:rgba(255,255,255,0.7);
+    background-color: var(--orange);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out; 
+}
+
+#ref-todo input:hover {
+    background-color: var(--littlePink); 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  #ref-todo input:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); 
+  }
+/* #home{
+    width: 10000px;
+} */
+
+
+/* 완료된 항목 스타일 */
+.to-do-list-section__contents li.completed {
+    text-decoration: line-through; /* 가운데 줄 긋기 */
+    color: var(--orange); /* 빨간색 텍스트 */
+  }
+  

@@ -37,7 +37,9 @@
       </div>
       <header class="senior-info-header">
         <div class="senior-info-header__column">
-          <a href="#"> <i class="fa-solid fa-angles-left fa-2x"></i></a>
+          <a onclick="go_home()" style="cursor: pointer">
+            <i class="fa-solid fa-house fa-2x"></i
+          ></a>
         </div>
         <div class="senior-info-header__column">
           <h1 class="senior-info-header__title">시니어 정보 수정하기</h1>
@@ -79,7 +81,7 @@
               <div class="question-click__container">
                 <!-- 첫 번째 줄 -->
                 <div
-                  class="click-option {% if '해당없음' in selected_diseases %}selected{% endif %}" 
+                  class="click-option {% if '해당없음' in selected_diseases %}selected{% endif %}"
                   id="해당없음"
                   onclick="updateSelection('해당없음')"
                 >
@@ -206,9 +208,9 @@
                 <div
                   class="click-option mobility-option {% if selected_mobility == '스스로가능함' %}selected{% endif %}"
                   id="스스로가능함"
-                  onclick="updateMobility('스스로가능함')" 
+                  onclick="updateMobility('스스로가능함')"
                 >
-                  스스로 가능함
+                  스스로가능함
                 </div>
                 <div
                   class="click-option mobility-option {% if selected_mobility == '부분적도움필요' %}selected{% endif %}"
@@ -333,12 +335,28 @@
         </form>
 
         <!-- 서버 전송 -->
-        
-        <form id="senior-sickness-info-form" action="/senior_info_3" method="POST">
-          <input type="hidden" id="selected-diseases" name="selected-diseases" />
-          <input type="hidden" id="selected-mobility" name="selected-mobility" />
+
+        <form
+          id="senior-sickness-info-form"
+          action="/senior_info_3"
+          method="POST"
+        >
+          <input
+            type="hidden"
+            id="selected-diseases"
+            name="selected-diseases"
+          />
+          <input
+            type="hidden"
+            id="selected-mobility"
+            name="selected-mobility"
+          />
           <input type="hidden" id="selected-meal" name="selected-meal" />
-          <input type="hidden" id="selected-relation" name="selected-relation" />
+          <input
+            type="hidden"
+            id="selected-relation"
+            name="selected-relation"
+          />
         </form>
 
         <a id="service-display-link">
@@ -357,7 +375,11 @@
           <a href="/senior_info_2" class="nav__link__text">이전</a>
         </div>
         <div class="previous-next-bar__next">
-          <a href="/senior_info_4" class="nav__link__text" onclick="submitFormAndRedirect()">다음</a>
+          <a
+            class="nav__link__text"
+            onclick="submitFormAndRedirect()"
+            >다음</a
+          >
         </div>
       </div>
     </nav>
@@ -446,38 +468,49 @@
 
       // 폼 제출 함수
       function submitFormAndRedirect() {
-          const formData = new FormData();
+        const formData = new FormData();
 
-          // 데이터 설정
-          formData.append("selected-diseases", selectedDiseases.join(", "));
-          formData.append("selected-mobility", selectedMobility);
-          formData.append("selected-meal", selectedMeal);
-          formData.append("selected-relation", selectedRelation);
+        // 데이터 설정
+        formData.append("selected-diseases", selectedDiseases.join(", "));
+        formData.append("selected-mobility", selectedMobility);
+        formData.append("selected-meal", selectedMeal);
+        formData.append("selected-relation", selectedRelation);
 
-          console.log("서버로 데이터 전송 시작");
+        console.log(selectedDiseases);
+        console.log(selectedMobility);
+        console.log(selectedMeal);
+        console.log(selectedRelation);
+        console.log("서버로 데이터 전송 시작");
 
-          // 서버에 데이터 전송
-          fetch("/senior_info_3", {
-              method: "POST",
-              body: formData,
-          })
+        // 서버에 데이터 전송
+        fetch("/senior_info_3", {
+          method: "POST",
+          body: formData,
+        })
           .then((response) => {
-              if (response.ok) {
-                  console.log("데이터 전송 성공, 페이지 이동");
-                  // 페이지 이동
-                  window.location.href = "/senior_info_4";
-              } else {
-                  console.error("데이터 전송 실패:", response.statusText);
-                  alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
-              }
+            if (response.ok) {
+              console.log("데이터 전송 성공, 페이지 이동");
+              // 페이지 이동
+              window.location.href = "/senior_info_4";
+            } else {
+              console.error("데이터 전송 실패:", response.statusText);
+              alert("공란이 존재합니다. 다시 시도해주세요.");
+            }
           })
           .catch((error) => {
-              console.error("네트워크 오류:", error);
-              alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+            console.error("네트워크 오류:", error);
+            alert("다시 시도해주세요.");
           });
       }
     </script>
   </body>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+
+    //매칭 요청을 보냄
+  </script>
 </html>
 
 <!-- 

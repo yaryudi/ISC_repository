@@ -88,7 +88,7 @@
       }
       
       window.onload = function () {
-        if (window.location.pathname === '/match_personal') {
+        if (window.location.pathname === '/first_match') {
           first_match() // 특정 URL에 접근했을 때 자동 실행할 함수
         }
       }
@@ -96,6 +96,7 @@
       
       //첫 요청 보기
       function first_match() {
+        print("asdfasdf")
         $.ajax({
           type: 'POST',
           url: '/api/first_match',

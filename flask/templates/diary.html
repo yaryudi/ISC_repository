@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="..\static\css\style.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISC: 돌봄 다이어리 열람</title>
+    <link rel="shortcut icon" href="#" />
+  </head>
+  <script
+    src="https://kit.fontawesome.com/d5055e0a20.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <body id="diary">
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <header class="top-screen-header">
+      <div class="top-screen-header__column">
+        <a onclick="go_home()">
+          <i class="fa-solid fa-chevron-left fa-2x"></i>
+        </a>
+      </div>
+      <div class="top-screen-header__column">
+        <h1 class="top-screen-header__title">돌봄 다이어리</h1>
+      </div>
+      <div class="top-screen-header__column">
+        <span>
+          <img
+            class="top-screen-header-logo"
+            src="../static/ISC-logo_trans.png"
+          />
+        </span>
+      </div>
+    </header>
+    <!-- 오늘 날짜 랜더링 -->
+    <div class="main-screen">
+      <div class="navigation-bar">
+        <a
+          class="navigation-bar__prev"
+          href="{{ url_for('care_record_page', week=week_offset - 1) }}"
+          class="nav-btn"
+          >◀</a
+        >
+        <span class="current-week"
+          >{{ current_week }} -
+          <span id="current_week__day"> {{ current_day if current_day else '' }} </span></span
+        >
+        <a
+          class="navigation-bar__next"
+          href="{{ url_for('care_record_page', week=week_offset + 1) }}"
+          class="nav-btn"
+          >▶</a
+        >
+      </div>
+      <!-- 요일 선택 -->
+      <div class="diary__weekend">
+        {% for day, date in week_dates %}
+        <a
+          href="{{ url_for('care_record_page', week=week_offset, date=date) }}"
+          class="diary__weekend__day {% if current_date == date %}active{% endif %}"
+        >
+          {{ day }} <br />
+          <span class="diary__weekend__day__number">{{ date[-2:] }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      <!-- 데이터 표시 -->
+      <div id="diary__container">
+        {% if cares %} {% for care in cares %}
+        <div class="diary__items">
+          <!-- 시간 표시 -->
+          <div class="diary__items__time">{{ care.time }}</div>
+          <!-- 세부 내용 -->
+          <div class="diary__items__details">
+            <div class="diary__items__details__title">{{ care.content }}</div>
+            {% if care.photo %}
+            <div class="diary__items__details__photo">
+              <img
+                src="{{ url_for('static', filename=care.photo) }}"
+                alt="첨부된 사진"
+              />
+            </div>
+            {% endif %} {% if care.comment %}
+            <div class="diary__items__details__comment">{{ care.comment }}</div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <p id="no-data">선택된 날짜에 데이터가 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+  <script>
+    function go_home() {
+      window.location.href = "/main";
+    }
+  </script>
+</html>
